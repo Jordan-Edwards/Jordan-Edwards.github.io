@@ -34,6 +34,32 @@ unit and a computer. The binary layout of those files isn't publicly documented,
 is not a drop-box for arbitrary new patterns, and the songs here cannot simply be
 copied into it. Option 2 above is still by hand; the grid is laid out to make that fast.
 
+## Running it locally (`tools/aira_local.py`)
+
+The page drives the synths from a browser. `tools/aira_local.py` does the same job
+from a terminal **on the computer the synths are plugged into**, plus two things a
+browser cannot do: copy a unit's `BACKUP` folder off while it's in drive mode, and
+pull those files apart so the pattern format can be worked out.
+
+```sh
+python3 tools/aira_local.py ports                  # list MIDI outs, guess the two units
+python3 tools/aira_local.py play acid-rain --loop  # stream it to the synths
+python3 tools/aira_local.py rec  acid-rain         # same, with a 4-beat count-in
+python3 tools/aira_local.py backup /Volumes/J-6 ~/aira-backups
+python3 tools/aira_local.py analyze ~/aira-backups/J-6-20260915-0638
+```
+
+`ports`, `play` and `rec` need `pip install mido python-rtmidi`.
+**`backup` and `analyze` are pure standard library — nothing to install.**
+
+`backup` only ever reads from the unit; it never writes to it.
+
+`analyze` reports each file's magic bytes, padding, and the repeating record size,
+ranked. It reports the *smallest* stride that divides the data exactly, because every
+multiple of a record size also scores — a "768-byte record" is usually eight 96-byte
+ones. It is validated both ways: it recovers a planted record structure with its exact
+header bytes, and claims nothing at all on random noise.
+
 ## Rebuilding
 
 ```sh
