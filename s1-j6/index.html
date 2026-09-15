@@ -123,8 +123,16 @@
   .ch{
     background:var(--panel2);border:1px solid var(--line);border-radius:8px;
     padding:6px 10px;font-size:13px;font-weight:600;
+    cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:none;
+    transition:transform .06s,border-color .06s,background .06s;
   }
+  .ch:hover{border-color:var(--dimmer)}
   .ch.lit{border-color:var(--accent2);color:var(--accent2)}
+  .ch.down{
+    border-color:var(--accent2);background:rgba(74,168,255,.16);
+    color:var(--accent2);transform:translateY(1px);
+  }
+  .taphint{font-size:11px;color:var(--dimmer);margin-top:8px}
   .ch small{display:block;font-size:10px;color:var(--dimmer);font-weight:400;margin-top:1px}
 
   /* ---------- step grid ---------- */
@@ -379,6 +387,24 @@
   }
   function hz(m){ return 440 * Math.pow(2, (m - 69) / 12); }
 
+  // ------------------------------------------------ tap a chord by hand
+  // Press sends a real note-on to the J-6 and holds it; release sends note-off.
+  // The speaker preview just decays on its own.
+  var held = [];
+  function chordDown(notes){
+    chordUp();                       // retrigger cleanly if a chord is still down
+    var a = audio(), t = a.currentTime + 0.01;
+    notes.forEach(function(nt){
+      voice(t, hz(nt), 1.8, 'j6');
+      sendOut(outJ6, [0x90, nt, 92]);
+    });
+    held = notes.slice();
+  }
+  function chordUp(){
+    held.forEach(function(nt){ sendOut(outJ6, [0x80, nt, 0]); });
+    held = [];
+  }
+
   // ------------------------------------------------------------- events
   // Build one loop of absolute-time events, in beats.
   function buildEvents(song){
@@ -459,6 +485,8 @@
   function stop(){
     playing = false;
     if (timer){ clearInterval(timer); timer = null; }
+    held = [];
+    document.querySelectorAll('.ch.down').forEach(function(el){ el.classList.remove('down'); });
     allNotesOff();
     document.getElementById('play').textContent = '▶ Play';
     document.querySelectorAll('.st.cur').forEach(function(el){ el.classList.remove('cur'); });
@@ -567,11 +595,38 @@
     var prog = el('div','prog');
     s.j6.prog.forEach(function(name, i){
       var c = el('div','ch');
+      c.setAttribute('role','button');
+      c.setAttribute('tabindex','0');
+      c.setAttribute('aria-label', 'Play ' + name);
       c.appendChild(document.createTextNode(name));
       c.appendChild(el('small', null, s.j6.chordNames[i].join(' ')));
+      (function(notes, chip){
+        function down(e){
+          if (e.cancelable) e.preventDefault();
+          chip.classList.add('down');
+          chordDown(notes);
+        }
+        function up(){
+          if (!chip.classList.contains('down')) return;
+          chip.classList.remove('down');
+          chordUp();
+        }
+        chip.addEventListener('pointerdown', down);
+        ['pointerup','pointercancel','pointerleave'].forEach(function(ev){
+          chip.addEventListener(ev, up);
+        });
+        chip.addEventListener('keydown', function(e){
+          if (e.repeat) return;
+          if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); down(e); }
+        });
+        chip.addEventListener('keyup', function(e){
+          if (e.key === 'Enter' || e.key === ' ') up();
+        });
+      })(s.j6.chords[i], c);
       prog.appendChild(c);
     });
     pj.appendChild(prog);
+    pj.appendChild(el('div','taphint','Tap a chord to hear it — held while you hold it, and sent to the J-6 if it’s connected.'));
     panes.appendChild(pj);
 
     var ps = el('div','pane s1');
@@ -645,9 +700,11 @@
 
   document.addEventListener('keydown', function(e){
     if (e.target.tagName === 'SELECT') return;
+    // a focused chord chip handles Space itself — don't also toggle transport
+    if (e.target.classList && e.target.classList.contains('ch')) return;
     if (e.code === 'Space'){ e.preventDefault(); playing ? stop() : play(); }
   });
-  window.addEventListener('pagehide', stop);
+  window.addEventListener('pagehide', function(){ chordUp(); stop(); });
 
   if (!SONGS.length){
     document.getElementById('detail').textContent = 'No songs loaded — songs.js is missing.';
