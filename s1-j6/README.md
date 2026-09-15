@@ -24,8 +24,15 @@ Open `index.html` — or the published page at `/s1-j6/` — for the playable ve
    standalone. Accents and slides are marked per step.
 3. **Drag the `.mid` into a DAW** — route track 2 to the J-6 and track 3 to the S-1.
 
-There's no published SysEx format for writing patterns into the S-1's pattern memory,
-so option 2 is genuinely by hand; the grid is laid out to make that fast.
+### A note on drive mode
+
+AIRA Compacts *do* mount as USB mass storage: power the unit off, hold **PLAY**, power
+it back on, and it shows up as an external disk with `BACKUP` and `RESTORE` folders.
+
+That is Roland's own backup mechanism — it moves patterns you already made between a
+unit and a computer. The binary layout of those files isn't publicly documented, so it
+is not a drop-box for arbitrary new patterns, and the songs here cannot simply be
+copied into it. Option 2 above is still by hand; the grid is laid out to make that fast.
 
 ## Rebuilding
 
