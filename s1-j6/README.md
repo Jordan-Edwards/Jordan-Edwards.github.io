@@ -89,8 +89,8 @@ the same key and tempo, plus `all.mid` (chords ch 1, bass ch 2, lead ch 3, arp c
 - Swing (lo-fi, UKG) and delay are described in each kit's note, not written in.
 
 To get a part into the OP-XY, stream it while the OP-XY records:
-`python3 tools/aira_local.py play s1-j6/library/A-minor/05-acid-i-pedal/bass.mid --s1 "OP-XY"`
-(use `ports` to see the exact port name). The page needs to be served, not opened
+`python3 tools/aira_local.py play s1-j6/library/A-minor/05-acid-i-pedal/bass.mid --to OP-XY --loop`
+(`--to` sends every track, channels kept, to one port; `ports` lists the names). The page needs to be served, not opened
 as a file: `python3 -m http.server` from the repo root, then `/s1-j6/library.html`.
 
 ## Pulling patterns off the units (`capture`, `harvest`, `scan`)

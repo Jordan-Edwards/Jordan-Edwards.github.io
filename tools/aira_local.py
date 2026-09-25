@@ -147,12 +147,16 @@ def ticks_to_seconds(tick, tpq, tempos):
     return secs
 
 
-def schedule(path):
-    """Flatten a MIDI file into [(seconds, role, status, d1, d2)], time-ordered."""
+def schedule(path, single=False):
+    """Flatten a MIDI file into [(seconds, role, status, d1, d2)], time-ordered.
+
+    With `single`, every track goes to one role ("to") with its channels kept -
+    for library parts and for streaming a whole file into one device (OP-XY).
+    """
     tpq, events, tempos = read_smf(path)
     out = []
     for tidx, tick, status, d1, d2 in events:
-        role = TRACK_ROLE.get(tidx)
+        role = "to" if single else TRACK_ROLE.get(tidx)
         if role is None:
             continue
         if status & 0xF0 not in (0x80, 0x90, 0xB0, 0xC0):
@@ -903,7 +907,7 @@ def cmd_ports(args):
 
 def cmd_play(args):
     path = song_path(args.song)
-    events, micros = schedule(path)
+    events, micros = schedule(path, single=bool(args.to))
     bpm = round(60_000_000 / micros)
     notes = sum(1 for e in events if e[2] & 0xF0 == 0x90 and e[4] > 0)
     span = max((e[0] for e in events), default=0)
@@ -915,8 +919,14 @@ def cmd_play(args):
         if kind is None:
             raise SystemExit("No MIDI backend.\n  pip install mido python-rtmidi")
         names = list_ports()
-        want = {"j6": args.j6 or guess(names, "j-6", "j6"),
-                "s1": args.s1 or guess(names, "s-1", "s1")}
+        if args.to:
+            want = {"to": next((nm for nm in names if nm == args.to), None)
+                    or guess(names, args.to.lower())}
+            if want["to"] is None:
+                raise SystemExit(f"Port '{args.to}' not found. Run `ports` to list them.")
+        else:
+            want = {"j6": args.j6 or guess(names, "j-6", "j6"),
+                    "s1": args.s1 or guess(names, "s-1", "s1")}
         for role, nm in want.items():
             if nm is None:
                 print(f"  ! no port for {role.upper()} - that part will be silent")
@@ -1371,6 +1381,9 @@ def main():
         p.add_argument("song", help="song id (e.g. acid-rain) or path to a .mid")
         p.add_argument("--j6", help="exact J-6 port name")
         p.add_argument("--s1", help="exact S-1 port name")
+        p.add_argument("--to", metavar="PORT",
+                       help="send every track, channels kept, to one port "
+                            "(name or part of it, e.g. OP-XY) - use for library parts")
         p.add_argument("--loop", action="store_true", help="repeat until Ctrl-C")
         p.add_argument("--dry-run", action="store_true",
                        help="work out the timing but open no ports")
