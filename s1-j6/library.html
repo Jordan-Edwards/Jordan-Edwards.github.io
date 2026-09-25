@@ -92,7 +92,9 @@
   .parts{display:grid;gap:1px;background:var(--line)}
   .part{background:var(--panel);padding:14px 18px}
   .phead{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-  .phead h3{font-size:12px;text-transform:uppercase;letter-spacing:.09em;flex:1;min-width:120px}
+  .phead h3{font-size:12px;text-transform:uppercase;letter-spacing:.09em;flex:1;min-width:120px;
+            display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+  .phead h3 .badge{margin-left:0}
   .part.chords h3,.part.arp h3{color:var(--accent2)}
   .part.bass h3,.part.lead h3{color:var(--accent)}
   .part.all h3{color:var(--ink)}
@@ -101,6 +103,17 @@
     background:var(--panel2);border:1px solid var(--line);color:var(--dim);text-transform:none;
   }
   .badge.poly{color:var(--violet);border-color:rgba(180,140,255,.4)}
+  .badge.conf.sourced{color:var(--accent);border-color:rgba(61,220,132,.4)}
+  .badge.conf.constructed{color:var(--accent2);border-color:rgba(74,168,255,.4)}
+  .badge.conf.common-practice{color:var(--warn);border-color:rgba(255,194,74,.4)}
+  .card .m .badge{margin-left:0}
+  .hint{font-size:12.5px;color:var(--dim);margin-top:8px}
+  .hint b{color:var(--ink);font-weight:600}
+  .note{
+    background:rgba(255,194,74,.08);border-left:3px solid var(--warn);
+    padding:10px 12px;border-radius:0 8px 8px 0;font-size:13px;color:var(--dim);margin:0 0 18px;
+  }
+  .roll .n.ghost{opacity:.45}
   .pwhy{font-size:12.5px;color:var(--dim);margin-top:6px}
   .dl{text-decoration:none}
   .roll{display:block;width:100%;height:64px;margin-top:10px;background:var(--panel2);
@@ -135,7 +148,7 @@
       <span class="sub">every key · 4-bar kits</span>
     </div>
     <p class="tagline">
-      Chord progressions with a matching arp, S-1 bassline and lead for all 24 keys.
+      Researched chord progressions for 12 genres, each with a matching arp, S-1 bassline and lead, in all 24 keys.
       Each kit is 4 bars (64 steps, one S-1 pattern). Grab single parts or <b>all.mid</b>
       (chords ch1, bass ch2, lead ch3, arp ch4), send it into the OP-XY, record, and paste
       it onto whichever synth track you like.
@@ -156,6 +169,13 @@
       <div class="lab">Genre</div>
       <div class="seg wide" id="genres"></div>
     </div>
+  </div>
+
+  <div class="note">
+    Every idea is tagged <b>sourced</b>, <b>constructed</b> (notes built from a sourced rule) or
+    <b>common practice</b> (no source found). Most facts come from web-search excerpts, not full page
+    reads; see <a href="https://github.com/Jordan-Edwards/Jordan-Edwards.github.io/blob/HEAD/s1-j6/library/RESEARCH.md" target="_blank" rel="noopener">RESEARCH.md</a>. Accent is written as velocity 110 and slide
+    as a 1/32 legato overlap. How the S-1 maps those to its own accent and slide has not been verified.
   </div>
 
   <div class="kits" id="kits"><div class="empty">Loading library…</div></div>
@@ -213,6 +233,18 @@
   function curKey(){
     return LIB.keys.filter(function(k){ return k.tonic_pc === state.root && k.mode === state.mode; })[0];
   }
+  // Kit = shared metadata (LIB.kits[mode]) + this key's chords/voicings/folder.
+  function kitsFor(key){
+    return key.kits.map(function(kk, i){
+      var k = Object.assign({}, LIB.kits[key.mode][i], kk), files = {};
+      ['chords','arp','bass','lead','all'].forEach(function(p){ files[p] = kk.dir + '/' + p + '.mid'; });
+      k.files = files;
+      return k;
+    });
+  }
+  function curKit(){
+    return kitsFor(curKey()).filter(function(k){ return k.id === state.kit; })[0] || null;
+  }
 
   // ------------------------------------------------------------ pickers
   function segButtons(box, items, isOn, onPick){
@@ -233,32 +265,44 @@
     segButtons($('modes'), [{label:'Minor', v:'minor'}, {label:'Major', v:'major'}],
       function(it){ return it.v === state.mode; },
       function(it){ state.mode = it.v; state.kit = null; render(); });
-    var gs = [{label:'All', v:'all'}].concat(Object.keys(LIB.genres).map(function(g){
-      return {label: LIB.genres[g].name, v:g};
-    }));
+    var present = {};
+    LIB.kits[state.mode].forEach(function(k){ present[k.genre] = true; });
+    var gs = [{label:'All', v:'all'}, {label:'Polyrhythm', v:'poly'}].concat(
+      Object.keys(LIB.genres).filter(function(g){ return present[g]; }).map(function(g){
+        return {label: LIB.genres[g].name, v:g};
+      }));
+    if (state.genre !== 'all' && state.genre !== 'poly' && !present[state.genre]) state.genre = 'all';
     segButtons($('genres'), gs,
       function(it){ return it.v === state.genre; },
       function(it){ state.genre = it.v; render(); });
+  }
+
+  function confBadge(conf){
+    var b = el('span', 'badge conf ' + conf, conf);
+    b.title = (LIB.confidence || {})[conf] || '';
+    return b;
   }
 
   // ------------------------------------------------------------ list
   function renderList(){
     var key = curKey(), box = $('kits');
     box.innerHTML = '';
-    var kits = key.kits.filter(function(k){ return state.genre === 'all' || k.genre === state.genre; });
-    if (!kits.length){ box.appendChild(el('div', 'empty', 'No kits for that genre in this key.')); }
+    var kits = kitsFor(key).filter(function(k){
+      return state.genre === 'all' || (state.genre === 'poly' ? k.poly.length : k.genre === state.genre);
+    });
+    if (!kits.length){ box.appendChild(el('div', 'empty', 'Nothing matches in this key.')); }
     if (!kits.some(function(k){ return k.id === state.kit; })) state.kit = kits.length ? kits[0].id : null;
     kits.forEach(function(k){
       var c = el('button', 'card');
       c.setAttribute('aria-current', k.id === state.kit ? 'true' : 'false');
-      c.appendChild(el('div', 'g', String(k.n).padStart(2,'0') + ' · ' + k.genre_name));
+      c.appendChild(el('div', 'g', String(k.n).padStart(2,'0') + ' · ' + k.genre_name + ' · ' + k.ref));
       c.appendChild(el('div', 't', k.name));
-      c.appendChild(el('div', 'r', k.roman.join(' – ')));
+      c.appendChild(el('div', 'r', k.roman));
       c.appendChild(el('div', 'c', k.chords.join('  ')));
       var m = el('div', 'm');
       m.appendChild(el('span', null, k.bpm + ' BPM'));
-      m.appendChild(el('span', null, LIB.styles.bass[k.parts.bass].style + ' bass'));
-      if (k.poly.length) m.appendChild(el('span', 'poly', 'polyrhythm: ' + k.poly.join(', ')));
+      m.appendChild(confBadge(k.confidence));
+      if (k.poly.length) m.appendChild(el('span', 'poly', 'poly: ' + k.poly.join(', ')));
       c.appendChild(m);
       c.onclick = function(){ state.kit = k.id; stop(); render(); };
       box.appendChild(c);
@@ -266,19 +310,18 @@
   }
 
   // ------------------------------------------------------------ detail
-  function sourceNode(src){
+  function sourceNode(src, conf){
     var d = el('div', 'src');
-    var list = Array.isArray(src) ? src : [src];
-    list = list.filter(Boolean);
-    if (!list.length || /^PENDING/.test(list[0])){
-      d.className = 'src pending'; d.textContent = 'Source: pending';
+    if (conf) { d.appendChild(confBadge(conf)); d.appendChild(document.createTextNode(' ')); }
+    var list = (Array.isArray(src) ? src : [src]).filter(Boolean);
+    if (!list.length){
+      d.appendChild(document.createTextNode('No source: common practice.'));
       return d;
     }
-    d.appendChild(document.createTextNode('Source: '));
     list.forEach(function(s, i){
       if (i) d.appendChild(document.createTextNode(' · '));
       if (/^https?:\/\//.test(s)){
-        var a = el('a', null, s.replace(/^https?:\/\/(www\.)?/, '').slice(0, 70));
+        var a = el('a', null, s.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '').slice(0, 60));
         a.href = s; a.target = '_blank'; a.rel = 'noopener';
         d.appendChild(a);
       } else d.appendChild(document.createTextNode(s));
@@ -296,24 +339,33 @@
     var head = el('div', 'dhead');
     head.appendChild(el('h2', null, k.name));
     var meta = el('div', 'meta');
-    [['Key', key.name], ['Genre', k.genre_name], ['Tempo', k.bpm + ' BPM'], ['Length', '4 bars · 64 steps']]
+    [['Key', key.name], ['Genre', k.genre_name], ['Tempo', k.bpm + ' BPM'], ['Scale', k.scale],
+     ['Research', k.ref], ['Length', '4 bars · 64 steps']]
       .forEach(function(p){
         var c = el('span', 'chip'); c.appendChild(document.createTextNode(p[0] + ' '));
         c.appendChild(el('b', null, p[1])); meta.appendChild(c);
       });
     head.appendChild(meta);
-    if (k.why) head.appendChild(el('div', 'why', k.why));
-    head.appendChild(sourceNode(k.source));
+    head.appendChild(el('div', 'why', k.why));
+    head.appendChild(sourceNode(k.source, k.confidence));
     var prog = el('div', 'prog');
     k.chords.forEach(function(name, i){
       var c = el('div', 'ch', name);
-      c.appendChild(el('small', null, k.roman[i]));
+      c.appendChild(el('small', null, k.bars[i]));
       c.dataset.bar = i;
       c.onclick = function(){ previewChord(k.voicings[i], k.bpm); };
       prog.appendChild(c);
     });
     head.appendChild(prog);
-    head.appendChild(el('div', 'src', 'Tap a chord to hear it.'));
+    head.appendChild(el('div', 'src', 'Tap a chord to hear it. Numerals: ' + k.roman + '.'));
+    var j6 = el('div', 'hint');
+    j6.appendChild(el('b', null, 'J-6: '));
+    j6.appendChild(document.createTextNode(k.j6 + '. Pick one with SHIFT+CHORD and VALUE for a similar palette.'));
+    head.appendChild(j6);
+    var pr = el('div', 'hint');
+    pr.appendChild(el('b', null, 'Why these parts go together: '));
+    pr.appendChild(document.createTextNode(k.pairing));
+    head.appendChild(pr);
     det.appendChild(head);
 
     var parts = el('div', 'parts');
@@ -327,18 +379,18 @@
     parts.appendChild(all);
 
     PARTS.forEach(function(p){
-      var st = LIB.styles[p.id][k.parts[p.id]];
+      var name = k.parts[p.id], st = LIB.styles[p.id][name];
       var row = el('div', 'part ' + p.id);
       var h = el('div', 'phead');
       var h3 = el('h3', null, p.label);
-      h3.appendChild(el('span', 'badge', st.style));
+      h3.appendChild(el('span', 'badge', st.ref));
       if (st.poly) h3.appendChild(el('span', 'badge poly', 'poly'));
       h.appendChild(h3);
       h.appendChild(playBtn(p.id, 'Play'));
       h.appendChild(dlBtn(k.files[p.id], p.id + '.mid'));
       row.appendChild(h);
-      if (st.why) row.appendChild(el('div', 'pwhy', st.why + (st.poly ? ' (' + st.poly + ')' : '')));
-      row.appendChild(sourceNode(st.source));
+      row.appendChild(el('div', 'pwhy', st.why + (st.poly ? ' [' + st.poly + ']' : '')));
+      row.appendChild(sourceNode(st.source, st.confidence));
       var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
       svg.setAttribute('class', 'roll'); svg.setAttribute('viewBox', '0 0 640 64');
       svg.setAttribute('preserveAspectRatio', 'none'); svg.dataset.part = p.id;
@@ -347,7 +399,7 @@
     });
     det.appendChild(parts);
     var lg = el('div', 'legend');
-    ['Red notes = accent (vel 110)', 'Overlapping notes = slide', 'Single-part files are on MIDI channel 1']
+    ['Red = accent (vel 110)', 'Dim = ghost (vel 64)', 'Overlap = slide (1/32)', 'Single-part files are on MIDI channel 1']
       .forEach(function(t){ lg.appendChild(el('span', null, t)); });
     det.appendChild(lg);
     box.appendChild(det);
@@ -370,10 +422,6 @@
     a.href = BASE + path; a.setAttribute('download', curKey().id + '-' + curKit().id + '-' + name);
     a.appendChild(el('button', null, '↓ ' + name));
     return a;
-  }
-  function curKit(){
-    var key = curKey();
-    return key.kits.filter(function(k){ return k.id === state.kit; })[0] || null;
   }
 
   // ------------------------------------------------------------ SMF parsing
@@ -444,7 +492,7 @@
       }
       notes.forEach(function(n){
         var r = document.createElementNS(NS, 'rect');
-        r.setAttribute('class', 'n' + (n.vel >= 110 ? ' acc' : ''));
+        r.setAttribute('class', 'n' + (n.vel >= 110 ? ' acc' : n.vel < 70 ? ' ghost' : ''));
         r.setAttribute('x', n.on * 40); r.setAttribute('width', Math.max(2, (n.off - n.on) * 40 - 1));
         r.setAttribute('y', (hi - n.n) * H / (hi - lo + 1));
         r.setAttribute('height', Math.max(2, H / (hi - lo + 1) - 1));

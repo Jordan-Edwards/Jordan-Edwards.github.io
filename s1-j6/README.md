@@ -13,6 +13,11 @@ Open `index.html` — or the published page at `/s1-j6/` — for the playable ve
 | `songs.js` | Generated song data (do not hand-edit) |
 | `midi/*.mid` | One Standard MIDI File per song — 3 tracks: tempo, J-6 on ch 1, S-1 on ch 2 |
 | `../tools/build_songs.py` | The generator. Everything above is derived from it. |
+| `library.html` | Browse the idea library: pick key / genre, preview, download parts |
+| `library/<Key>/<kit>/*.mid` | 50 genre kits × 24 keys — `chords`, `arp`, `bass`, `lead`, `all` |
+| `library/index.json` | Every kit's progression, chords, BPM, J-6 set hint, source and confidence |
+| `library/RESEARCH.md` | The sourced research the library is built from, with caveats |
+| `../tools/build_library.py` | The library generator |
 
 ## Three ways to play them
 
@@ -59,6 +64,58 @@ ranked. It reports the *smallest* stride that divides the data exactly, because 
 multiple of a record size also scores — a "768-byte record" is usually eight 96-byte
 ones. It is validated both ways: it recovers a planted record structure with its exact
 header bytes, and claims nothing at all on random noise.
+
+## Idea library (`library/`)
+
+A grab-bag of parts to pull into the OP-XY: 50 kits across 12 genres (synthwave,
+acid, deep house, Chicago house, lo-fi, Berlin techno, melodic techno, UK garage,
+DnB, trap, ambient/cinematic, future garage/chillwave), each transposed to all 24
+keys. Every kit is a progression plus a matching arp, S-1 bass and lead, all in
+the same key and tempo, plus `all.mid` (chords ch 1, bass ch 2, lead ch 3, arp ch 4).
+
+- **Sourced, not invented.** Each progression and pattern comes from
+  `library/RESEARCH.md` and carries its source URL and a confidence tag:
+  `sourced`, `constructed` (built from a sourced rule), or `common-practice`.
+  Most sources were read as search excerpts, not full pages — see the caveats there.
+- **Weakest genres:** future garage / chillwave, UK garage and Chicago house lean
+  on constructed or common-practice material; most leads outside melodic techno
+  and lo-fi are constructed.
+- **`-poly` kits** use polymeter: odd-length bass loops (13, 12, 5, 6 steps), 3-against-4
+  arps, dotted-8th leads. Their note gives the S-1 last-step setting
+  (SHIFT + pad 4) to recreate them on the unit.
+- **J-6 hint:** each kit names the J-6 chord sets closest to that genre.
+- **Accent / slide:** accent is velocity 110 (80 normal), slide is a 1/32 legato
+  overlap. How the S-1 itself maps these over MIDI is not verified.
+- Swing (lo-fi, UKG) and delay are described in each kit's note, not written in.
+
+To get a part into the OP-XY, stream it while the OP-XY records:
+`python3 tools/aira_local.py play s1-j6/library/A-minor/05-acid-i-pedal/bass.mid --s1 "OP-XY"`
+(use `ports` to see the exact port name). The page needs to be served, not opened
+as a file: `python3 -m http.server` from the repo root, then `/s1-j6/library.html`.
+
+## Pulling patterns off the units (`capture`, `harvest`, `scan`)
+
+The J-6 and S-1 send their notes out over USB MIDI while they play — the same
+thing the OP-XY records. `aira_local.py` can record that straight to `.mid`:
+
+```sh
+pip install mido python-rtmidi
+python3 tools/aira_local.py capture --list                  # MIDI inputs
+python3 tools/aira_local.py harvest --unit j6               # pattern by pattern
+python3 tools/aira_local.py harvest --unit s1 --bars 4
+python3 tools/aira_local.py scan ~/aira-library             # catalog any .mid files
+```
+
+`harvest` prompts you to select each pattern and press PLAY, records one pass,
+and saves e.g. `~/aira-library/j6/j6-p01-Amin.mid` with the detected key in the
+name; `s` skips, a number jumps, `q` quits. Every take is logged to `index.csv`
+with key, BPM, bars and chord names (J-6) or notes (S-1).
+
+- **Stop the unit between patterns.** The take starts at MIDI Start (or the first
+  note), so starting mid-loop shifts the downbeat.
+- If the unit isn't sending clock, pass `--bpm` matching its tempo.
+- Key detection assumes the loop starts on its home chord.
+- Tested against simulated MIDI streams, not yet on real hardware.
 
 ## Rebuilding
 
