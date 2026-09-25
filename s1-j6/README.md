@@ -93,6 +93,30 @@ To get a part into the OP-XY, stream it while the OP-XY records:
 (`--to` sends every track, channels kept, to one port; `ports` lists the names). The page needs to be served, not opened
 as a file: `python3 -m http.server` from the repo root, then `/s1-j6/library.html`.
 
+## Sets (`sets/`)
+
+Switchable collections, registered in `sets/index.json`:
+
+| Set | What it is |
+|---|---|
+| `genre-kits` | The idea library above (`library/`) |
+| `sinnoh-style` | 8 original full tracks with a DS-era, Sinnoh-style feel — route walks, snow route, cave, town, wild battle, rival battle with a half-step key change, champion finale, and a spooky Lavender-flavoured piece |
+
+`sinnoh-style` is original music written for these boxes. It borrows the era's
+tempos, harmony, orchestration and rhythm, not any game's melodies. Each track has:
+
+- `full.mid` — the whole 32–40 bar arrangement: J-6 chords ch 1, S-1 bass ch 2,
+  S-1 lead ch 3, counter-line ch 4 for covers on the OP-XY / M8. Section and loop
+  markers are in the conductor track.
+- `sections/<section>-{chords,bass,lead}.mid` — 4-bar pieces, each fitting one S-1
+  pattern (64 steps). `set.json` lists pattern slots (track N → slots 8N-7…8N),
+  the closest J-6 chord set, S-1 patch hints and cover-instrument ideas.
+
+```sh
+python3 tools/aira_local.py play s1-j6/sets/sinnoh-style/06-ironbell-rival/full.mid --to OP-XY
+python3 tools/build_sets.py        # rebuild
+```
+
 ## Pulling patterns off the units (`capture`, `harvest`, `scan`)
 
 The J-6 and S-1 send their notes out over USB MIDI while they play — the same

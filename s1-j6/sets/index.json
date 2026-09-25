@@ -1,0 +1,80 @@
+{
+ "generated_by": "tools/build_sets.py",
+ "note": "Registry of switchable sets. Load one set onto the units at a time.",
+ "sets": [
+  {
+   "id": "genre-kits",
+   "name": "Genre kits (research library)",
+   "path": "../library/index.json",
+   "read_only": true,
+   "built_by": "tools/build_library.py",
+   "description": "4-bar genre idea kits in all 24 keys (chords, arp, bass, lead), sourced in library/RESEARCH.md. Referenced here, not modified."
+  },
+  {
+   "id": "sinnoh-style",
+   "name": "Sinnoh-style (original)",
+   "path": "sinnoh-style/set.json",
+   "read_only": false,
+   "built_by": "tools/build_sets.py",
+   "description": "Eight ORIGINAL full-length pieces written in the general style of mid-2000s DS handheld RPG soundtracks (Sinnoh-era DS feel): march-ish route themes, a snowy route, a cave, a town, two battles (the rival one with a last-chorus half-step key change), a champion-style finale and a spooky tower piece. No melody, bassline or progression is taken from any game or song.",
+   "tracks": [
+    {
+     "id": "01-mossroot-walk",
+     "title": "Mossroot Walk",
+     "bpm": 132,
+     "key": "D major",
+     "bars": 32
+    },
+    {
+     "id": "02-frostline-pass",
+     "title": "Frostline Pass",
+     "bpm": 84,
+     "key": "Bb major",
+     "bars": 32
+    },
+    {
+     "id": "03-hollowroot-cavern",
+     "title": "Hollowroot Cavern",
+     "bpm": 104,
+     "key": "D minor",
+     "bars": 32
+    },
+    {
+     "id": "04-kettle-square",
+     "title": "Kettle Square",
+     "bpm": 112,
+     "key": "F major",
+     "bars": 40
+    },
+    {
+     "id": "05-tall-grass-ambush",
+     "title": "Tall Grass Ambush",
+     "bpm": 168,
+     "key": "E minor",
+     "bars": 32
+    },
+    {
+     "id": "06-ironbell-rival",
+     "title": "Ironbell Rival",
+     "bpm": 152,
+     "key": "A minor",
+     "bars": 40
+    },
+    {
+     "id": "07-summit-crown",
+     "title": "Summit Crown",
+     "bpm": 144,
+     "key": "G minor",
+     "bars": 36
+    },
+    {
+     "id": "08-lantern-hill",
+     "title": "Lantern Hill",
+     "bpm": 88,
+     "key": "E minor",
+     "bars": 32
+    }
+   ]
+  }
+ ]
+}

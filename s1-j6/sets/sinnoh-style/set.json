@@ -1,0 +1,1762 @@
+{
+ "generated_by": "tools/build_sets.py",
+ "id": "sinnoh-style",
+ "name": "Sinnoh-style (original)",
+ "description": "Eight ORIGINAL full-length pieces written in the general style of mid-2000s DS handheld RPG soundtracks (Sinnoh-era DS feel): march-ish route themes, a snowy route, a cave, a town, two battles (the rival one with a last-chorus half-step key change), a champion-style finale and a spooky tower piece. No melody, bassline or progression is taken from any game or song.",
+ "originality": "All titles, melodies, basslines and chord sequences are original compositions. 'Sinnoh-era DS feel' describes the general style only (tempo, keys, harmonic language, orchestration and rhythm cues); nothing is transcribed or paraphrased.",
+ "ppq": 480,
+ "section_bars": 4,
+ "section_steps": 64,
+ "channels": {
+  "full.mid": {
+   "chords (J-6)": 1,
+   "bass (S-1)": 2,
+   "lead (S-1)": 3,
+   "counter/arp (OP-XY/M8 covers)": 4
+  },
+  "sections/*.mid": 1
+ },
+ "ranges": {
+  "chords": "C3-C5",
+  "bass": "C1-C3",
+  "lead": "C3-C6",
+  "counter": "C3-C6"
+ },
+ "velocity": {
+  "accent": 110,
+  "normal": 80
+ },
+ "slide": "note overlaps the next note by 60 ticks (1/32), as in the genre-kit library",
+ "pattern_slots": "Each track owns 8 pattern slots: track N uses patterns 8(N-1)+1 .. 8(N-1)+8, one per section in the order listed. The J-6 gets the chords file in that slot. The S-1 has one pattern bank, so load either the BASS profile (sections/*-bass.mid) or the LEAD profile (sections/*-lead.mid) into the same slot numbers; the other part goes to an OP-XY/M8 track from full.mid.",
+ "j6_chord_sets": "Set numbers from s1-j6/library/RESEARCH.md section 13 (J-6 manual p.25 via github.com/stonefruit/j6). Utility sets 17-24 put the chord root on the key you press; themed sets need the j6-chords.json lookup. full.mid / sections/*-chords.mid carry the exact voicings if no set fits.",
+ "tracks": [
+  {
+   "n": 1,
+   "id": "01-mossroot-walk",
+   "dir": "01-mossroot-walk",
+   "title": "Mossroot Walk",
+   "role": "Route theme (cheerful walk)",
+   "bpm": 132,
+   "key": "D major",
+   "detected_key": "Dmaj",
+   "style": "Sinnoh-era DS feel: bright major march, IV-V-iii-vi motion, borrowed iv (Gm) before the tonic, bVI-bVII-I lift out of the B section.",
+   "bars": 32,
+   "form": [
+    {
+     "section": "intro",
+     "bars": 4,
+     "start_bar": 1
+    },
+    {
+     "section": "a1",
+     "bars": 4,
+     "start_bar": 5
+    },
+    {
+     "section": "a2",
+     "bars": 4,
+     "start_bar": 9
+    },
+    {
+     "section": "b1",
+     "bars": 4,
+     "start_bar": 13
+    },
+    {
+     "section": "b2",
+     "bars": 4,
+     "start_bar": 17
+    },
+    {
+     "section": "bridge",
+     "bars": 4,
+     "start_bar": 21
+    },
+    {
+     "section": "a1",
+     "bars": 4,
+     "start_bar": 25
+    },
+    {
+     "section": "a2",
+     "bars": 4,
+     "start_bar": 29
+    }
+   ],
+   "form_summary": "intro(4) a1(4) a2(4) b1(4) b2(4) bridge(4) a1(4) a2(4)",
+   "loop": {
+    "start_bar": 5,
+    "end_bar": 32,
+    "section": "a1",
+    "note": "play the intro once, then loop bars 5-32"
+   },
+   "sections": {
+    "intro": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "D major",
+     "chords": [["Dadd9"], ["Gmaj7"], ["Em7"], ["Asus4", "A"]],
+     "voicings": [["F#3", "A3", "D4", "E4"], ["G3", "B3", "D4", "F#4"], ["G3", "B3", "D4", "E4"], ["A3", "D4", "E4"], ["A3", "C#4", "E4"]],
+     "voice_motion_semitones": [5, 2, 3, 1],
+     "chord_rhythm": "swell: half-note swells",
+     "bass_style": "long: one long note per chord",
+     "counter": "generated arp (bells8)",
+     "files": {
+      "chords": "sections/intro-chords.mid",
+      "bass": "sections/intro-bass.mid",
+      "lead": "sections/intro-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 1,
+      "s1_bass": 1,
+      "s1_lead": 1
+     }
+    },
+    "a1": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "D major",
+     "chords": [["D"], ["G", "A"], ["F#m", "Bm"], ["Em7", "A"]],
+     "voicings": [["A3", "D4", "F#4"], ["B3", "D4", "G4"], ["A3", "C#4", "E4"], ["A3", "C#4", "F#4"], ["B3", "D4", "F#4"], ["B3", "D4", "E4", "G4"], ["A3", "C#4", "E4"]],
+     "voice_motion_semitones": [3, 6, 2, 3, 2, 4.5],
+     "chord_rhythm": "march: quarter-note march comping",
+     "bass_style": "march: route-march oom-pah, root and fifth below",
+     "counter": "generated arp (bells8)",
+     "files": {
+      "chords": "sections/a1-chords.mid",
+      "bass": "sections/a1-bass.mid",
+      "lead": "sections/a1-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 2,
+      "s1_bass": 2,
+      "s1_lead": 2
+     }
+    },
+    "a2": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "D major",
+     "chords": [["D/F#"], ["G", "A"], ["Gm"], ["D"]],
+     "voicings": [["A3", "D4", "F#4"], ["B3", "D4", "G4"], ["A3", "C#4", "E4"], ["A#3", "D4", "G4"], ["A3", "D4", "F#4"]],
+     "voice_motion_semitones": [3, 6, 5, 2],
+     "chord_rhythm": "march: quarter-note march comping",
+     "bass_style": "march: route-march oom-pah, root and fifth below",
+     "counter": "generated arp (bells8)",
+     "files": {
+      "chords": "sections/a2-chords.mid",
+      "bass": "sections/a2-bass.mid",
+      "lead": "sections/a2-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 3,
+      "s1_bass": 3,
+      "s1_lead": 3
+     }
+    },
+    "b1": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "D major",
+     "chords": [["Gmaj7"], ["F#m7"], ["Em7"], ["Asus4", "A"]],
+     "voicings": [["G3", "B3", "D4", "F#4"], ["F#3", "A3", "C#4", "E4"], ["G3", "B3", "D4", "E4"], ["A3", "D4", "E4"], ["A3", "C#4", "E4"]],
+     "voice_motion_semitones": [6, 4, 3, 1],
+     "chord_rhythm": "offbeat: upbeat brass/organ chops",
+     "bass_style": "pizz: staccato pizzicato 8ths",
+     "counter": "generated arp (bells8)",
+     "files": {
+      "chords": "sections/b1-chords.mid",
+      "bass": "sections/b1-bass.mid",
+      "lead": "sections/b1-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 4,
+      "s1_bass": 4,
+      "s1_lead": 4
+     }
+    },
+    "b2": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "D major",
+     "chords": [["Gmaj7"], ["F#m7", "B7"], ["Em7", "A7"], ["Bb", "C"]],
+     "voicings": [["G3", "B3", "D4", "F#4"], ["A3", "C#4", "E4", "F#4"], ["A3", "B3", "D#4", "F#4"], ["G3", "B3", "D4", "E4"], ["G3", "A3", "C#4", "E4"], ["A#3", "D4", "F4"], ["G3", "C4", "E4"]],
+     "voice_motion_semitones": [6, 3, 5, 3, 4.5, 6],
+     "chord_rhythm": "offbeat: upbeat brass/organ chops",
+     "bass_style": "pizz: staccato pizzicato 8ths",
+     "counter": "generated arp (bells8)",
+     "files": {
+      "chords": "sections/b2-chords.mid",
+      "bass": "sections/b2-bass.mid",
+      "lead": "sections/b2-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 5,
+      "s1_bass": 5,
+      "s1_lead": 5
+     }
+    },
+    "bridge": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "D major",
+     "chords": [["Bm7"], ["Gmaj7"], ["Bm7"], ["Gm6"]],
+     "voicings": [["F#3", "B3", "D4", "A4"], ["F#3", "B3", "D4", "G4"], ["F#3", "B3", "D4", "A4"], ["E3", "A#3", "D4", "G4"]],
+     "voice_motion_semitones": [2, 2, 5],
+     "chord_rhythm": "pad: string pad, one chord per slot",
+     "bass_style": "long: one long note per chord",
+     "counter": "generated arp (bells8)",
+     "files": {
+      "chords": "sections/bridge-chords.mid",
+      "bass": "sections/bridge-bass.mid",
+      "lead": "sections/bridge-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 6,
+      "s1_bass": 6,
+      "s1_lead": 6
+     }
+    }
+   },
+   "j6": {
+    "closest_chord_sets": "7 (C-major diatonic), 46 (G-major palette: C D Em G Am Bm), 40 (all add9)",
+    "style": "Chord/strum style at march pace; brass or organ preset"
+   },
+   "s1": {
+    "bass_patch": "SQUARE + SUB, short DECAY: tuba-ish oom-pah",
+    "lead_patch": "SQUARE, slight vibrato LFO: DS flute/trumpet lead",
+    "pattern_slots": "1-6"
+   },
+   "counter_ch4": "generated bells8 arp",
+   "cover_ideas": "OP-XY: 'brass' sampler stabs, pluck bass, flute multisample lead, snare-roll march kit. M8: FM horn chords, wavsynth pulse bass, sampled flute lead, macro-synth glock counter.",
+   "files": {
+    "full": "full.mid",
+    "sections": "sections/<section>-{chords,bass,lead}.mid"
+   }
+  },
+  {
+   "n": 2,
+   "id": "02-frostline-pass",
+   "dir": "02-frostline-pass",
+   "title": "Frostline Pass",
+   "role": "Route theme (snowy, slow)",
+   "bpm": 84,
+   "key": "Bb major",
+   "detected_key": "Bbmaj",
+   "style": "Sinnoh-era DS feel: slow snowfield route, add9/maj7 pads, music-box lead, Lydian #11 colour, borrowed Ebm6 and a bVI (Gbmaj7) chromatic lift.",
+   "bars": 32,
+   "form": [
+    {
+     "section": "intro",
+     "bars": 4,
+     "start_bar": 1
+    },
+    {
+     "section": "a1",
+     "bars": 4,
+     "start_bar": 5
+    },
+    {
+     "section": "a2",
+     "bars": 4,
+     "start_bar": 9
+    },
+    {
+     "section": "b1",
+     "bars": 4,
+     "start_bar": 13
+    },
+    {
+     "section": "b2",
+     "bars": 4,
+     "start_bar": 17
+    },
+    {
+     "section": "bridge",
+     "bars": 4,
+     "start_bar": 21
+    },
+    {
+     "section": "a1",
+     "bars": 4,
+     "start_bar": 25
+    },
+    {
+     "section": "a2",
+     "bars": 4,
+     "start_bar": 29
+    }
+   ],
+   "form_summary": "intro(4) a1(4) a2(4) b1(4) b2(4) bridge(4) a1(4) a2(4)",
+   "loop": {
+    "start_bar": 5,
+    "end_bar": 32,
+    "section": "a1",
+    "note": "play the intro once, then loop bars 5-32"
+   },
+   "sections": {
+    "intro": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "Bb major",
+     "chords": [["Bbadd9"], ["Ebmaj7"], ["Bbadd9"], ["Fsus4", "F"]],
+     "voicings": [["D3", "Bb3", "C4", "F4"], ["Eb3", "Bb3", "D4", "G4"], ["D3", "Bb3", "C4", "F4"], ["Bb3", "C4", "F4"], ["A3", "C4", "F4"]],
+     "voice_motion_semitones": [5, 5, 4, 1],
+     "chord_rhythm": "pad: string pad, one chord per slot",
+     "bass_style": "long: one long note per chord",
+     "counter": "generated arp (sparkle16)",
+     "files": {
+      "chords": "sections/intro-chords.mid",
+      "bass": "sections/intro-bass.mid",
+      "lead": "sections/intro-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 9,
+      "s1_bass": 9,
+      "s1_lead": 9
+     }
+    },
+    "a1": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "Bb major",
+     "chords": [["Bb"], ["Dm7"], ["Ebmaj7"], ["Cm7", "F"]],
+     "voicings": [["F3", "Bb3", "D4"], ["F3", "A3", "C4", "D4"], ["Eb3", "G3", "Bb3", "D4"], ["Eb3", "G3", "Bb3", "C4"], ["F3", "A3", "C4"]],
+     "voice_motion_semitones": [2, 6, 2, 4],
+     "chord_rhythm": "pad: string pad, one chord per slot",
+     "bass_style": "halves: root, then root-fifth answer",
+     "counter": "generated arp (sparkle16)",
+     "files": {
+      "chords": "sections/a1-chords.mid",
+      "bass": "sections/a1-bass.mid",
+      "lead": "sections/a1-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 10,
+      "s1_bass": 10,
+      "s1_lead": 10
+     }
+    },
+    "a2": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "Bb major",
+     "chords": [["Gm7"], ["Ebmaj7"], ["Ebm6"], ["Bbadd9"]],
+     "voicings": [["F3", "Bb3", "D4", "G4"], ["Eb3", "Bb3", "D4", "G4"], ["Eb3", "Bb3", "C4", "Gb4"], ["D3", "Bb3", "C4", "F4"]],
+     "voice_motion_semitones": [2, 3, 2],
+     "chord_rhythm": "pad: string pad, one chord per slot",
+     "bass_style": "halves: root, then root-fifth answer",
+     "counter": "generated arp (sparkle16)",
+     "files": {
+      "chords": "sections/a2-chords.mid",
+      "bass": "sections/a2-bass.mid",
+      "lead": "sections/a2-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 11,
+      "s1_bass": 11,
+      "s1_lead": 11
+     }
+    },
+    "b1": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "Bb major",
+     "chords": [["Gm"], ["Ebmaj7"], ["Cm7"], ["Dsus4", "D"]],
+     "voicings": [["Bb3", "D4", "G4"], ["Eb3", "Bb3", "D4", "G4"], ["Eb3", "Bb3", "C4", "G4"], ["A3", "D4", "G4"], ["A3", "D4", "Gb4"]],
+     "voice_motion_semitones": [3.5, 2, 6, 1],
+     "chord_rhythm": "swell: half-note swells",
+     "bass_style": "walk: town walking bass with chromatic approach",
+     "counter": "generated arp (sparkle16)",
+     "files": {
+      "chords": "sections/b1-chords.mid",
+      "bass": "sections/b1-bass.mid",
+      "lead": "sections/b1-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 12,
+      "s1_bass": 12,
+      "s1_lead": 12
+     }
+    },
+    "b2": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "Bb major",
+     "chords": [["Gm7"], ["Ebmaj7"], ["Gbmaj7"], ["Fsus4", "F"]],
+     "voicings": [["F3", "Bb3", "D4", "G4"], ["Eb3", "Bb3", "D4", "G4"], ["F3", "Bb3", "Db4", "Gb4"], ["Bb3", "C4", "F4"], ["A3", "C4", "F4"]],
+     "voice_motion_semitones": [2, 4, 4.5, 1],
+     "chord_rhythm": "swell: half-note swells",
+     "bass_style": "walk: town walking bass with chromatic approach",
+     "counter": "generated arp (sparkle16)",
+     "files": {
+      "chords": "sections/b2-chords.mid",
+      "bass": "sections/b2-bass.mid",
+      "lead": "sections/b2-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 13,
+      "s1_bass": 13,
+      "s1_lead": 13
+     }
+    },
+    "bridge": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "Bb major",
+     "chords": [["Ebmaj7"], ["Bb/D"], ["Cm7"], ["Fsus4"]],
+     "voicings": [["Eb3", "Bb3", "D4", "G4"], ["Bb3", "D4", "F4"], ["Bb3", "C4", "Eb4", "G4"], ["Bb3", "C4", "F4"]],
+     "voice_motion_semitones": [5.5, 4, 3],
+     "chord_rhythm": "pad: string pad, one chord per slot",
+     "bass_style": "long: one long note per chord",
+     "counter": "generated arp (sparkle16)",
+     "files": {
+      "chords": "sections/bridge-chords.mid",
+      "bass": "sections/bridge-bass.mid",
+      "lead": "sections/bridge-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 14,
+      "s1_bass": 14,
+      "s1_lead": 14
+     }
+    }
+   },
+   "j6": {
+    "closest_chord_sets": "19 (all M7) and 40 (all add9); 34 (all sus2) for the intro",
+    "style": "Long pad (slow ATTACK, long RELEASE, CHORUS on)"
+   },
+   "s1": {
+    "bass_patch": "TRIANGLE + SUB, long DECAY: soft upright",
+    "lead_patch": "TRIANGLE/SQUARE, short DECAY, no SUB: music box / celesta",
+    "pattern_slots": "9-14"
+   },
+   "counter_ch4": "generated sparkle16 arp",
+   "cover_ideas": "OP-XY: 'celesta'/'glock' multisample lead, string-pad synth, felt-piano counter, brushed kit. M8: FM bell lead, sampled strings, soft sine sub bass.",
+   "files": {
+    "full": "full.mid",
+    "sections": "sections/<section>-{chords,bass,lead}.mid"
+   }
+  },
+  {
+   "n": 3,
+   "id": "03-hollowroot-cavern",
+   "dir": "03-hollowroot-cavern",
+   "title": "Hollowroot Cavern",
+   "role": "Forest / cave (mystery)",
+   "bpm": 104,
+   "key": "D minor",
+   "detected_key": "Dmin",
+   "style": "Sinnoh-era DS feel: Dorian cave loop over a D pedal, sus2/sus4 colour, pizzicato staccato bass, breathy flute lead, descending maj7/m7 B section.",
+   "bars": 32,
+   "form": [
+    {
+     "section": "intro",
+     "bars": 4,
+     "start_bar": 1
+    },
+    {
+     "section": "a1",
+     "bars": 4,
+     "start_bar": 5
+    },
+    {
+     "section": "a2",
+     "bars": 4,
+     "start_bar": 9
+    },
+    {
+     "section": "b1",
+     "bars": 4,
+     "start_bar": 13
+    },
+    {
+     "section": "b2",
+     "bars": 4,
+     "start_bar": 17
+    },
+    {
+     "section": "bridge",
+     "bars": 4,
+     "start_bar": 21
+    },
+    {
+     "section": "a1",
+     "bars": 4,
+     "start_bar": 25
+    },
+    {
+     "section": "a2",
+     "bars": 4,
+     "start_bar": 29
+    }
+   ],
+   "form_summary": "intro(4) a1(4) a2(4) b1(4) b2(4) bridge(4) a1(4) a2(4)",
+   "loop": {
+    "start_bar": 5,
+    "end_bar": 32,
+    "section": "a1",
+    "note": "play the intro once, then loop bars 5-32"
+   },
+   "sections": {
+    "intro": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "D minor",
+     "chords": [["Dm"], ["Em7/D"], ["Dm"], ["Csus2/D"]],
+     "voicings": [["A3", "D4", "F4"], ["G3", "B3", "D4", "E4"], ["A3", "D4", "F4"], ["C4", "D4", "G4"]],
+     "voice_motion_semitones": [4, 4, 5],
+     "chord_rhythm": "pad: string pad, one chord per slot",
+     "bass_style": "pedal8: tonic pedal in 8ths",
+     "counter": "generated arp (bells8)",
+     "files": {
+      "chords": "sections/intro-chords.mid",
+      "bass": "sections/intro-bass.mid",
+      "lead": "sections/intro-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 17,
+      "s1_bass": 17,
+      "s1_lead": 17
+     }
+    },
+    "a1": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "D minor",
+     "chords": [["Dm7"], ["G/D"], ["Dm7"], ["Cadd9"]],
+     "voicings": [["A3", "C4", "D4", "F4"], ["B3", "D4", "G4"], ["A3", "C4", "D4", "F4"], ["G3", "C4", "D4", "E4"]],
+     "voice_motion_semitones": [4, 4, 3],
+     "chord_rhythm": "offbeat: upbeat brass/organ chops",
+     "bass_style": "pizz: staccato pizzicato 8ths",
+     "counter": "generated arp (bells8)",
+     "files": {
+      "chords": "sections/a1-chords.mid",
+      "bass": "sections/a1-bass.mid",
+      "lead": "sections/a1-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 18,
+      "s1_bass": 18,
+      "s1_lead": 18
+     }
+    },
+    "a2": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "D minor",
+     "chords": [["Bbmaj7"], ["C"], ["Asus4"], ["A"]],
+     "voicings": [["A3", "D4", "F4", "Bb4"], ["G3", "C4", "E4"], ["A3", "D4", "E4"], ["A3", "Db4", "E4"]],
+     "voice_motion_semitones": [8, 4, 1],
+     "chord_rhythm": "offbeat: upbeat brass/organ chops",
+     "bass_style": "pizz: staccato pizzicato 8ths",
+     "counter": "generated arp (bells8)",
+     "files": {
+      "chords": "sections/a2-chords.mid",
+      "bass": "sections/a2-bass.mid",
+      "lead": "sections/a2-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 19,
+      "s1_bass": 19,
+      "s1_lead": 19
+     }
+    },
+    "b1": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "D minor",
+     "chords": [["Fmaj7"], ["Em7"], ["Dm7"], ["Cmaj7"]],
+     "voicings": [["F3", "C4", "E4", "A4"], ["E3", "B3", "D4", "G4"], ["F3", "C4", "D4", "A4"], ["G3", "C4", "E4", "B4"]],
+     "voice_motion_semitones": [6, 4, 6],
+     "chord_rhythm": "swell: half-note swells",
+     "bass_style": "sparse: cave/forest sparse figure",
+     "counter": "generated arp (bells8)",
+     "files": {
+      "chords": "sections/b1-chords.mid",
+      "bass": "sections/b1-bass.mid",
+      "lead": "sections/b1-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 20,
+      "s1_bass": 20,
+      "s1_lead": 20
+     }
+    },
+    "b2": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "D minor",
+     "chords": [["Bbmaj7"], ["Gm7"], ["Asus4"], ["A7"]],
+     "voicings": [["Bb3", "D4", "F4", "A4"], ["Bb3", "D4", "F4", "G4"], ["A3", "D4", "E4"], ["A3", "Db4", "E4", "G4"]],
+     "voice_motion_semitones": [2, 3.5, 2.5],
+     "chord_rhythm": "swell: half-note swells",
+     "bass_style": "sparse: cave/forest sparse figure",
+     "counter": "generated arp (bells8)",
+     "files": {
+      "chords": "sections/b2-chords.mid",
+      "bass": "sections/b2-bass.mid",
+      "lead": "sections/b2-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 21,
+      "s1_bass": 21,
+      "s1_lead": 21
+     }
+    },
+    "bridge": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "D minor",
+     "chords": [["Dm"], ["Bbmaj7/D"], ["Gm/D"], ["Asus4/D"]],
+     "voicings": [["A3", "D4", "F4"], ["Bb3", "D4", "F4", "A4"], ["Bb3", "D4", "G4"], ["A3", "D4", "E4"]],
+     "voice_motion_semitones": [3, 3, 4],
+     "chord_rhythm": "pad: string pad, one chord per slot",
+     "bass_style": "drone: held tonic drone",
+     "counter": "generated arp (bells8)",
+     "files": {
+      "chords": "sections/bridge-chords.mid",
+      "bass": "sections/bridge-bass.mid",
+      "lead": "sections/bridge-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 22,
+      "s1_bass": 22,
+      "s1_lead": 22
+     }
+    }
+   },
+   "j6": {
+    "closest_chord_sets": "34 (all sus2), 20 (all m7), 19 (all M7) - utility-style, root on the key",
+    "style": "Slow up/down arp (STYLE 1-2) or long pad"
+   },
+   "s1": {
+    "bass_patch": "SQUARE, very short DECAY, low CUTOFF: plucked/pizz",
+    "lead_patch": "TRIANGLE, NOISE a touch, slow LFO vibrato: flute",
+    "pattern_slots": "17-22"
+   },
+   "counter_ch4": "generated bells8 arp",
+   "cover_ideas": "OP-XY: pizzicato-strings sampler bass, flute or ocarina lead, hand-drum kit, reverb-heavy pad. M8: sampled pizz, FM flute, granular drip texture on ch4.",
+   "files": {
+    "full": "full.mid",
+    "sections": "sections/<section>-{chords,bass,lead}.mid"
+   }
+  },
+  {
+   "n": 4,
+   "id": "04-kettle-square",
+   "dir": "04-kettle-square",
+   "title": "Kettle Square",
+   "role": "Town theme",
+   "bpm": 112,
+   "key": "F major",
+   "detected_key": "Fmaj",
+   "style": "Sinnoh-era DS feel: relaxed town loop, maj7/m7 colour, walking bass, Bbm6 borrowed iv, ii-V turnarounds and a bVI (Ab) lift in the bridge.",
+   "bars": 40,
+   "form": [
+    {
+     "section": "intro",
+     "bars": 4,
+     "start_bar": 1
+    },
+    {
+     "section": "a1",
+     "bars": 4,
+     "start_bar": 5
+    },
+    {
+     "section": "a2",
+     "bars": 4,
+     "start_bar": 9
+    },
+    {
+     "section": "b1",
+     "bars": 4,
+     "start_bar": 13
+    },
+    {
+     "section": "b2",
+     "bars": 4,
+     "start_bar": 17
+    },
+    {
+     "section": "a1",
+     "bars": 4,
+     "start_bar": 21
+    },
+    {
+     "section": "a2",
+     "bars": 4,
+     "start_bar": 25
+    },
+    {
+     "section": "bridge",
+     "bars": 4,
+     "start_bar": 29
+    },
+    {
+     "section": "b1",
+     "bars": 4,
+     "start_bar": 33
+    },
+    {
+     "section": "b2",
+     "bars": 4,
+     "start_bar": 37
+    }
+   ],
+   "form_summary": "intro(4) a1(4) a2(4) b1(4) b2(4) a1(4) a2(4) bridge(4) b1(4) b2(4)",
+   "loop": {
+    "start_bar": 5,
+    "end_bar": 40,
+    "section": "a1",
+    "note": "play the intro once, then loop bars 5-40"
+   },
+   "sections": {
+    "intro": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "F major",
+     "chords": [["Fmaj7"], ["Gm7", "C7"], ["Fmaj7"], ["Bbmaj7", "C7"]],
+     "voicings": [["F3", "C4", "E4", "A4"], ["G3", "D4", "F4", "Bb4"], ["G3", "C4", "E4", "Bb4"], ["F3", "C4", "E4", "A4"], ["F3", "Bb3", "D4", "A4"], ["G3", "C4", "E4", "Bb4"]],
+     "voice_motion_semitones": [6, 3, 3, 4, 7],
+     "chord_rhythm": "tick: light town comping (dotted feel)",
+     "bass_style": "halves: root, then root-fifth answer",
+     "counter": "generated arp (bells8)",
+     "files": {
+      "chords": "sections/intro-chords.mid",
+      "bass": "sections/intro-bass.mid",
+      "lead": "sections/intro-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 25,
+      "s1_bass": 25,
+      "s1_lead": 25
+     }
+    },
+    "a1": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "F major",
+     "chords": [["F"], ["Bb", "C"], ["Am7", "Dm7"], ["Gm7", "C7"]],
+     "voicings": [["A3", "C4", "F4"], ["Bb3", "D4", "F4"], ["C4", "E4", "G4"], ["A3", "C4", "E4", "G4"], ["A3", "C4", "D4", "F4"], ["G3", "Bb3", "D4", "F4"], ["G3", "Bb3", "C4", "E4"]],
+     "voice_motion_semitones": [3, 6, 1.5, 4, 4, 3],
+     "chord_rhythm": "tick: light town comping (dotted feel)",
+     "bass_style": "walk: town walking bass with chromatic approach",
+     "counter": "generated arp (bells8)",
+     "files": {
+      "chords": "sections/a1-chords.mid",
+      "bass": "sections/a1-bass.mid",
+      "lead": "sections/a1-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 26,
+      "s1_bass": 26,
+      "s1_lead": 26
+     }
+    },
+    "a2": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "F major",
+     "chords": [["F"], ["Bb", "Bbm6"], ["Am7", "D7"], ["Gm7", "C7"]],
+     "voicings": [["A3", "C4", "F4"], ["Bb3", "D4", "F4"], ["Bb3", "Db4", "F4", "G4"], ["A3", "C4", "E4", "G4"], ["A3", "C4", "D4", "Gb4"], ["G3", "Bb3", "D4", "F4"], ["G3", "Bb3", "C4", "E4"]],
+     "voice_motion_semitones": [3, 2, 3, 3, 5, 3],
+     "chord_rhythm": "tick: light town comping (dotted feel)",
+     "bass_style": "walk: town walking bass with chromatic approach",
+     "counter": "generated arp (bells8)",
+     "files": {
+      "chords": "sections/a2-chords.mid",
+      "bass": "sections/a2-bass.mid",
+      "lead": "sections/a2-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 27,
+      "s1_bass": 27,
+      "s1_lead": 27
+     }
+    },
+    "b1": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "F major",
+     "chords": [["Dm7"], ["Bbmaj7"], ["Gm7"], ["C7sus4", "C7"]],
+     "voicings": [["F3", "C4", "D4", "A4"], ["F3", "Bb3", "D4", "A4"], ["F3", "Bb3", "D4", "G4"], ["F3", "Bb3", "C4", "G4"], ["E3", "Bb3", "C4", "G4"]],
+     "voice_motion_semitones": [2, 2, 2, 1],
+     "chord_rhythm": "swell: half-note swells",
+     "bass_style": "walk: town walking bass with chromatic approach",
+     "counter": "generated arp (bells8)",
+     "files": {
+      "chords": "sections/b1-chords.mid",
+      "bass": "sections/b1-bass.mid",
+      "lead": "sections/b1-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 28,
+      "s1_bass": 28,
+      "s1_lead": 28
+     }
+    },
+    "b2": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "F major",
+     "chords": [["Dm7"], ["Bbmaj7"], ["Gm7", "Bbm6"], ["F"]],
+     "voicings": [["C4", "D4", "F4", "A4"], ["Bb3", "D4", "F4", "A4"], ["Bb3", "D4", "F4", "G4"], ["Bb3", "Db4", "F4", "G4"], ["A3", "C4", "F4"]],
+     "voice_motion_semitones": [2, 2, 1, 3],
+     "chord_rhythm": "swell: half-note swells",
+     "bass_style": "walk: town walking bass with chromatic approach",
+     "counter": "generated arp (bells8)",
+     "files": {
+      "chords": "sections/b2-chords.mid",
+      "bass": "sections/b2-bass.mid",
+      "lead": "sections/b2-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 29,
+      "s1_bass": 29,
+      "s1_lead": 29
+     }
+    },
+    "bridge": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "F major",
+     "chords": [["Bbmaj7"], ["Am7"], ["Gm7"], ["Ab", "C7"]],
+     "voicings": [["Bb3", "D4", "F4", "A4"], ["A3", "C4", "E4", "G4"], ["Bb3", "D4", "F4", "G4"], ["C4", "Eb4", "Ab4"], ["Bb3", "C4", "E4", "G4"]],
+     "voice_motion_semitones": [6, 4, 5, 3],
+     "chord_rhythm": "pad: string pad, one chord per slot",
+     "bass_style": "halves: root, then root-fifth answer",
+     "counter": "generated arp (bells8)",
+     "files": {
+      "chords": "sections/bridge-chords.mid",
+      "bass": "sections/bridge-bass.mid",
+      "lead": "sections/bridge-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 30,
+      "s1_bass": 30,
+      "s1_lead": 30
+     }
+    }
+   },
+   "j6": {
+    "closest_chord_sets": "19 (all M7) + 20 (all m7) utility sets; 7 (C-major diatonic) for the triads",
+    "style": "Light chord rhythm (short RELEASE), electric-piano-ish preset"
+   },
+   "s1": {
+    "bass_patch": "SQUARE + SUB, medium DECAY: round walking bass",
+    "lead_patch": "PULSE/SQUARE, medium CUTOFF: clarinet/accordion-ish",
+    "pattern_slots": "25-30"
+   },
+   "counter_ch4": "generated bells8 arp",
+   "cover_ideas": "OP-XY: e-piano or accordion sampler chords, upright bass, whistle/clarinet lead, shaker + rim kit. M8: FM e-piano, sampled upright, square lead with slow vibrato.",
+   "files": {
+    "full": "full.mid",
+    "sections": "sections/<section>-{chords,bass,lead}.mid"
+   }
+  },
+  {
+   "n": 5,
+   "id": "05-tall-grass-ambush",
+   "dir": "05-tall-grass-ambush",
+   "title": "Tall Grass Ambush",
+   "role": "Wild battle",
+   "bpm": 168,
+   "key": "E minor",
+   "detected_key": "Emin",
+   "style": "Sinnoh-era DS feel: fast minor battle, driving 16th bass ostinato, syncopated brass stabs, scalar pickups into each phrase, bVII (D) and V7 (B7) pushes.",
+   "bars": 32,
+   "form": [
+    {
+     "section": "intro",
+     "bars": 4,
+     "start_bar": 1
+    },
+    {
+     "section": "a1",
+     "bars": 4,
+     "start_bar": 5
+    },
+    {
+     "section": "a2",
+     "bars": 4,
+     "start_bar": 9
+    },
+    {
+     "section": "b1",
+     "bars": 4,
+     "start_bar": 13
+    },
+    {
+     "section": "b2",
+     "bars": 4,
+     "start_bar": 17
+    },
+    {
+     "section": "break",
+     "bars": 4,
+     "start_bar": 21
+    },
+    {
+     "section": "a1",
+     "bars": 4,
+     "start_bar": 25
+    },
+    {
+     "section": "a2",
+     "bars": 4,
+     "start_bar": 29
+    }
+   ],
+   "form_summary": "intro(4) a1(4) a2(4) b1(4) b2(4) break(4) a1(4) a2(4)",
+   "loop": {
+    "start_bar": 5,
+    "end_bar": 32,
+    "section": "a1",
+    "note": "play the intro once, then loop bars 5-32"
+   },
+   "sections": {
+    "intro": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "E minor",
+     "chords": [["Em"], ["Cmaj7"], ["Am"], ["B7"]],
+     "voicings": [["B3", "E4", "G4"], ["C4", "E4", "G4", "B4"], ["C4", "E4", "A4"], ["B3", "D#4", "F#4", "A4"]],
+     "voice_motion_semitones": [3, 3, 3],
+     "chord_rhythm": "stab: syncopated DS-style brass stabs",
+     "bass_style": "drive: driving 16th battle ostinato",
+     "counter": "generated arp (brass16)",
+     "files": {
+      "chords": "sections/intro-chords.mid",
+      "bass": "sections/intro-bass.mid",
+      "lead": "sections/intro-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 33,
+      "s1_bass": 33,
+      "s1_lead": 33
+     }
+    },
+    "a1": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "E minor",
+     "chords": [["Em"], ["Cmaj7"], ["Am"], ["B7"]],
+     "voicings": [["B3", "E4", "G4"], ["C4", "E4", "G4", "B4"], ["C4", "E4", "A4"], ["B3", "D#4", "F#4", "A4"]],
+     "voice_motion_semitones": [3, 3, 3],
+     "chord_rhythm": "battle: 16th brass hits with pickups",
+     "bass_style": "drive: driving 16th battle ostinato",
+     "counter": "generated arp (brass16)",
+     "files": {
+      "chords": "sections/a1-chords.mid",
+      "bass": "sections/a1-bass.mid",
+      "lead": "sections/a1-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 34,
+      "s1_bass": 34,
+      "s1_lead": 34
+     }
+    },
+    "a2": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "E minor",
+     "chords": [["Em"], ["Cmaj7"], ["D"], ["B"]],
+     "voicings": [["B3", "E4", "G4"], ["B3", "E4", "G4", "C5"], ["A3", "D4", "F#4"], ["B3", "D#4", "F#4"]],
+     "voice_motion_semitones": [2.5, 8, 3],
+     "chord_rhythm": "battle: 16th brass hits with pickups",
+     "bass_style": "drive: driving 16th battle ostinato",
+     "counter": "generated arp (brass16)",
+     "files": {
+      "chords": "sections/a2-chords.mid",
+      "bass": "sections/a2-bass.mid",
+      "lead": "sections/a2-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 35,
+      "s1_bass": 35,
+      "s1_lead": 35
+     }
+    },
+    "b1": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "E minor",
+     "chords": [["Am7"], ["D7"], ["Gmaj7"], ["Cmaj7"]],
+     "voicings": [["G3", "C4", "E4", "A4"], ["F#3", "C4", "D4", "A4"], ["F#3", "B3", "D4", "G4"], ["G3", "C4", "E4", "B4"]],
+     "voice_motion_semitones": [3, 3, 8],
+     "chord_rhythm": "stab: syncopated DS-style brass stabs",
+     "bass_style": "gallop: galloping x.xx battle figure",
+     "counter": "generated arp (brass16)",
+     "files": {
+      "chords": "sections/b1-chords.mid",
+      "bass": "sections/b1-bass.mid",
+      "lead": "sections/b1-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 36,
+      "s1_bass": 36,
+      "s1_lead": 36
+     }
+    },
+    "b2": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "E minor",
+     "chords": [["Am7"], ["F#m7b5"], ["Cmaj7"], ["B7"]],
+     "voicings": [["G3", "C4", "E4", "A4"], ["F#3", "C4", "E4", "A4"], ["G3", "C4", "E4", "B4"], ["F#3", "B3", "D#4", "A4"]],
+     "voice_motion_semitones": [1, 3, 5],
+     "chord_rhythm": "stab: syncopated DS-style brass stabs",
+     "bass_style": "gallop: galloping x.xx battle figure",
+     "counter": "generated arp (brass16)",
+     "files": {
+      "chords": "sections/b2-chords.mid",
+      "bass": "sections/b2-bass.mid",
+      "lead": "sections/b2-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 37,
+      "s1_bass": 37,
+      "s1_lead": 37
+     }
+    },
+    "break": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "E minor",
+     "chords": [["Em"], ["Em"], ["C"], ["D"]],
+     "voicings": [["B3", "E4", "G4"], ["B3", "E4", "G4"], ["C4", "E4", "G4"], ["A3", "D4", "F#4"]],
+     "voice_motion_semitones": [0, 1, 6],
+     "chord_rhythm": "offbeat: upbeat brass/organ chops",
+     "bass_style": "drive: driving 16th battle ostinato",
+     "counter": "generated arp (brass16)",
+     "files": {
+      "chords": "sections/break-chords.mid",
+      "bass": "sections/break-bass.mid",
+      "lead": "sections/break-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 38,
+      "s1_bass": 38,
+      "s1_lead": 38
+     }
+    }
+   },
+   "j6": {
+    "closest_chord_sets": "8 (C-minor diatonic), 58 (Techno) for hard stabs",
+    "style": "Short stab styles, fast ATTACK, short RELEASE; brass preset"
+   },
+   "s1": {
+    "bass_patch": "SAW, high ENV MOD, short DECAY, accents on: driving ostinato",
+    "lead_patch": "SQUARE, bright CUTOFF, fast vibrato: DS trumpet/synth lead",
+    "pattern_slots": "33-38"
+   },
+   "counter_ch4": "generated brass16 arp",
+   "cover_ideas": "OP-XY: brass-section sampler stabs, saw bass, square lead, fast 16th hat + tom fills. M8: FM brass stabs, wavsynth saw bass, pulse lead with arp-chip counter.",
+   "files": {
+    "full": "full.mid",
+    "sections": "sections/<section>-{chords,bass,lead}.mid"
+   }
+  },
+  {
+   "n": 6,
+   "id": "06-ironbell-rival",
+   "dir": "06-ironbell-rival",
+   "title": "Ironbell Rival",
+   "role": "Gym leader / rival battle",
+   "bpm": 152,
+   "key": "A minor",
+   "detected_key": "Amin",
+   "style": "Sinnoh-era DS feel: rival battle in A minor, gallop bass, Neapolitan (Bb) turn, then a last-chorus half-step key change (E -> F pivot) into Bb minor.",
+   "bars": 40,
+   "form": [
+    {
+     "section": "intro",
+     "bars": 4,
+     "start_bar": 1
+    },
+    {
+     "section": "a1",
+     "bars": 4,
+     "start_bar": 5
+    },
+    {
+     "section": "a2",
+     "bars": 4,
+     "start_bar": 9
+    },
+    {
+     "section": "b1",
+     "bars": 4,
+     "start_bar": 13
+    },
+    {
+     "section": "b2",
+     "bars": 4,
+     "start_bar": 17
+    },
+    {
+     "section": "a1",
+     "bars": 4,
+     "start_bar": 21
+    },
+    {
+     "section": "a2",
+     "bars": 4,
+     "start_bar": 25
+    },
+    {
+     "section": "bridge",
+     "bars": 4,
+     "start_bar": 29
+    },
+    {
+     "section": "a1up",
+     "bars": 4,
+     "start_bar": 33
+    },
+    {
+     "section": "a2up",
+     "bars": 4,
+     "start_bar": 37
+    }
+   ],
+   "form_summary": "intro(4) a1(4) a2(4) b1(4) b2(4) a1(4) a2(4) bridge(4) a1up(4) a2up(4)",
+   "loop": {
+    "start_bar": 5,
+    "end_bar": 40,
+    "section": "a1",
+    "note": "play the intro once, then loop bars 5-40"
+   },
+   "sections": {
+    "intro": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "A minor",
+     "chords": [["Am"], ["Am7"], ["Fmaj7"], ["E7"]],
+     "voicings": [["A3", "C4", "E4"], ["G3", "A3", "C4", "E4"], ["F3", "A3", "C4", "E4"], ["G#3", "B3", "D4", "E4"]],
+     "voice_motion_semitones": [1, 2, 7],
+     "chord_rhythm": "stab: syncopated DS-style brass stabs",
+     "bass_style": "drive: driving 16th battle ostinato",
+     "counter": "generated arp (brass16)",
+     "files": {
+      "chords": "sections/intro-chords.mid",
+      "bass": "sections/intro-bass.mid",
+      "lead": "sections/intro-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 41,
+      "s1_bass": 41,
+      "s1_lead": 41
+     }
+    },
+    "a1": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "A minor",
+     "chords": [["Am"], ["Dm7"], ["G"], ["Cmaj7"]],
+     "voicings": [["A3", "C4", "E4"], ["A3", "C4", "D4", "F4"], ["B3", "D4", "G4"], ["B3", "E4", "G4", "C5"]],
+     "voice_motion_semitones": [2, 4, 4.5],
+     "chord_rhythm": "battle: 16th brass hits with pickups",
+     "bass_style": "gallop: galloping x.xx battle figure",
+     "counter": "generated arp (brass16)",
+     "files": {
+      "chords": "sections/a1-chords.mid",
+      "bass": "sections/a1-bass.mid",
+      "lead": "sections/a1-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 42,
+      "s1_bass": 42,
+      "s1_lead": 42
+     }
+    },
+    "a2": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "A minor",
+     "chords": [["Fmaj7"], ["Dm7"], ["Esus4"], ["E"]],
+     "voicings": [["F3", "A3", "C4", "E4"], ["F3", "A3", "C4", "D4"], ["A3", "B3", "E4"], ["G#3", "B3", "E4"]],
+     "voice_motion_semitones": [2, 5, 1],
+     "chord_rhythm": "battle: 16th brass hits with pickups",
+     "bass_style": "gallop: galloping x.xx battle figure",
+     "counter": "generated arp (brass16)",
+     "files": {
+      "chords": "sections/a2-chords.mid",
+      "bass": "sections/a2-bass.mid",
+      "lead": "sections/a2-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 43,
+      "s1_bass": 43,
+      "s1_lead": 43
+     }
+    },
+    "b1": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "A minor",
+     "chords": [["F"], ["G"], ["Em7", "Am"], ["Dm7", "E7"]],
+     "voicings": [["A3", "C4", "F4"], ["G3", "B3", "D4"], ["G3", "B3", "D4", "E4"], ["A3", "C4", "E4"], ["A3", "C4", "D4", "F4"], ["G#3", "B3", "D4", "E4"]],
+     "voice_motion_semitones": [6, 1, 4, 2, 3],
+     "chord_rhythm": "stab: syncopated DS-style brass stabs",
+     "bass_style": "drive: driving 16th battle ostinato",
+     "counter": "generated arp (brass16)",
+     "files": {
+      "chords": "sections/b1-chords.mid",
+      "bass": "sections/b1-bass.mid",
+      "lead": "sections/b1-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 44,
+      "s1_bass": 44,
+      "s1_lead": 44
+     }
+    },
+    "b2": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "A minor",
+     "chords": [["F"], ["G"], ["Am"], ["Bb", "E7"]],
+     "voicings": [["A3", "C4", "F4"], ["G3", "B3", "D4"], ["A3", "C4", "E4"], ["A#3", "D4", "F4"], ["G#3", "B3", "D4", "E4"]],
+     "voice_motion_semitones": [6, 5, 4, 3],
+     "chord_rhythm": "stab: syncopated DS-style brass stabs",
+     "bass_style": "drive: driving 16th battle ostinato",
+     "counter": "generated arp (brass16)",
+     "files": {
+      "chords": "sections/b2-chords.mid",
+      "bass": "sections/b2-bass.mid",
+      "lead": "sections/b2-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 45,
+      "s1_bass": 45,
+      "s1_lead": 45
+     }
+    },
+    "bridge": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "A minor",
+     "chords": [["Dm"], ["Dm"], ["Esus4"], ["F"]],
+     "voicings": [["A3", "D4", "F4"], ["A3", "D4", "F4"], ["A3", "B3", "E4"], ["A3", "C4", "F4"]],
+     "voice_motion_semitones": [0, 4, 2],
+     "chord_rhythm": "offbeat: upbeat brass/organ chops",
+     "bass_style": "pulse8: straight 8th pulse into an approach note",
+     "counter": "generated arp (brass16)",
+     "files": {
+      "chords": "sections/bridge-chords.mid",
+      "bass": "sections/bridge-bass.mid",
+      "lead": "sections/bridge-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 46,
+      "s1_bass": 46,
+      "s1_lead": 46
+     }
+    },
+    "a1up": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "Bb minor",
+     "chords": [["Bbm"], ["Ebm7"], ["Ab"], ["Dbmaj7"]],
+     "voicings": [["Bb3", "Db4", "F4"], ["Bb3", "Db4", "Eb4", "Gb4"], ["C4", "Eb4", "Ab4"], ["Db4", "F4", "Ab4", "C5"]],
+     "voice_motion_semitones": [2, 4, 5],
+     "chord_rhythm": "battle: 16th brass hits with pickups",
+     "bass_style": "gallop: galloping x.xx battle figure",
+     "counter": "generated arp (brass16)",
+     "files": {
+      "chords": "sections/a1up-chords.mid",
+      "bass": "sections/a1up-bass.mid",
+      "lead": "sections/a1up-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 47,
+      "s1_bass": 47,
+      "s1_lead": 47
+     },
+     "transposed_from": {
+      "section": "a1",
+      "semitones": 1
+     }
+    },
+    "a2up": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "Bb minor",
+     "chords": [["Gbmaj7"], ["Ebm7"], ["Fsus4"], ["F"]],
+     "voicings": [["Gb3", "Bb3", "Db4", "F4"], ["Gb3", "Bb3", "Db4", "Eb4"], ["Bb3", "C4", "F4"], ["A3", "C4", "F4"]],
+     "voice_motion_semitones": [2, 5, 1],
+     "chord_rhythm": "battle: 16th brass hits with pickups",
+     "bass_style": "gallop: galloping x.xx battle figure",
+     "counter": "generated arp (brass16)",
+     "files": {
+      "chords": "sections/a2up-chords.mid",
+      "bass": "sections/a2up-bass.mid",
+      "lead": "sections/a2up-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 48,
+      "s1_bass": 48,
+      "s1_lead": 48
+     },
+     "transposed_from": {
+      "section": "a2",
+      "semitones": 1
+     }
+    }
+   },
+   "j6": {
+    "closest_chord_sets": "8 (C-minor diatonic), 48 (Trance: minor palette with slash-chord bass)",
+    "style": "Stab styles; for the key change step every chord up one key (verify transpose on the unit)"
+   },
+   "s1": {
+    "bass_patch": "SAW + SUB, short DECAY, accents: galloping drive",
+    "lead_patch": "SQUARE, bright, PORTAMENTO a touch for slides: rival lead",
+    "pattern_slots": "41-48"
+   },
+   "counter_ch4": "generated brass16 arp",
+   "cover_ideas": "OP-XY: orchestral-hit + brass sampler chords, saw bass, lead on a detuned square, timpani/snare-roll kit into the key change. M8: FM brass, saw bass, sampled timpani fills.",
+   "files": {
+    "full": "full.mid",
+    "sections": "sections/<section>-{chords,bass,lead}.mid"
+   }
+  },
+  {
+   "n": 7,
+   "id": "07-summit-crown",
+   "dir": "07-summit-crown",
+   "title": "Summit Crown",
+   "role": "Champion-style finale",
+   "bpm": 144,
+   "key": "G minor",
+   "detected_key": "Gmin",
+   "style": "Sinnoh-era DS feel: final-battle scale, fanfare intro, chromatic-mediant lifts (Eb -> B, Gm -> E), chromatic descent to V, and a G-major coda (bVI-bVII-I).",
+   "bars": 36,
+   "form": [
+    {
+     "section": "intro",
+     "bars": 4,
+     "start_bar": 1
+    },
+    {
+     "section": "a1",
+     "bars": 4,
+     "start_bar": 5
+    },
+    {
+     "section": "a2",
+     "bars": 4,
+     "start_bar": 9
+    },
+    {
+     "section": "b1",
+     "bars": 4,
+     "start_bar": 13
+    },
+    {
+     "section": "b2",
+     "bars": 4,
+     "start_bar": 17
+    },
+    {
+     "section": "bridge",
+     "bars": 4,
+     "start_bar": 21
+    },
+    {
+     "section": "a1",
+     "bars": 4,
+     "start_bar": 25
+    },
+    {
+     "section": "a2",
+     "bars": 4,
+     "start_bar": 29
+    },
+    {
+     "section": "coda",
+     "bars": 4,
+     "start_bar": 33
+    }
+   ],
+   "form_summary": "intro(4) a1(4) a2(4) b1(4) b2(4) bridge(4) a1(4) a2(4) coda(4)",
+   "loop": {
+    "start_bar": 5,
+    "end_bar": 36,
+    "section": "a1",
+    "note": "play the intro once, then loop bars 5-36"
+   },
+   "sections": {
+    "intro": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "G minor",
+     "chords": [["Gm"], ["Ebmaj7"], ["Cm"], ["D7"]],
+     "voicings": [["G3", "Bb3", "D4"], ["Eb3", "G3", "Bb3", "D4"], ["G3", "C4", "Eb4"], ["Gb3", "A3", "C4", "D4"]],
+     "voice_motion_semitones": [2, 5, 3],
+     "chord_rhythm": "stab: syncopated DS-style brass stabs",
+     "bass_style": "pulse8: straight 8th pulse into an approach note",
+     "counter": "generated arp (brass16)",
+     "files": {
+      "chords": "sections/intro-chords.mid",
+      "bass": "sections/intro-bass.mid",
+      "lead": "sections/intro-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 49,
+      "s1_bass": 49,
+      "s1_lead": 49
+     }
+    },
+    "a1": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "G minor",
+     "chords": [["Gm"], ["Ebmaj7"], ["Bb/D"], ["F"]],
+     "voicings": [["G3", "Bb3", "D4"], ["Eb3", "G3", "Bb3", "D4"], ["F3", "Bb3", "D4"], ["F3", "A3", "C4"]],
+     "voice_motion_semitones": [2, 3, 3],
+     "chord_rhythm": "battle: 16th brass hits with pickups",
+     "bass_style": "drive: driving 16th battle ostinato",
+     "counter": "generated arp (brass16)",
+     "files": {
+      "chords": "sections/a1-chords.mid",
+      "bass": "sections/a1-bass.mid",
+      "lead": "sections/a1-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 50,
+      "s1_bass": 50,
+      "s1_lead": 50
+     }
+    },
+    "a2": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "G minor",
+     "chords": [["Gm"], ["Ebmaj7"], ["Cm7"], ["D"]],
+     "voicings": [["Bb3", "D4", "G4"], ["Eb3", "Bb3", "D4", "G4"], ["Eb3", "Bb3", "C4", "G4"], ["A3", "D4", "Gb4"]],
+     "voice_motion_semitones": [3.5, 2, 7],
+     "chord_rhythm": "battle: 16th brass hits with pickups",
+     "bass_style": "drive: driving 16th battle ostinato",
+     "counter": "generated arp (brass16)",
+     "files": {
+      "chords": "sections/a2-chords.mid",
+      "bass": "sections/a2-bass.mid",
+      "lead": "sections/a2-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 51,
+      "s1_bass": 51,
+      "s1_lead": 51
+     }
+    },
+    "b1": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "G minor",
+     "chords": [["Ebmaj7"], ["Cm7"], ["B"], ["D"]],
+     "voicings": [["Eb3", "Bb3", "D4", "G4"], ["Eb3", "Bb3", "C4", "G4"], ["B3", "Eb4", "Gb4"], ["A3", "D4", "Gb4"]],
+     "voice_motion_semitones": [2, 8, 3],
+     "chord_rhythm": "stab: syncopated DS-style brass stabs",
+     "bass_style": "gallop: galloping x.xx battle figure",
+     "counter": "generated arp (brass16)",
+     "files": {
+      "chords": "sections/b1-chords.mid",
+      "bass": "sections/b1-bass.mid",
+      "lead": "sections/b1-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 52,
+      "s1_bass": 52,
+      "s1_lead": 52
+     }
+    },
+    "b2": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "G minor",
+     "chords": [["Gm"], ["E"], ["Eb"], ["D"]],
+     "voicings": [["Bb3", "D4", "G4"], ["B3", "E4", "Ab4"], ["Bb3", "Eb4", "G4"], ["A3", "D4", "Gb4"]],
+     "voice_motion_semitones": [4, 3, 3],
+     "chord_rhythm": "stab: syncopated DS-style brass stabs",
+     "bass_style": "gallop: galloping x.xx battle figure",
+     "counter": "generated arp (brass16)",
+     "files": {
+      "chords": "sections/b2-chords.mid",
+      "bass": "sections/b2-bass.mid",
+      "lead": "sections/b2-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 53,
+      "s1_bass": 53,
+      "s1_lead": 53
+     }
+    },
+    "bridge": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "G minor",
+     "chords": [["Bb"], ["F/A"], ["Ebmaj7"], ["Dsus4", "D"]],
+     "voicings": [["Bb3", "D4", "F4"], ["A3", "C4", "F4"], ["Eb3", "Bb3", "D4", "G4"], ["A3", "D4", "G4"], ["A3", "D4", "Gb4"]],
+     "voice_motion_semitones": [3, 8, 4, 1],
+     "chord_rhythm": "swell: half-note swells",
+     "bass_style": "long: one long note per chord",
+     "counter": "generated arp (brass16)",
+     "files": {
+      "chords": "sections/bridge-chords.mid",
+      "bass": "sections/bridge-bass.mid",
+      "lead": "sections/bridge-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 54,
+      "s1_bass": 54,
+      "s1_lead": 54
+     }
+    },
+    "coda": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "G minor",
+     "chords": [["G"], ["Eb"], ["F"], ["G"]],
+     "voicings": [["B3", "D4", "G4"], ["Bb3", "Eb4", "G4"], ["A3", "C4", "F4"], ["B3", "D4", "G4"]],
+     "voice_motion_semitones": [2, 6, 6],
+     "chord_rhythm": "march: quarter-note march comping",
+     "bass_style": "pulse8: straight 8th pulse into an approach note",
+     "counter": "generated arp (brass16)",
+     "files": {
+      "chords": "sections/coda-chords.mid",
+      "bass": "sections/coda-bass.mid",
+      "lead": "sections/coda-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 55,
+      "s1_bass": 55,
+      "s1_lead": 55
+     }
+    }
+   },
+   "j6": {
+    "closest_chord_sets": "48 (Trance: minor palette with slash-chord bass), 33/35-38 (Cinematic)",
+    "style": "Stab + long chord alternation; brass/strings preset, CHORUS on"
+   },
+   "s1": {
+    "bass_patch": "SAW + SUB full, accents: heavy 8th/16th drive",
+    "lead_patch": "SQUARE, bright, vibrato: heroic brass lead",
+    "pattern_slots": "49-55"
+   },
+   "counter_ch4": "generated brass16 arp",
+   "cover_ideas": "OP-XY: full brass-section sampler, string ostinato on ch4, saw bass, big tom/cymbal kit. M8: layered FM brass + sampled strings, pulse bass, hypersynth choir pad for the coda.",
+   "files": {
+    "full": "full.mid",
+    "sections": "sections/<section>-{chords,bass,lead}.mid"
+   }
+  },
+  {
+   "n": 8,
+   "id": "08-lantern-hill",
+   "dir": "08-lantern-hill",
+   "title": "Lantern Hill",
+   "role": "Spooky tower / haunted town",
+   "bpm": 88,
+   "key": "E minor",
+   "detected_key": "Emin",
+   "style": "Old-handheld spooky-town feel (not a copy of any theme): a high repeating 8th-note arpeggio figure over an E drone, whole-tone (Caug) and tritone (Bb/E) colour, a slow counter-melody on ch4.",
+   "bars": 32,
+   "form": [
+    {
+     "section": "intro",
+     "bars": 4,
+     "start_bar": 1
+    },
+    {
+     "section": "a1",
+     "bars": 4,
+     "start_bar": 5
+    },
+    {
+     "section": "a2",
+     "bars": 4,
+     "start_bar": 9
+    },
+    {
+     "section": "b1",
+     "bars": 4,
+     "start_bar": 13
+    },
+    {
+     "section": "b2",
+     "bars": 4,
+     "start_bar": 17
+    },
+    {
+     "section": "bridge",
+     "bars": 4,
+     "start_bar": 21
+    },
+    {
+     "section": "a1",
+     "bars": 4,
+     "start_bar": 25
+    },
+    {
+     "section": "a2",
+     "bars": 4,
+     "start_bar": 29
+    }
+   ],
+   "form_summary": "intro(4) a1(4) a2(4) b1(4) b2(4) bridge(4) a1(4) a2(4)",
+   "loop": {
+    "start_bar": 5,
+    "end_bar": 32,
+    "section": "a1",
+    "note": "play the intro once, then loop bars 5-32"
+   },
+   "sections": {
+    "intro": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "E minor",
+     "chords": [["Em"], ["Em"], ["Cmaj7"], ["Cmaj7"]],
+     "voicings": [["B3", "E4", "G4"], ["B3", "E4", "G4"], ["B3", "E4", "G4", "C5"], ["B3", "E4", "G4", "C5"]],
+     "voice_motion_semitones": [0, 2.5, 0],
+     "chord_rhythm": "pad: string pad, one chord per slot",
+     "bass_style": "drone: held tonic drone",
+     "counter": "hand-written counter-melody",
+     "files": {
+      "chords": "sections/intro-chords.mid",
+      "bass": "sections/intro-bass.mid",
+      "lead": "sections/intro-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 57,
+      "s1_bass": 57,
+      "s1_lead": 57
+     }
+    },
+    "a1": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "E minor",
+     "chords": [["Em"], ["Caug/E"], ["Em"], ["Bb/E"]],
+     "voicings": [["G3", "B3", "E4"], ["G#3", "C4", "E4"], ["G3", "B3", "E4"], ["F3", "A#3", "D4"]],
+     "voice_motion_semitones": [2, 2, 5],
+     "chord_rhythm": "pad: string pad, one chord per slot",
+     "bass_style": "drone: held tonic drone",
+     "counter": "hand-written counter-melody",
+     "files": {
+      "chords": "sections/a1-chords.mid",
+      "bass": "sections/a1-bass.mid",
+      "lead": "sections/a1-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 58,
+      "s1_bass": 58,
+      "s1_lead": 58
+     }
+    },
+    "a2": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "E minor",
+     "chords": [["Em"], ["Am/E"], ["Caug/E"], ["B7"]],
+     "voicings": [["G3", "B3", "E4"], ["A3", "C4", "E4"], ["G#3", "C4", "E4"], ["A3", "B3", "D#4", "F#4"]],
+     "voice_motion_semitones": [3, 1, 4],
+     "chord_rhythm": "pad: string pad, one chord per slot",
+     "bass_style": "drone: held tonic drone",
+     "counter": "hand-written counter-melody",
+     "files": {
+      "chords": "sections/a2-chords.mid",
+      "bass": "sections/a2-bass.mid",
+      "lead": "sections/a2-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 59,
+      "s1_bass": 59,
+      "s1_lead": 59
+     }
+    },
+    "b1": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "E minor",
+     "chords": [["Cmaj7"], ["Am7"], ["F#m7b5"], ["B7"]],
+     "voicings": [["G3", "C4", "E4", "B4"], ["G3", "C4", "E4", "A4"], ["F#3", "C4", "E4", "A4"], ["F#3", "B3", "D#4", "A4"]],
+     "voice_motion_semitones": [2, 1, 2],
+     "chord_rhythm": "swell: half-note swells",
+     "bass_style": "long: one long note per chord",
+     "counter": "hand-written counter-melody",
+     "files": {
+      "chords": "sections/b1-chords.mid",
+      "bass": "sections/b1-bass.mid",
+      "lead": "sections/b1-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 60,
+      "s1_bass": 60,
+      "s1_lead": 60
+     }
+    },
+    "b2": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "E minor",
+     "chords": [["Cmaj7"], ["Am7"], ["F"], ["B7"]],
+     "voicings": [["C4", "E4", "G4", "B4"], ["C4", "E4", "G4", "A4"], ["C4", "F4", "A4"], ["B3", "D#4", "F#4", "A4"]],
+     "voice_motion_semitones": [2, 2, 3],
+     "chord_rhythm": "swell: half-note swells",
+     "bass_style": "long: one long note per chord",
+     "counter": "hand-written counter-melody",
+     "files": {
+      "chords": "sections/b2-chords.mid",
+      "bass": "sections/b2-bass.mid",
+      "lead": "sections/b2-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 61,
+      "s1_bass": 61,
+      "s1_lead": 61
+     }
+    },
+    "bridge": {
+     "bars": 4,
+     "steps": 64,
+     "home_key": "E minor",
+     "chords": [["Em"], ["Bb/E"], ["Em"], ["Caug/E"]],
+     "voicings": [["G3", "B3", "E4"], ["F3", "A#3", "D4"], ["G3", "B3", "E4"], ["G#3", "C4", "E4"]],
+     "voice_motion_semitones": [5, 5, 2],
+     "chord_rhythm": "pad: string pad, one chord per slot",
+     "bass_style": "drone: held tonic drone",
+     "counter": "hand-written counter-melody",
+     "files": {
+      "chords": "sections/bridge-chords.mid",
+      "bass": "sections/bridge-bass.mid",
+      "lead": "sections/bridge-lead.mid"
+     },
+     "pattern_slot": {
+      "j6": 62,
+      "s1_bass": 62,
+      "s1_lead": 62
+     }
+    }
+   },
+   "j6": {
+    "closest_chord_sets": "23 (all M9#11 = Lydian) for the #11 shimmer, 57 (House/Techno: C5b9 root+b9) for unease",
+    "style": "Long pad, slow ATTACK, big REVERB; or STYLE 1-2 slow arp"
+   },
+   "s1": {
+    "bass_patch": "SQUARE + SUB, LFO slow on pitch (tiny): drone",
+    "lead_patch": "PULSE, short DECAY, DELAY on: high music-box/chip arpeggio",
+    "pattern_slots": "57-62"
+   },
+   "counter_ch4": "hand-written counter-melody",
+   "cover_ideas": "OP-XY: glass/music-box multisample for the figure, organ or choir pad, sine drone, reverse-cymbal swells. M8: FM bell figure, sampled choir, slow granular drone on ch4.",
+   "files": {
+    "full": "full.mid",
+    "sections": "sections/<section>-{chords,bass,lead}.mid"
+   }
+  }
+ ]
+}
