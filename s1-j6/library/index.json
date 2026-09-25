@@ -1,0 +1,8349 @@
+{
+ "generated_by": "tools/build_library.py",
+ "ppq": 480,
+ "bars": 4,
+ "steps": 64,
+ "channels": {
+  "all.mid": {
+   "chords": 1,
+   "bass": 2,
+   "lead": 3,
+   "arp": 4
+  },
+  "single files": 1
+ },
+ "velocity": {
+  "accent": 110,
+  "normal": 80
+ },
+ "keys": [
+  {
+   "id": "C-minor",
+   "name": "C minor",
+   "tonic": "C",
+   "tonic_pc": 0,
+   "mode": "minor",
+   "kits": [
+    {
+     "id": "01-synthwave-i-VI-III-VII",
+     "n": 1,
+     "genre": "synthwave",
+     "genre_name": "Synthwave",
+     "bpm": 100,
+     "about": "Aeolian anthem: the classic 80s minor loop",
+     "roman": [
+      "i",
+      "VI",
+      "III",
+      "VII"
+     ],
+     "chords": [
+      "Cm",
+      "Ab",
+      "Eb",
+      "Bb"
+     ],
+     "voicings": [
+      [
+       60,
+       63,
+       67
+      ],
+      [
+       60,
+       63,
+       68
+      ],
+      [
+       58,
+       63,
+       67
+      ],
+      [
+       58,
+       62,
+       65
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "up",
+      "bass": "octave-bounce",
+      "lead": "synthwave"
+     },
+     "files": {
+      "chords": "C-minor/01-synthwave-i-VI-III-VII/chords.mid",
+      "arp": "C-minor/01-synthwave-i-VI-III-VII/arp.mid",
+      "bass": "C-minor/01-synthwave-i-VI-III-VII/bass.mid",
+      "lead": "C-minor/01-synthwave-i-VI-III-VII/lead.mid",
+      "all": "C-minor/01-synthwave-i-VI-III-VII/all.mid"
+     }
+    },
+    {
+     "id": "02-house-i9-iv7-VImaj7-v7",
+     "n": 2,
+     "genre": "house",
+     "genre_name": "House",
+     "bpm": 124,
+     "about": "Deep-house minor 7ths/9ths",
+     "roman": [
+      "i9",
+      "iv7",
+      "VImaj7",
+      "v7"
+     ],
+     "chords": [
+      "Cm9",
+      "Fm7",
+      "Abmaj7",
+      "Gm7"
+     ],
+     "voicings": [
+      [
+       50,
+       58,
+       60,
+       63
+      ],
+      [
+       51,
+       56,
+       60,
+       65
+      ],
+      [
+       51,
+       56,
+       60,
+       67
+      ],
+      [
+       53,
+       58,
+       62,
+       67
+      ]
+     ],
+     "styles": {
+      "chords": "stabs",
+      "arp": "broken",
+      "bass": "offbeat-root-fifth",
+      "lead": "house"
+     },
+     "files": {
+      "chords": "C-minor/02-house-i9-iv7-VImaj7-v7/chords.mid",
+      "arp": "C-minor/02-house-i9-iv7-VImaj7-v7/arp.mid",
+      "bass": "C-minor/02-house-i9-iv7-VImaj7-v7/bass.mid",
+      "lead": "C-minor/02-house-i9-iv7-VImaj7-v7/lead.mid",
+      "all": "C-minor/02-house-i9-iv7-VImaj7-v7/all.mid"
+     }
+    },
+    {
+     "id": "03-lofi-iim7b5-V7-i9-VImaj7",
+     "n": 3,
+     "genre": "lofi",
+     "genre_name": "Lo-fi",
+     "bpm": 80,
+     "about": "Jazz minor ii-V-i with a VImaj7 turnaround",
+     "roman": [
+      "iiø7",
+      "V7",
+      "i9",
+      "VImaj7"
+     ],
+     "chords": [
+      "Dm7b5",
+      "G7",
+      "Cm9",
+      "Abmaj7"
+     ],
+     "voicings": [
+      [
+       50,
+       56,
+       60,
+       65
+      ],
+      [
+       50,
+       55,
+       59,
+       65
+      ],
+      [
+       50,
+       58,
+       60,
+       63
+      ],
+      [
+       51,
+       56,
+       60,
+       67
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "walking",
+      "lead": "lofi"
+     },
+     "files": {
+      "chords": "C-minor/03-lofi-iim7b5-V7-i9-VImaj7/chords.mid",
+      "arp": "C-minor/03-lofi-iim7b5-V7-i9-VImaj7/arp.mid",
+      "bass": "C-minor/03-lofi-iim7b5-V7-i9-VImaj7/bass.mid",
+      "lead": "C-minor/03-lofi-iim7b5-V7-i9-VImaj7/lead.mid",
+      "all": "C-minor/03-lofi-iim7b5-V7-i9-VImaj7/all.mid"
+     }
+    },
+    {
+     "id": "04-techno-i-i-iv-v",
+     "n": 4,
+     "genre": "techno",
+     "genre_name": "Techno",
+     "bpm": 132,
+     "about": "Hypnotic i-iv-v stabs",
+     "roman": [
+      "i",
+      "i",
+      "iv",
+      "v"
+     ],
+     "chords": [
+      "Cm",
+      "Cm",
+      "Fm",
+      "Gm"
+     ],
+     "voicings": [
+      [
+       55,
+       60,
+       63
+      ],
+      [
+       55,
+       60,
+       63
+      ],
+      [
+       56,
+       60,
+       65
+      ],
+      [
+       55,
+       58,
+       62
+      ]
+     ],
+     "styles": {
+      "chords": "offbeat",
+      "arp": "down",
+      "bass": "acid-303",
+      "lead": "techno"
+     },
+     "files": {
+      "chords": "C-minor/04-techno-i-i-iv-v/chords.mid",
+      "arp": "C-minor/04-techno-i-i-iv-v/arp.mid",
+      "bass": "C-minor/04-techno-i-i-iv-v/bass.mid",
+      "lead": "C-minor/04-techno-i-i-iv-v/lead.mid",
+      "all": "C-minor/04-techno-i-i-iv-v/all.mid"
+     }
+    },
+    {
+     "id": "05-pop-i-III-VII-VI",
+     "n": 5,
+     "genre": "pop",
+     "genre_name": "Pop",
+     "bpm": 112,
+     "about": "Minor pop loop",
+     "roman": [
+      "i",
+      "III",
+      "VII",
+      "VI"
+     ],
+     "chords": [
+      "Cm",
+      "Eb",
+      "Bb",
+      "Ab"
+     ],
+     "voicings": [
+      [
+       60,
+       63,
+       67
+      ],
+      [
+       58,
+       63,
+       67
+      ],
+      [
+       58,
+       62,
+       65
+      ],
+      [
+       60,
+       63,
+       68
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "pumping-root-fifth",
+      "lead": "pop"
+     },
+     "files": {
+      "chords": "C-minor/05-pop-i-III-VII-VI/chords.mid",
+      "arp": "C-minor/05-pop-i-III-VII-VI/arp.mid",
+      "bass": "C-minor/05-pop-i-III-VII-VI/bass.mid",
+      "lead": "C-minor/05-pop-i-III-VII-VI/lead.mid",
+      "all": "C-minor/05-pop-i-III-VII-VI/all.mid"
+     }
+    },
+    {
+     "id": "06-cinematic-i-bII-VI-V",
+     "n": 6,
+     "genre": "cinematic",
+     "genre_name": "Dark / Cinematic",
+     "bpm": 90,
+     "about": "Phrygian bII + major V: dark and tense",
+     "roman": [
+      "i",
+      "bII",
+      "VI",
+      "V"
+     ],
+     "chords": [
+      "Cm",
+      "Db",
+      "Ab",
+      "G"
+     ],
+     "voicings": [
+      [
+       55,
+       60,
+       63
+      ],
+      [
+       56,
+       61,
+       65
+      ],
+      [
+       56,
+       60,
+       63
+      ],
+      [
+       55,
+       59,
+       62
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "broken",
+      "bass": "sub-glide",
+      "lead": "cinematic"
+     },
+     "files": {
+      "chords": "C-minor/06-cinematic-i-bII-VI-V/chords.mid",
+      "arp": "C-minor/06-cinematic-i-bII-VI-V/arp.mid",
+      "bass": "C-minor/06-cinematic-i-bII-VI-V/bass.mid",
+      "lead": "C-minor/06-cinematic-i-bII-VI-V/lead.mid",
+      "all": "C-minor/06-cinematic-i-bII-VI-V/all.mid"
+     }
+    }
+   ]
+  },
+  {
+   "id": "C-major",
+   "name": "C major",
+   "tonic": "C",
+   "tonic_pc": 0,
+   "mode": "major",
+   "kits": [
+    {
+     "id": "01-synthwave-I-vi-bVI-bVII",
+     "n": 1,
+     "genre": "synthwave",
+     "genre_name": "Synthwave",
+     "bpm": 100,
+     "about": "Borrowed bVI-bVII lift (80s soundtrack)",
+     "roman": [
+      "I",
+      "vi",
+      "bVI",
+      "bVII"
+     ],
+     "chords": [
+      "C",
+      "Am",
+      "Ab",
+      "Bb"
+     ],
+     "voicings": [
+      [
+       55,
+       60,
+       64
+      ],
+      [
+       57,
+       60,
+       64
+      ],
+      [
+       56,
+       60,
+       63
+      ],
+      [
+       58,
+       62,
+       65
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "up",
+      "bass": "octave-bounce",
+      "lead": "synthwave"
+     },
+     "files": {
+      "chords": "C-major/01-synthwave-I-vi-bVI-bVII/chords.mid",
+      "arp": "C-major/01-synthwave-I-vi-bVI-bVII/arp.mid",
+      "bass": "C-major/01-synthwave-I-vi-bVI-bVII/bass.mid",
+      "lead": "C-major/01-synthwave-I-vi-bVI-bVII/lead.mid",
+      "all": "C-major/01-synthwave-I-vi-bVI-bVII/all.mid"
+     }
+    },
+    {
+     "id": "02-house-IVmaj7-V7-iii7-vi7",
+     "n": 2,
+     "genre": "house",
+     "genre_name": "House",
+     "bpm": 124,
+     "about": "Royal road with 7ths (city pop / piano house)",
+     "roman": [
+      "IVmaj7",
+      "V7",
+      "iii7",
+      "vi7"
+     ],
+     "chords": [
+      "Fmaj7",
+      "G7",
+      "Em7",
+      "Am7"
+     ],
+     "voicings": [
+      [
+       53,
+       60,
+       64,
+       69
+      ],
+      [
+       55,
+       62,
+       65,
+       71
+      ],
+      [
+       55,
+       62,
+       64,
+       71
+      ],
+      [
+       55,
+       60,
+       64,
+       69
+      ]
+     ],
+     "styles": {
+      "chords": "stabs",
+      "arp": "broken",
+      "bass": "offbeat-root-fifth",
+      "lead": "house"
+     },
+     "files": {
+      "chords": "C-major/02-house-IVmaj7-V7-iii7-vi7/chords.mid",
+      "arp": "C-major/02-house-IVmaj7-V7-iii7-vi7/arp.mid",
+      "bass": "C-major/02-house-IVmaj7-V7-iii7-vi7/bass.mid",
+      "lead": "C-major/02-house-IVmaj7-V7-iii7-vi7/lead.mid",
+      "all": "C-major/02-house-IVmaj7-V7-iii7-vi7/all.mid"
+     }
+    },
+    {
+     "id": "03-lofi-ii9-V9-Imaj9-vi9",
+     "n": 3,
+     "genre": "lofi",
+     "genre_name": "Lo-fi",
+     "bpm": 80,
+     "about": "ii-V-I in 9ths with a vi9 turnaround",
+     "roman": [
+      "ii9",
+      "V9",
+      "Imaj9",
+      "vi9"
+     ],
+     "chords": [
+      "Dm9",
+      "G9",
+      "Cmaj9",
+      "Am9"
+     ],
+     "voicings": [
+      [
+       52,
+       60,
+       62,
+       65
+      ],
+      [
+       55,
+       59,
+       65,
+       69
+      ],
+      [
+       59,
+       62,
+       64,
+       72
+      ],
+      [
+       57,
+       60,
+       67,
+       71
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "walking",
+      "lead": "lofi"
+     },
+     "files": {
+      "chords": "C-major/03-lofi-ii9-V9-Imaj9-vi9/chords.mid",
+      "arp": "C-major/03-lofi-ii9-V9-Imaj9-vi9/arp.mid",
+      "bass": "C-major/03-lofi-ii9-V9-Imaj9-vi9/bass.mid",
+      "lead": "C-major/03-lofi-ii9-V9-Imaj9-vi9/lead.mid",
+      "all": "C-major/03-lofi-ii9-V9-Imaj9-vi9/all.mid"
+     }
+    },
+    {
+     "id": "04-techno-I-I-bVII-IV",
+     "n": 4,
+     "genre": "techno",
+     "genre_name": "Techno",
+     "bpm": 132,
+     "about": "Mixolydian I-bVII-IV",
+     "roman": [
+      "I",
+      "I",
+      "bVII",
+      "IV"
+     ],
+     "chords": [
+      "C",
+      "C",
+      "Bb",
+      "F"
+     ],
+     "voicings": [
+      [
+       55,
+       60,
+       64
+      ],
+      [
+       55,
+       60,
+       64
+      ],
+      [
+       58,
+       62,
+       65
+      ],
+      [
+       57,
+       60,
+       65
+      ]
+     ],
+     "styles": {
+      "chords": "offbeat",
+      "arp": "down",
+      "bass": "acid-303",
+      "lead": "techno"
+     },
+     "files": {
+      "chords": "C-major/04-techno-I-I-bVII-IV/chords.mid",
+      "arp": "C-major/04-techno-I-I-bVII-IV/arp.mid",
+      "bass": "C-major/04-techno-I-I-bVII-IV/bass.mid",
+      "lead": "C-major/04-techno-I-I-bVII-IV/lead.mid",
+      "all": "C-major/04-techno-I-I-bVII-IV/all.mid"
+     }
+    },
+    {
+     "id": "05-pop-vi-IV-I-V",
+     "n": 5,
+     "genre": "pop",
+     "genre_name": "Pop",
+     "bpm": 112,
+     "about": "The axis progression",
+     "roman": [
+      "vi",
+      "IV",
+      "I",
+      "V"
+     ],
+     "chords": [
+      "Am",
+      "F",
+      "C",
+      "G"
+     ],
+     "voicings": [
+      [
+       57,
+       60,
+       64
+      ],
+      [
+       57,
+       60,
+       65
+      ],
+      [
+       55,
+       60,
+       64
+      ],
+      [
+       55,
+       59,
+       62
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "pumping-root-fifth",
+      "lead": "pop"
+     },
+     "files": {
+      "chords": "C-major/05-pop-vi-IV-I-V/chords.mid",
+      "arp": "C-major/05-pop-vi-IV-I-V/arp.mid",
+      "bass": "C-major/05-pop-vi-IV-I-V/bass.mid",
+      "lead": "C-major/05-pop-vi-IV-I-V/lead.mid",
+      "all": "C-major/05-pop-vi-IV-I-V/all.mid"
+     }
+    },
+    {
+     "id": "06-cinematic-I-III-IV-iv",
+     "n": 6,
+     "genre": "cinematic",
+     "genre_name": "Dark / Cinematic",
+     "bpm": 90,
+     "about": "Chromatic-mediant III and borrowed iv",
+     "roman": [
+      "I",
+      "III",
+      "IV",
+      "iv"
+     ],
+     "chords": [
+      "C",
+      "E",
+      "F",
+      "Fm"
+     ],
+     "voicings": [
+      [
+       55,
+       60,
+       64
+      ],
+      [
+       56,
+       59,
+       64
+      ],
+      [
+       57,
+       60,
+       65
+      ],
+      [
+       56,
+       60,
+       65
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "broken",
+      "bass": "sub-glide",
+      "lead": "cinematic"
+     },
+     "files": {
+      "chords": "C-major/06-cinematic-I-III-IV-iv/chords.mid",
+      "arp": "C-major/06-cinematic-I-III-IV-iv/arp.mid",
+      "bass": "C-major/06-cinematic-I-III-IV-iv/bass.mid",
+      "lead": "C-major/06-cinematic-I-III-IV-iv/lead.mid",
+      "all": "C-major/06-cinematic-I-III-IV-iv/all.mid"
+     }
+    }
+   ]
+  },
+  {
+   "id": "Cs-minor",
+   "name": "C# minor",
+   "tonic": "C#",
+   "tonic_pc": 1,
+   "mode": "minor",
+   "kits": [
+    {
+     "id": "01-synthwave-i-VI-III-VII",
+     "n": 1,
+     "genre": "synthwave",
+     "genre_name": "Synthwave",
+     "bpm": 100,
+     "about": "Aeolian anthem: the classic 80s minor loop",
+     "roman": [
+      "i",
+      "VI",
+      "III",
+      "VII"
+     ],
+     "chords": [
+      "C#m",
+      "A",
+      "E",
+      "B"
+     ],
+     "voicings": [
+      [
+       56,
+       61,
+       64
+      ],
+      [
+       57,
+       61,
+       64
+      ],
+      [
+       56,
+       59,
+       64
+      ],
+      [
+       54,
+       59,
+       63
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "up",
+      "bass": "octave-bounce",
+      "lead": "synthwave"
+     },
+     "files": {
+      "chords": "Cs-minor/01-synthwave-i-VI-III-VII/chords.mid",
+      "arp": "Cs-minor/01-synthwave-i-VI-III-VII/arp.mid",
+      "bass": "Cs-minor/01-synthwave-i-VI-III-VII/bass.mid",
+      "lead": "Cs-minor/01-synthwave-i-VI-III-VII/lead.mid",
+      "all": "Cs-minor/01-synthwave-i-VI-III-VII/all.mid"
+     }
+    },
+    {
+     "id": "02-house-i9-iv7-VImaj7-v7",
+     "n": 2,
+     "genre": "house",
+     "genre_name": "House",
+     "bpm": 124,
+     "about": "Deep-house minor 7ths/9ths",
+     "roman": [
+      "i9",
+      "iv7",
+      "VImaj7",
+      "v7"
+     ],
+     "chords": [
+      "C#m9",
+      "F#m7",
+      "Amaj7",
+      "G#m7"
+     ],
+     "voicings": [
+      [
+       51,
+       59,
+       61,
+       64
+      ],
+      [
+       52,
+       57,
+       61,
+       66
+      ],
+      [
+       52,
+       57,
+       61,
+       68
+      ],
+      [
+       54,
+       59,
+       63,
+       68
+      ]
+     ],
+     "styles": {
+      "chords": "stabs",
+      "arp": "broken",
+      "bass": "offbeat-root-fifth",
+      "lead": "house"
+     },
+     "files": {
+      "chords": "Cs-minor/02-house-i9-iv7-VImaj7-v7/chords.mid",
+      "arp": "Cs-minor/02-house-i9-iv7-VImaj7-v7/arp.mid",
+      "bass": "Cs-minor/02-house-i9-iv7-VImaj7-v7/bass.mid",
+      "lead": "Cs-minor/02-house-i9-iv7-VImaj7-v7/lead.mid",
+      "all": "Cs-minor/02-house-i9-iv7-VImaj7-v7/all.mid"
+     }
+    },
+    {
+     "id": "03-lofi-iim7b5-V7-i9-VImaj7",
+     "n": 3,
+     "genre": "lofi",
+     "genre_name": "Lo-fi",
+     "bpm": 80,
+     "about": "Jazz minor ii-V-i with a VImaj7 turnaround",
+     "roman": [
+      "iiø7",
+      "V7",
+      "i9",
+      "VImaj7"
+     ],
+     "chords": [
+      "D#m7b5",
+      "G#7",
+      "C#m9",
+      "Amaj7"
+     ],
+     "voicings": [
+      [
+       51,
+       57,
+       61,
+       66
+      ],
+      [
+       51,
+       56,
+       60,
+       66
+      ],
+      [
+       51,
+       59,
+       61,
+       64
+      ],
+      [
+       52,
+       57,
+       61,
+       68
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "walking",
+      "lead": "lofi"
+     },
+     "files": {
+      "chords": "Cs-minor/03-lofi-iim7b5-V7-i9-VImaj7/chords.mid",
+      "arp": "Cs-minor/03-lofi-iim7b5-V7-i9-VImaj7/arp.mid",
+      "bass": "Cs-minor/03-lofi-iim7b5-V7-i9-VImaj7/bass.mid",
+      "lead": "Cs-minor/03-lofi-iim7b5-V7-i9-VImaj7/lead.mid",
+      "all": "Cs-minor/03-lofi-iim7b5-V7-i9-VImaj7/all.mid"
+     }
+    },
+    {
+     "id": "04-techno-i-i-iv-v",
+     "n": 4,
+     "genre": "techno",
+     "genre_name": "Techno",
+     "bpm": 132,
+     "about": "Hypnotic i-iv-v stabs",
+     "roman": [
+      "i",
+      "i",
+      "iv",
+      "v"
+     ],
+     "chords": [
+      "C#m",
+      "C#m",
+      "F#m",
+      "G#m"
+     ],
+     "voicings": [
+      [
+       56,
+       61,
+       64
+      ],
+      [
+       56,
+       61,
+       64
+      ],
+      [
+       57,
+       61,
+       66
+      ],
+      [
+       56,
+       59,
+       63
+      ]
+     ],
+     "styles": {
+      "chords": "offbeat",
+      "arp": "down",
+      "bass": "acid-303",
+      "lead": "techno"
+     },
+     "files": {
+      "chords": "Cs-minor/04-techno-i-i-iv-v/chords.mid",
+      "arp": "Cs-minor/04-techno-i-i-iv-v/arp.mid",
+      "bass": "Cs-minor/04-techno-i-i-iv-v/bass.mid",
+      "lead": "Cs-minor/04-techno-i-i-iv-v/lead.mid",
+      "all": "Cs-minor/04-techno-i-i-iv-v/all.mid"
+     }
+    },
+    {
+     "id": "05-pop-i-III-VII-VI",
+     "n": 5,
+     "genre": "pop",
+     "genre_name": "Pop",
+     "bpm": 112,
+     "about": "Minor pop loop",
+     "roman": [
+      "i",
+      "III",
+      "VII",
+      "VI"
+     ],
+     "chords": [
+      "C#m",
+      "E",
+      "B",
+      "A"
+     ],
+     "voicings": [
+      [
+       56,
+       61,
+       64
+      ],
+      [
+       56,
+       59,
+       64
+      ],
+      [
+       54,
+       59,
+       63
+      ],
+      [
+       57,
+       61,
+       64
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "pumping-root-fifth",
+      "lead": "pop"
+     },
+     "files": {
+      "chords": "Cs-minor/05-pop-i-III-VII-VI/chords.mid",
+      "arp": "Cs-minor/05-pop-i-III-VII-VI/arp.mid",
+      "bass": "Cs-minor/05-pop-i-III-VII-VI/bass.mid",
+      "lead": "Cs-minor/05-pop-i-III-VII-VI/lead.mid",
+      "all": "Cs-minor/05-pop-i-III-VII-VI/all.mid"
+     }
+    },
+    {
+     "id": "06-cinematic-i-bII-VI-V",
+     "n": 6,
+     "genre": "cinematic",
+     "genre_name": "Dark / Cinematic",
+     "bpm": 90,
+     "about": "Phrygian bII + major V: dark and tense",
+     "roman": [
+      "i",
+      "bII",
+      "VI",
+      "V"
+     ],
+     "chords": [
+      "C#m",
+      "D",
+      "A",
+      "G#"
+     ],
+     "voicings": [
+      [
+       56,
+       61,
+       64
+      ],
+      [
+       57,
+       62,
+       66
+      ],
+      [
+       57,
+       61,
+       64
+      ],
+      [
+       56,
+       60,
+       63
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "broken",
+      "bass": "sub-glide",
+      "lead": "cinematic"
+     },
+     "files": {
+      "chords": "Cs-minor/06-cinematic-i-bII-VI-V/chords.mid",
+      "arp": "Cs-minor/06-cinematic-i-bII-VI-V/arp.mid",
+      "bass": "Cs-minor/06-cinematic-i-bII-VI-V/bass.mid",
+      "lead": "Cs-minor/06-cinematic-i-bII-VI-V/lead.mid",
+      "all": "Cs-minor/06-cinematic-i-bII-VI-V/all.mid"
+     }
+    }
+   ]
+  },
+  {
+   "id": "Db-major",
+   "name": "Db major",
+   "tonic": "Db",
+   "tonic_pc": 1,
+   "mode": "major",
+   "kits": [
+    {
+     "id": "01-synthwave-I-vi-bVI-bVII",
+     "n": 1,
+     "genre": "synthwave",
+     "genre_name": "Synthwave",
+     "bpm": 100,
+     "about": "Borrowed bVI-bVII lift (80s soundtrack)",
+     "roman": [
+      "I",
+      "vi",
+      "bVI",
+      "bVII"
+     ],
+     "chords": [
+      "Db",
+      "Bbm",
+      "A",
+      "B"
+     ],
+     "voicings": [
+      [
+       56,
+       61,
+       65
+      ],
+      [
+       58,
+       61,
+       65
+      ],
+      [
+       57,
+       61,
+       64
+      ],
+      [
+       59,
+       63,
+       66
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "up",
+      "bass": "octave-bounce",
+      "lead": "synthwave"
+     },
+     "files": {
+      "chords": "Db-major/01-synthwave-I-vi-bVI-bVII/chords.mid",
+      "arp": "Db-major/01-synthwave-I-vi-bVI-bVII/arp.mid",
+      "bass": "Db-major/01-synthwave-I-vi-bVI-bVII/bass.mid",
+      "lead": "Db-major/01-synthwave-I-vi-bVI-bVII/lead.mid",
+      "all": "Db-major/01-synthwave-I-vi-bVI-bVII/all.mid"
+     }
+    },
+    {
+     "id": "02-house-IVmaj7-V7-iii7-vi7",
+     "n": 2,
+     "genre": "house",
+     "genre_name": "House",
+     "bpm": 124,
+     "about": "Royal road with 7ths (city pop / piano house)",
+     "roman": [
+      "IVmaj7",
+      "V7",
+      "iii7",
+      "vi7"
+     ],
+     "chords": [
+      "Gbmaj7",
+      "Ab7",
+      "Fm7",
+      "Bbm7"
+     ],
+     "voicings": [
+      [
+       53,
+       58,
+       61,
+       66
+      ],
+      [
+       54,
+       60,
+       63,
+       68
+      ],
+      [
+       53,
+       60,
+       63,
+       68
+      ],
+      [
+       53,
+       58,
+       61,
+       68
+      ]
+     ],
+     "styles": {
+      "chords": "stabs",
+      "arp": "broken",
+      "bass": "offbeat-root-fifth",
+      "lead": "house"
+     },
+     "files": {
+      "chords": "Db-major/02-house-IVmaj7-V7-iii7-vi7/chords.mid",
+      "arp": "Db-major/02-house-IVmaj7-V7-iii7-vi7/arp.mid",
+      "bass": "Db-major/02-house-IVmaj7-V7-iii7-vi7/bass.mid",
+      "lead": "Db-major/02-house-IVmaj7-V7-iii7-vi7/lead.mid",
+      "all": "Db-major/02-house-IVmaj7-V7-iii7-vi7/all.mid"
+     }
+    },
+    {
+     "id": "03-lofi-ii9-V9-Imaj9-vi9",
+     "n": 3,
+     "genre": "lofi",
+     "genre_name": "Lo-fi",
+     "bpm": 80,
+     "about": "ii-V-I in 9ths with a vi9 turnaround",
+     "roman": [
+      "ii9",
+      "V9",
+      "Imaj9",
+      "vi9"
+     ],
+     "chords": [
+      "Ebm9",
+      "Ab9",
+      "Dbmaj9",
+      "Bbm9"
+     ],
+     "voicings": [
+      [
+       53,
+       61,
+       63,
+       66
+      ],
+      [
+       56,
+       60,
+       66,
+       70
+      ],
+      [
+       61,
+       63,
+       65,
+       72
+      ],
+      [
+       58,
+       61,
+       68,
+       72
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "walking",
+      "lead": "lofi"
+     },
+     "files": {
+      "chords": "Db-major/03-lofi-ii9-V9-Imaj9-vi9/chords.mid",
+      "arp": "Db-major/03-lofi-ii9-V9-Imaj9-vi9/arp.mid",
+      "bass": "Db-major/03-lofi-ii9-V9-Imaj9-vi9/bass.mid",
+      "lead": "Db-major/03-lofi-ii9-V9-Imaj9-vi9/lead.mid",
+      "all": "Db-major/03-lofi-ii9-V9-Imaj9-vi9/all.mid"
+     }
+    },
+    {
+     "id": "04-techno-I-I-bVII-IV",
+     "n": 4,
+     "genre": "techno",
+     "genre_name": "Techno",
+     "bpm": 132,
+     "about": "Mixolydian I-bVII-IV",
+     "roman": [
+      "I",
+      "I",
+      "bVII",
+      "IV"
+     ],
+     "chords": [
+      "Db",
+      "Db",
+      "B",
+      "Gb"
+     ],
+     "voicings": [
+      [
+       56,
+       61,
+       65
+      ],
+      [
+       56,
+       61,
+       65
+      ],
+      [
+       59,
+       63,
+       66
+      ],
+      [
+       58,
+       61,
+       66
+      ]
+     ],
+     "styles": {
+      "chords": "offbeat",
+      "arp": "down",
+      "bass": "acid-303",
+      "lead": "techno"
+     },
+     "files": {
+      "chords": "Db-major/04-techno-I-I-bVII-IV/chords.mid",
+      "arp": "Db-major/04-techno-I-I-bVII-IV/arp.mid",
+      "bass": "Db-major/04-techno-I-I-bVII-IV/bass.mid",
+      "lead": "Db-major/04-techno-I-I-bVII-IV/lead.mid",
+      "all": "Db-major/04-techno-I-I-bVII-IV/all.mid"
+     }
+    },
+    {
+     "id": "05-pop-vi-IV-I-V",
+     "n": 5,
+     "genre": "pop",
+     "genre_name": "Pop",
+     "bpm": 112,
+     "about": "The axis progression",
+     "roman": [
+      "vi",
+      "IV",
+      "I",
+      "V"
+     ],
+     "chords": [
+      "Bbm",
+      "Gb",
+      "Db",
+      "Ab"
+     ],
+     "voicings": [
+      [
+       58,
+       61,
+       65
+      ],
+      [
+       58,
+       61,
+       66
+      ],
+      [
+       56,
+       61,
+       65
+      ],
+      [
+       56,
+       60,
+       63
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "pumping-root-fifth",
+      "lead": "pop"
+     },
+     "files": {
+      "chords": "Db-major/05-pop-vi-IV-I-V/chords.mid",
+      "arp": "Db-major/05-pop-vi-IV-I-V/arp.mid",
+      "bass": "Db-major/05-pop-vi-IV-I-V/bass.mid",
+      "lead": "Db-major/05-pop-vi-IV-I-V/lead.mid",
+      "all": "Db-major/05-pop-vi-IV-I-V/all.mid"
+     }
+    },
+    {
+     "id": "06-cinematic-I-III-IV-iv",
+     "n": 6,
+     "genre": "cinematic",
+     "genre_name": "Dark / Cinematic",
+     "bpm": 90,
+     "about": "Chromatic-mediant III and borrowed iv",
+     "roman": [
+      "I",
+      "III",
+      "IV",
+      "iv"
+     ],
+     "chords": [
+      "Db",
+      "F",
+      "Gb",
+      "Gbm"
+     ],
+     "voicings": [
+      [
+       56,
+       61,
+       65
+      ],
+      [
+       57,
+       60,
+       65
+      ],
+      [
+       58,
+       61,
+       66
+      ],
+      [
+       57,
+       61,
+       66
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "broken",
+      "bass": "sub-glide",
+      "lead": "cinematic"
+     },
+     "files": {
+      "chords": "Db-major/06-cinematic-I-III-IV-iv/chords.mid",
+      "arp": "Db-major/06-cinematic-I-III-IV-iv/arp.mid",
+      "bass": "Db-major/06-cinematic-I-III-IV-iv/bass.mid",
+      "lead": "Db-major/06-cinematic-I-III-IV-iv/lead.mid",
+      "all": "Db-major/06-cinematic-I-III-IV-iv/all.mid"
+     }
+    }
+   ]
+  },
+  {
+   "id": "D-minor",
+   "name": "D minor",
+   "tonic": "D",
+   "tonic_pc": 2,
+   "mode": "minor",
+   "kits": [
+    {
+     "id": "01-synthwave-i-VI-III-VII",
+     "n": 1,
+     "genre": "synthwave",
+     "genre_name": "Synthwave",
+     "bpm": 100,
+     "about": "Aeolian anthem: the classic 80s minor loop",
+     "roman": [
+      "i",
+      "VI",
+      "III",
+      "VII"
+     ],
+     "chords": [
+      "Dm",
+      "Bb",
+      "F",
+      "C"
+     ],
+     "voicings": [
+      [
+       57,
+       62,
+       65
+      ],
+      [
+       58,
+       62,
+       65
+      ],
+      [
+       57,
+       60,
+       65
+      ],
+      [
+       55,
+       60,
+       64
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "up",
+      "bass": "octave-bounce",
+      "lead": "synthwave"
+     },
+     "files": {
+      "chords": "D-minor/01-synthwave-i-VI-III-VII/chords.mid",
+      "arp": "D-minor/01-synthwave-i-VI-III-VII/arp.mid",
+      "bass": "D-minor/01-synthwave-i-VI-III-VII/bass.mid",
+      "lead": "D-minor/01-synthwave-i-VI-III-VII/lead.mid",
+      "all": "D-minor/01-synthwave-i-VI-III-VII/all.mid"
+     }
+    },
+    {
+     "id": "02-house-i9-iv7-VImaj7-v7",
+     "n": 2,
+     "genre": "house",
+     "genre_name": "House",
+     "bpm": 124,
+     "about": "Deep-house minor 7ths/9ths",
+     "roman": [
+      "i9",
+      "iv7",
+      "VImaj7",
+      "v7"
+     ],
+     "chords": [
+      "Dm9",
+      "Gm7",
+      "Bbmaj7",
+      "Am7"
+     ],
+     "voicings": [
+      [
+       52,
+       60,
+       62,
+       65
+      ],
+      [
+       53,
+       58,
+       62,
+       67
+      ],
+      [
+       53,
+       58,
+       62,
+       69
+      ],
+      [
+       52,
+       57,
+       60,
+       67
+      ]
+     ],
+     "styles": {
+      "chords": "stabs",
+      "arp": "broken",
+      "bass": "offbeat-root-fifth",
+      "lead": "house"
+     },
+     "files": {
+      "chords": "D-minor/02-house-i9-iv7-VImaj7-v7/chords.mid",
+      "arp": "D-minor/02-house-i9-iv7-VImaj7-v7/arp.mid",
+      "bass": "D-minor/02-house-i9-iv7-VImaj7-v7/bass.mid",
+      "lead": "D-minor/02-house-i9-iv7-VImaj7-v7/lead.mid",
+      "all": "D-minor/02-house-i9-iv7-VImaj7-v7/all.mid"
+     }
+    },
+    {
+     "id": "03-lofi-iim7b5-V7-i9-VImaj7",
+     "n": 3,
+     "genre": "lofi",
+     "genre_name": "Lo-fi",
+     "bpm": 80,
+     "about": "Jazz minor ii-V-i with a VImaj7 turnaround",
+     "roman": [
+      "iiø7",
+      "V7",
+      "i9",
+      "VImaj7"
+     ],
+     "chords": [
+      "Em7b5",
+      "A7",
+      "Dm9",
+      "Bbmaj7"
+     ],
+     "voicings": [
+      [
+       52,
+       58,
+       62,
+       67
+      ],
+      [
+       52,
+       57,
+       61,
+       67
+      ],
+      [
+       52,
+       60,
+       62,
+       65
+      ],
+      [
+       53,
+       58,
+       62,
+       69
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "walking",
+      "lead": "lofi"
+     },
+     "files": {
+      "chords": "D-minor/03-lofi-iim7b5-V7-i9-VImaj7/chords.mid",
+      "arp": "D-minor/03-lofi-iim7b5-V7-i9-VImaj7/arp.mid",
+      "bass": "D-minor/03-lofi-iim7b5-V7-i9-VImaj7/bass.mid",
+      "lead": "D-minor/03-lofi-iim7b5-V7-i9-VImaj7/lead.mid",
+      "all": "D-minor/03-lofi-iim7b5-V7-i9-VImaj7/all.mid"
+     }
+    },
+    {
+     "id": "04-techno-i-i-iv-v",
+     "n": 4,
+     "genre": "techno",
+     "genre_name": "Techno",
+     "bpm": 132,
+     "about": "Hypnotic i-iv-v stabs",
+     "roman": [
+      "i",
+      "i",
+      "iv",
+      "v"
+     ],
+     "chords": [
+      "Dm",
+      "Dm",
+      "Gm",
+      "Am"
+     ],
+     "voicings": [
+      [
+       57,
+       62,
+       65
+      ],
+      [
+       57,
+       62,
+       65
+      ],
+      [
+       58,
+       62,
+       67
+      ],
+      [
+       57,
+       60,
+       64
+      ]
+     ],
+     "styles": {
+      "chords": "offbeat",
+      "arp": "down",
+      "bass": "acid-303",
+      "lead": "techno"
+     },
+     "files": {
+      "chords": "D-minor/04-techno-i-i-iv-v/chords.mid",
+      "arp": "D-minor/04-techno-i-i-iv-v/arp.mid",
+      "bass": "D-minor/04-techno-i-i-iv-v/bass.mid",
+      "lead": "D-minor/04-techno-i-i-iv-v/lead.mid",
+      "all": "D-minor/04-techno-i-i-iv-v/all.mid"
+     }
+    },
+    {
+     "id": "05-pop-i-III-VII-VI",
+     "n": 5,
+     "genre": "pop",
+     "genre_name": "Pop",
+     "bpm": 112,
+     "about": "Minor pop loop",
+     "roman": [
+      "i",
+      "III",
+      "VII",
+      "VI"
+     ],
+     "chords": [
+      "Dm",
+      "F",
+      "C",
+      "Bb"
+     ],
+     "voicings": [
+      [
+       57,
+       62,
+       65
+      ],
+      [
+       57,
+       60,
+       65
+      ],
+      [
+       55,
+       60,
+       64
+      ],
+      [
+       58,
+       62,
+       65
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "pumping-root-fifth",
+      "lead": "pop"
+     },
+     "files": {
+      "chords": "D-minor/05-pop-i-III-VII-VI/chords.mid",
+      "arp": "D-minor/05-pop-i-III-VII-VI/arp.mid",
+      "bass": "D-minor/05-pop-i-III-VII-VI/bass.mid",
+      "lead": "D-minor/05-pop-i-III-VII-VI/lead.mid",
+      "all": "D-minor/05-pop-i-III-VII-VI/all.mid"
+     }
+    },
+    {
+     "id": "06-cinematic-i-bII-VI-V",
+     "n": 6,
+     "genre": "cinematic",
+     "genre_name": "Dark / Cinematic",
+     "bpm": 90,
+     "about": "Phrygian bII + major V: dark and tense",
+     "roman": [
+      "i",
+      "bII",
+      "VI",
+      "V"
+     ],
+     "chords": [
+      "Dm",
+      "Eb",
+      "Bb",
+      "A"
+     ],
+     "voicings": [
+      [
+       57,
+       62,
+       65
+      ],
+      [
+       58,
+       63,
+       67
+      ],
+      [
+       58,
+       62,
+       65
+      ],
+      [
+       57,
+       61,
+       64
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "broken",
+      "bass": "sub-glide",
+      "lead": "cinematic"
+     },
+     "files": {
+      "chords": "D-minor/06-cinematic-i-bII-VI-V/chords.mid",
+      "arp": "D-minor/06-cinematic-i-bII-VI-V/arp.mid",
+      "bass": "D-minor/06-cinematic-i-bII-VI-V/bass.mid",
+      "lead": "D-minor/06-cinematic-i-bII-VI-V/lead.mid",
+      "all": "D-minor/06-cinematic-i-bII-VI-V/all.mid"
+     }
+    }
+   ]
+  },
+  {
+   "id": "D-major",
+   "name": "D major",
+   "tonic": "D",
+   "tonic_pc": 2,
+   "mode": "major",
+   "kits": [
+    {
+     "id": "01-synthwave-I-vi-bVI-bVII",
+     "n": 1,
+     "genre": "synthwave",
+     "genre_name": "Synthwave",
+     "bpm": 100,
+     "about": "Borrowed bVI-bVII lift (80s soundtrack)",
+     "roman": [
+      "I",
+      "vi",
+      "bVI",
+      "bVII"
+     ],
+     "chords": [
+      "D",
+      "Bm",
+      "Bb",
+      "C"
+     ],
+     "voicings": [
+      [
+       57,
+       62,
+       66
+      ],
+      [
+       59,
+       62,
+       66
+      ],
+      [
+       58,
+       62,
+       65
+      ],
+      [
+       55,
+       60,
+       64
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "up",
+      "bass": "octave-bounce",
+      "lead": "synthwave"
+     },
+     "files": {
+      "chords": "D-major/01-synthwave-I-vi-bVI-bVII/chords.mid",
+      "arp": "D-major/01-synthwave-I-vi-bVI-bVII/arp.mid",
+      "bass": "D-major/01-synthwave-I-vi-bVI-bVII/bass.mid",
+      "lead": "D-major/01-synthwave-I-vi-bVI-bVII/lead.mid",
+      "all": "D-major/01-synthwave-I-vi-bVI-bVII/all.mid"
+     }
+    },
+    {
+     "id": "02-house-IVmaj7-V7-iii7-vi7",
+     "n": 2,
+     "genre": "house",
+     "genre_name": "House",
+     "bpm": 124,
+     "about": "Royal road with 7ths (city pop / piano house)",
+     "roman": [
+      "IVmaj7",
+      "V7",
+      "iii7",
+      "vi7"
+     ],
+     "chords": [
+      "Gmaj7",
+      "A7",
+      "F#m7",
+      "Bm7"
+     ],
+     "voicings": [
+      [
+       54,
+       59,
+       62,
+       67
+      ],
+      [
+       55,
+       61,
+       64,
+       69
+      ],
+      [
+       54,
+       61,
+       64,
+       69
+      ],
+      [
+       54,
+       59,
+       62,
+       69
+      ]
+     ],
+     "styles": {
+      "chords": "stabs",
+      "arp": "broken",
+      "bass": "offbeat-root-fifth",
+      "lead": "house"
+     },
+     "files": {
+      "chords": "D-major/02-house-IVmaj7-V7-iii7-vi7/chords.mid",
+      "arp": "D-major/02-house-IVmaj7-V7-iii7-vi7/arp.mid",
+      "bass": "D-major/02-house-IVmaj7-V7-iii7-vi7/bass.mid",
+      "lead": "D-major/02-house-IVmaj7-V7-iii7-vi7/lead.mid",
+      "all": "D-major/02-house-IVmaj7-V7-iii7-vi7/all.mid"
+     }
+    },
+    {
+     "id": "03-lofi-ii9-V9-Imaj9-vi9",
+     "n": 3,
+     "genre": "lofi",
+     "genre_name": "Lo-fi",
+     "bpm": 80,
+     "about": "ii-V-I in 9ths with a vi9 turnaround",
+     "roman": [
+      "ii9",
+      "V9",
+      "Imaj9",
+      "vi9"
+     ],
+     "chords": [
+      "Em9",
+      "A9",
+      "Dmaj9",
+      "Bm9"
+     ],
+     "voicings": [
+      [
+       52,
+       55,
+       62,
+       66
+      ],
+      [
+       55,
+       57,
+       61,
+       71
+      ],
+      [
+       50,
+       54,
+       61,
+       64
+      ],
+      [
+       49,
+       57,
+       59,
+       62
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "walking",
+      "lead": "lofi"
+     },
+     "files": {
+      "chords": "D-major/03-lofi-ii9-V9-Imaj9-vi9/chords.mid",
+      "arp": "D-major/03-lofi-ii9-V9-Imaj9-vi9/arp.mid",
+      "bass": "D-major/03-lofi-ii9-V9-Imaj9-vi9/bass.mid",
+      "lead": "D-major/03-lofi-ii9-V9-Imaj9-vi9/lead.mid",
+      "all": "D-major/03-lofi-ii9-V9-Imaj9-vi9/all.mid"
+     }
+    },
+    {
+     "id": "04-techno-I-I-bVII-IV",
+     "n": 4,
+     "genre": "techno",
+     "genre_name": "Techno",
+     "bpm": 132,
+     "about": "Mixolydian I-bVII-IV",
+     "roman": [
+      "I",
+      "I",
+      "bVII",
+      "IV"
+     ],
+     "chords": [
+      "D",
+      "D",
+      "C",
+      "G"
+     ],
+     "voicings": [
+      [
+       57,
+       62,
+       66
+      ],
+      [
+       57,
+       62,
+       66
+      ],
+      [
+       60,
+       64,
+       67
+      ],
+      [
+       59,
+       62,
+       67
+      ]
+     ],
+     "styles": {
+      "chords": "offbeat",
+      "arp": "down",
+      "bass": "acid-303",
+      "lead": "techno"
+     },
+     "files": {
+      "chords": "D-major/04-techno-I-I-bVII-IV/chords.mid",
+      "arp": "D-major/04-techno-I-I-bVII-IV/arp.mid",
+      "bass": "D-major/04-techno-I-I-bVII-IV/bass.mid",
+      "lead": "D-major/04-techno-I-I-bVII-IV/lead.mid",
+      "all": "D-major/04-techno-I-I-bVII-IV/all.mid"
+     }
+    },
+    {
+     "id": "05-pop-vi-IV-I-V",
+     "n": 5,
+     "genre": "pop",
+     "genre_name": "Pop",
+     "bpm": 112,
+     "about": "The axis progression",
+     "roman": [
+      "vi",
+      "IV",
+      "I",
+      "V"
+     ],
+     "chords": [
+      "Bm",
+      "G",
+      "D",
+      "A"
+     ],
+     "voicings": [
+      [
+       59,
+       62,
+       66
+      ],
+      [
+       59,
+       62,
+       67
+      ],
+      [
+       57,
+       62,
+       66
+      ],
+      [
+       57,
+       61,
+       64
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "pumping-root-fifth",
+      "lead": "pop"
+     },
+     "files": {
+      "chords": "D-major/05-pop-vi-IV-I-V/chords.mid",
+      "arp": "D-major/05-pop-vi-IV-I-V/arp.mid",
+      "bass": "D-major/05-pop-vi-IV-I-V/bass.mid",
+      "lead": "D-major/05-pop-vi-IV-I-V/lead.mid",
+      "all": "D-major/05-pop-vi-IV-I-V/all.mid"
+     }
+    },
+    {
+     "id": "06-cinematic-I-III-IV-iv",
+     "n": 6,
+     "genre": "cinematic",
+     "genre_name": "Dark / Cinematic",
+     "bpm": 90,
+     "about": "Chromatic-mediant III and borrowed iv",
+     "roman": [
+      "I",
+      "III",
+      "IV",
+      "iv"
+     ],
+     "chords": [
+      "D",
+      "F#",
+      "G",
+      "Gm"
+     ],
+     "voicings": [
+      [
+       57,
+       62,
+       66
+      ],
+      [
+       58,
+       61,
+       66
+      ],
+      [
+       59,
+       62,
+       67
+      ],
+      [
+       58,
+       62,
+       67
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "broken",
+      "bass": "sub-glide",
+      "lead": "cinematic"
+     },
+     "files": {
+      "chords": "D-major/06-cinematic-I-III-IV-iv/chords.mid",
+      "arp": "D-major/06-cinematic-I-III-IV-iv/arp.mid",
+      "bass": "D-major/06-cinematic-I-III-IV-iv/bass.mid",
+      "lead": "D-major/06-cinematic-I-III-IV-iv/lead.mid",
+      "all": "D-major/06-cinematic-I-III-IV-iv/all.mid"
+     }
+    }
+   ]
+  },
+  {
+   "id": "Eb-minor",
+   "name": "Eb minor",
+   "tonic": "Eb",
+   "tonic_pc": 3,
+   "mode": "minor",
+   "kits": [
+    {
+     "id": "01-synthwave-i-VI-III-VII",
+     "n": 1,
+     "genre": "synthwave",
+     "genre_name": "Synthwave",
+     "bpm": 100,
+     "about": "Aeolian anthem: the classic 80s minor loop",
+     "roman": [
+      "i",
+      "VI",
+      "III",
+      "VII"
+     ],
+     "chords": [
+      "Ebm",
+      "B",
+      "Gb",
+      "Db"
+     ],
+     "voicings": [
+      [
+       58,
+       63,
+       66
+      ],
+      [
+       59,
+       63,
+       66
+      ],
+      [
+       58,
+       61,
+       66
+      ],
+      [
+       56,
+       61,
+       65
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "up",
+      "bass": "octave-bounce",
+      "lead": "synthwave"
+     },
+     "files": {
+      "chords": "Eb-minor/01-synthwave-i-VI-III-VII/chords.mid",
+      "arp": "Eb-minor/01-synthwave-i-VI-III-VII/arp.mid",
+      "bass": "Eb-minor/01-synthwave-i-VI-III-VII/bass.mid",
+      "lead": "Eb-minor/01-synthwave-i-VI-III-VII/lead.mid",
+      "all": "Eb-minor/01-synthwave-i-VI-III-VII/all.mid"
+     }
+    },
+    {
+     "id": "02-house-i9-iv7-VImaj7-v7",
+     "n": 2,
+     "genre": "house",
+     "genre_name": "House",
+     "bpm": 124,
+     "about": "Deep-house minor 7ths/9ths",
+     "roman": [
+      "i9",
+      "iv7",
+      "VImaj7",
+      "v7"
+     ],
+     "chords": [
+      "Ebm9",
+      "Abm7",
+      "Bmaj7",
+      "Bbm7"
+     ],
+     "voicings": [
+      [
+       53,
+       61,
+       63,
+       66
+      ],
+      [
+       54,
+       59,
+       63,
+       68
+      ],
+      [
+       54,
+       59,
+       63,
+       70
+      ],
+      [
+       53,
+       58,
+       61,
+       68
+      ]
+     ],
+     "styles": {
+      "chords": "stabs",
+      "arp": "broken",
+      "bass": "offbeat-root-fifth",
+      "lead": "house"
+     },
+     "files": {
+      "chords": "Eb-minor/02-house-i9-iv7-VImaj7-v7/chords.mid",
+      "arp": "Eb-minor/02-house-i9-iv7-VImaj7-v7/arp.mid",
+      "bass": "Eb-minor/02-house-i9-iv7-VImaj7-v7/bass.mid",
+      "lead": "Eb-minor/02-house-i9-iv7-VImaj7-v7/lead.mid",
+      "all": "Eb-minor/02-house-i9-iv7-VImaj7-v7/all.mid"
+     }
+    },
+    {
+     "id": "03-lofi-iim7b5-V7-i9-VImaj7",
+     "n": 3,
+     "genre": "lofi",
+     "genre_name": "Lo-fi",
+     "bpm": 80,
+     "about": "Jazz minor ii-V-i with a VImaj7 turnaround",
+     "roman": [
+      "iiø7",
+      "V7",
+      "i9",
+      "VImaj7"
+     ],
+     "chords": [
+      "Fm7b5",
+      "Bb7",
+      "Ebm9",
+      "Bmaj7"
+     ],
+     "voicings": [
+      [
+       53,
+       59,
+       63,
+       68
+      ],
+      [
+       53,
+       58,
+       62,
+       68
+      ],
+      [
+       53,
+       61,
+       63,
+       66
+      ],
+      [
+       54,
+       59,
+       63,
+       70
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "walking",
+      "lead": "lofi"
+     },
+     "files": {
+      "chords": "Eb-minor/03-lofi-iim7b5-V7-i9-VImaj7/chords.mid",
+      "arp": "Eb-minor/03-lofi-iim7b5-V7-i9-VImaj7/arp.mid",
+      "bass": "Eb-minor/03-lofi-iim7b5-V7-i9-VImaj7/bass.mid",
+      "lead": "Eb-minor/03-lofi-iim7b5-V7-i9-VImaj7/lead.mid",
+      "all": "Eb-minor/03-lofi-iim7b5-V7-i9-VImaj7/all.mid"
+     }
+    },
+    {
+     "id": "04-techno-i-i-iv-v",
+     "n": 4,
+     "genre": "techno",
+     "genre_name": "Techno",
+     "bpm": 132,
+     "about": "Hypnotic i-iv-v stabs",
+     "roman": [
+      "i",
+      "i",
+      "iv",
+      "v"
+     ],
+     "chords": [
+      "Ebm",
+      "Ebm",
+      "Abm",
+      "Bbm"
+     ],
+     "voicings": [
+      [
+       58,
+       63,
+       66
+      ],
+      [
+       58,
+       63,
+       66
+      ],
+      [
+       59,
+       63,
+       68
+      ],
+      [
+       58,
+       61,
+       65
+      ]
+     ],
+     "styles": {
+      "chords": "offbeat",
+      "arp": "down",
+      "bass": "acid-303",
+      "lead": "techno"
+     },
+     "files": {
+      "chords": "Eb-minor/04-techno-i-i-iv-v/chords.mid",
+      "arp": "Eb-minor/04-techno-i-i-iv-v/arp.mid",
+      "bass": "Eb-minor/04-techno-i-i-iv-v/bass.mid",
+      "lead": "Eb-minor/04-techno-i-i-iv-v/lead.mid",
+      "all": "Eb-minor/04-techno-i-i-iv-v/all.mid"
+     }
+    },
+    {
+     "id": "05-pop-i-III-VII-VI",
+     "n": 5,
+     "genre": "pop",
+     "genre_name": "Pop",
+     "bpm": 112,
+     "about": "Minor pop loop",
+     "roman": [
+      "i",
+      "III",
+      "VII",
+      "VI"
+     ],
+     "chords": [
+      "Ebm",
+      "Gb",
+      "Db",
+      "B"
+     ],
+     "voicings": [
+      [
+       58,
+       63,
+       66
+      ],
+      [
+       58,
+       61,
+       66
+      ],
+      [
+       56,
+       61,
+       65
+      ],
+      [
+       59,
+       63,
+       66
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "pumping-root-fifth",
+      "lead": "pop"
+     },
+     "files": {
+      "chords": "Eb-minor/05-pop-i-III-VII-VI/chords.mid",
+      "arp": "Eb-minor/05-pop-i-III-VII-VI/arp.mid",
+      "bass": "Eb-minor/05-pop-i-III-VII-VI/bass.mid",
+      "lead": "Eb-minor/05-pop-i-III-VII-VI/lead.mid",
+      "all": "Eb-minor/05-pop-i-III-VII-VI/all.mid"
+     }
+    },
+    {
+     "id": "06-cinematic-i-bII-VI-V",
+     "n": 6,
+     "genre": "cinematic",
+     "genre_name": "Dark / Cinematic",
+     "bpm": 90,
+     "about": "Phrygian bII + major V: dark and tense",
+     "roman": [
+      "i",
+      "bII",
+      "VI",
+      "V"
+     ],
+     "chords": [
+      "Ebm",
+      "E",
+      "B",
+      "Bb"
+     ],
+     "voicings": [
+      [
+       58,
+       63,
+       66
+      ],
+      [
+       59,
+       64,
+       68
+      ],
+      [
+       59,
+       63,
+       66
+      ],
+      [
+       58,
+       62,
+       65
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "broken",
+      "bass": "sub-glide",
+      "lead": "cinematic"
+     },
+     "files": {
+      "chords": "Eb-minor/06-cinematic-i-bII-VI-V/chords.mid",
+      "arp": "Eb-minor/06-cinematic-i-bII-VI-V/arp.mid",
+      "bass": "Eb-minor/06-cinematic-i-bII-VI-V/bass.mid",
+      "lead": "Eb-minor/06-cinematic-i-bII-VI-V/lead.mid",
+      "all": "Eb-minor/06-cinematic-i-bII-VI-V/all.mid"
+     }
+    }
+   ]
+  },
+  {
+   "id": "Eb-major",
+   "name": "Eb major",
+   "tonic": "Eb",
+   "tonic_pc": 3,
+   "mode": "major",
+   "kits": [
+    {
+     "id": "01-synthwave-I-vi-bVI-bVII",
+     "n": 1,
+     "genre": "synthwave",
+     "genre_name": "Synthwave",
+     "bpm": 100,
+     "about": "Borrowed bVI-bVII lift (80s soundtrack)",
+     "roman": [
+      "I",
+      "vi",
+      "bVI",
+      "bVII"
+     ],
+     "chords": [
+      "Eb",
+      "Cm",
+      "B",
+      "Db"
+     ],
+     "voicings": [
+      [
+       58,
+       63,
+       67
+      ],
+      [
+       60,
+       63,
+       67
+      ],
+      [
+       59,
+       63,
+       66
+      ],
+      [
+       56,
+       61,
+       65
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "up",
+      "bass": "octave-bounce",
+      "lead": "synthwave"
+     },
+     "files": {
+      "chords": "Eb-major/01-synthwave-I-vi-bVI-bVII/chords.mid",
+      "arp": "Eb-major/01-synthwave-I-vi-bVI-bVII/arp.mid",
+      "bass": "Eb-major/01-synthwave-I-vi-bVI-bVII/bass.mid",
+      "lead": "Eb-major/01-synthwave-I-vi-bVI-bVII/lead.mid",
+      "all": "Eb-major/01-synthwave-I-vi-bVI-bVII/all.mid"
+     }
+    },
+    {
+     "id": "02-house-IVmaj7-V7-iii7-vi7",
+     "n": 2,
+     "genre": "house",
+     "genre_name": "House",
+     "bpm": 124,
+     "about": "Royal road with 7ths (city pop / piano house)",
+     "roman": [
+      "IVmaj7",
+      "V7",
+      "iii7",
+      "vi7"
+     ],
+     "chords": [
+      "Abmaj7",
+      "Bb7",
+      "Gm7",
+      "Cm7"
+     ],
+     "voicings": [
+      [
+       55,
+       60,
+       63,
+       68
+      ],
+      [
+       56,
+       62,
+       65,
+       70
+      ],
+      [
+       55,
+       62,
+       65,
+       70
+      ],
+      [
+       55,
+       60,
+       63,
+       70
+      ]
+     ],
+     "styles": {
+      "chords": "stabs",
+      "arp": "broken",
+      "bass": "offbeat-root-fifth",
+      "lead": "house"
+     },
+     "files": {
+      "chords": "Eb-major/02-house-IVmaj7-V7-iii7-vi7/chords.mid",
+      "arp": "Eb-major/02-house-IVmaj7-V7-iii7-vi7/arp.mid",
+      "bass": "Eb-major/02-house-IVmaj7-V7-iii7-vi7/bass.mid",
+      "lead": "Eb-major/02-house-IVmaj7-V7-iii7-vi7/lead.mid",
+      "all": "Eb-major/02-house-IVmaj7-V7-iii7-vi7/all.mid"
+     }
+    },
+    {
+     "id": "03-lofi-ii9-V9-Imaj9-vi9",
+     "n": 3,
+     "genre": "lofi",
+     "genre_name": "Lo-fi",
+     "bpm": 80,
+     "about": "ii-V-I in 9ths with a vi9 turnaround",
+     "roman": [
+      "ii9",
+      "V9",
+      "Imaj9",
+      "vi9"
+     ],
+     "chords": [
+      "Fm9",
+      "Bb9",
+      "Ebmaj9",
+      "Cm9"
+     ],
+     "voicings": [
+      [
+       53,
+       56,
+       63,
+       67
+      ],
+      [
+       56,
+       58,
+       62,
+       72
+      ],
+      [
+       51,
+       55,
+       62,
+       65
+      ],
+      [
+       50,
+       58,
+       60,
+       63
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "walking",
+      "lead": "lofi"
+     },
+     "files": {
+      "chords": "Eb-major/03-lofi-ii9-V9-Imaj9-vi9/chords.mid",
+      "arp": "Eb-major/03-lofi-ii9-V9-Imaj9-vi9/arp.mid",
+      "bass": "Eb-major/03-lofi-ii9-V9-Imaj9-vi9/bass.mid",
+      "lead": "Eb-major/03-lofi-ii9-V9-Imaj9-vi9/lead.mid",
+      "all": "Eb-major/03-lofi-ii9-V9-Imaj9-vi9/all.mid"
+     }
+    },
+    {
+     "id": "04-techno-I-I-bVII-IV",
+     "n": 4,
+     "genre": "techno",
+     "genre_name": "Techno",
+     "bpm": 132,
+     "about": "Mixolydian I-bVII-IV",
+     "roman": [
+      "I",
+      "I",
+      "bVII",
+      "IV"
+     ],
+     "chords": [
+      "Eb",
+      "Eb",
+      "Db",
+      "Ab"
+     ],
+     "voicings": [
+      [
+       55,
+       58,
+       63
+      ],
+      [
+       55,
+       58,
+       63
+      ],
+      [
+       56,
+       61,
+       65
+      ],
+      [
+       56,
+       60,
+       63
+      ]
+     ],
+     "styles": {
+      "chords": "offbeat",
+      "arp": "down",
+      "bass": "acid-303",
+      "lead": "techno"
+     },
+     "files": {
+      "chords": "Eb-major/04-techno-I-I-bVII-IV/chords.mid",
+      "arp": "Eb-major/04-techno-I-I-bVII-IV/arp.mid",
+      "bass": "Eb-major/04-techno-I-I-bVII-IV/bass.mid",
+      "lead": "Eb-major/04-techno-I-I-bVII-IV/lead.mid",
+      "all": "Eb-major/04-techno-I-I-bVII-IV/all.mid"
+     }
+    },
+    {
+     "id": "05-pop-vi-IV-I-V",
+     "n": 5,
+     "genre": "pop",
+     "genre_name": "Pop",
+     "bpm": 112,
+     "about": "The axis progression",
+     "roman": [
+      "vi",
+      "IV",
+      "I",
+      "V"
+     ],
+     "chords": [
+      "Cm",
+      "Ab",
+      "Eb",
+      "Bb"
+     ],
+     "voicings": [
+      [
+       60,
+       63,
+       67
+      ],
+      [
+       60,
+       63,
+       68
+      ],
+      [
+       58,
+       63,
+       67
+      ],
+      [
+       58,
+       62,
+       65
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "pumping-root-fifth",
+      "lead": "pop"
+     },
+     "files": {
+      "chords": "Eb-major/05-pop-vi-IV-I-V/chords.mid",
+      "arp": "Eb-major/05-pop-vi-IV-I-V/arp.mid",
+      "bass": "Eb-major/05-pop-vi-IV-I-V/bass.mid",
+      "lead": "Eb-major/05-pop-vi-IV-I-V/lead.mid",
+      "all": "Eb-major/05-pop-vi-IV-I-V/all.mid"
+     }
+    },
+    {
+     "id": "06-cinematic-I-III-IV-iv",
+     "n": 6,
+     "genre": "cinematic",
+     "genre_name": "Dark / Cinematic",
+     "bpm": 90,
+     "about": "Chromatic-mediant III and borrowed iv",
+     "roman": [
+      "I",
+      "III",
+      "IV",
+      "iv"
+     ],
+     "chords": [
+      "Eb",
+      "G",
+      "Ab",
+      "Abm"
+     ],
+     "voicings": [
+      [
+       55,
+       58,
+       63
+      ],
+      [
+       55,
+       59,
+       62
+      ],
+      [
+       56,
+       60,
+       63
+      ],
+      [
+       56,
+       59,
+       63
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "broken",
+      "bass": "sub-glide",
+      "lead": "cinematic"
+     },
+     "files": {
+      "chords": "Eb-major/06-cinematic-I-III-IV-iv/chords.mid",
+      "arp": "Eb-major/06-cinematic-I-III-IV-iv/arp.mid",
+      "bass": "Eb-major/06-cinematic-I-III-IV-iv/bass.mid",
+      "lead": "Eb-major/06-cinematic-I-III-IV-iv/lead.mid",
+      "all": "Eb-major/06-cinematic-I-III-IV-iv/all.mid"
+     }
+    }
+   ]
+  },
+  {
+   "id": "E-minor",
+   "name": "E minor",
+   "tonic": "E",
+   "tonic_pc": 4,
+   "mode": "minor",
+   "kits": [
+    {
+     "id": "01-synthwave-i-VI-III-VII",
+     "n": 1,
+     "genre": "synthwave",
+     "genre_name": "Synthwave",
+     "bpm": 100,
+     "about": "Aeolian anthem: the classic 80s minor loop",
+     "roman": [
+      "i",
+      "VI",
+      "III",
+      "VII"
+     ],
+     "chords": [
+      "Em",
+      "C",
+      "G",
+      "D"
+     ],
+     "voicings": [
+      [
+       59,
+       64,
+       67
+      ],
+      [
+       60,
+       64,
+       67
+      ],
+      [
+       59,
+       62,
+       67
+      ],
+      [
+       57,
+       62,
+       66
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "up",
+      "bass": "octave-bounce",
+      "lead": "synthwave"
+     },
+     "files": {
+      "chords": "E-minor/01-synthwave-i-VI-III-VII/chords.mid",
+      "arp": "E-minor/01-synthwave-i-VI-III-VII/arp.mid",
+      "bass": "E-minor/01-synthwave-i-VI-III-VII/bass.mid",
+      "lead": "E-minor/01-synthwave-i-VI-III-VII/lead.mid",
+      "all": "E-minor/01-synthwave-i-VI-III-VII/all.mid"
+     }
+    },
+    {
+     "id": "02-house-i9-iv7-VImaj7-v7",
+     "n": 2,
+     "genre": "house",
+     "genre_name": "House",
+     "bpm": 124,
+     "about": "Deep-house minor 7ths/9ths",
+     "roman": [
+      "i9",
+      "iv7",
+      "VImaj7",
+      "v7"
+     ],
+     "chords": [
+      "Em9",
+      "Am7",
+      "Cmaj7",
+      "Bm7"
+     ],
+     "voicings": [
+      [
+       54,
+       62,
+       64,
+       67
+      ],
+      [
+       55,
+       60,
+       64,
+       69
+      ],
+      [
+       55,
+       60,
+       64,
+       71
+      ],
+      [
+       54,
+       59,
+       62,
+       69
+      ]
+     ],
+     "styles": {
+      "chords": "stabs",
+      "arp": "broken",
+      "bass": "offbeat-root-fifth",
+      "lead": "house"
+     },
+     "files": {
+      "chords": "E-minor/02-house-i9-iv7-VImaj7-v7/chords.mid",
+      "arp": "E-minor/02-house-i9-iv7-VImaj7-v7/arp.mid",
+      "bass": "E-minor/02-house-i9-iv7-VImaj7-v7/bass.mid",
+      "lead": "E-minor/02-house-i9-iv7-VImaj7-v7/lead.mid",
+      "all": "E-minor/02-house-i9-iv7-VImaj7-v7/all.mid"
+     }
+    },
+    {
+     "id": "03-lofi-iim7b5-V7-i9-VImaj7",
+     "n": 3,
+     "genre": "lofi",
+     "genre_name": "Lo-fi",
+     "bpm": 80,
+     "about": "Jazz minor ii-V-i with a VImaj7 turnaround",
+     "roman": [
+      "iiø7",
+      "V7",
+      "i9",
+      "VImaj7"
+     ],
+     "chords": [
+      "F#m7b5",
+      "B7",
+      "Em9",
+      "Cmaj7"
+     ],
+     "voicings": [
+      [
+       54,
+       60,
+       64,
+       69
+      ],
+      [
+       54,
+       59,
+       63,
+       69
+      ],
+      [
+       54,
+       62,
+       64,
+       67
+      ],
+      [
+       55,
+       60,
+       64,
+       71
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "walking",
+      "lead": "lofi"
+     },
+     "files": {
+      "chords": "E-minor/03-lofi-iim7b5-V7-i9-VImaj7/chords.mid",
+      "arp": "E-minor/03-lofi-iim7b5-V7-i9-VImaj7/arp.mid",
+      "bass": "E-minor/03-lofi-iim7b5-V7-i9-VImaj7/bass.mid",
+      "lead": "E-minor/03-lofi-iim7b5-V7-i9-VImaj7/lead.mid",
+      "all": "E-minor/03-lofi-iim7b5-V7-i9-VImaj7/all.mid"
+     }
+    },
+    {
+     "id": "04-techno-i-i-iv-v",
+     "n": 4,
+     "genre": "techno",
+     "genre_name": "Techno",
+     "bpm": 132,
+     "about": "Hypnotic i-iv-v stabs",
+     "roman": [
+      "i",
+      "i",
+      "iv",
+      "v"
+     ],
+     "chords": [
+      "Em",
+      "Em",
+      "Am",
+      "Bm"
+     ],
+     "voicings": [
+      [
+       55,
+       59,
+       64
+      ],
+      [
+       55,
+       59,
+       64
+      ],
+      [
+       57,
+       60,
+       64
+      ],
+      [
+       54,
+       59,
+       62
+      ]
+     ],
+     "styles": {
+      "chords": "offbeat",
+      "arp": "down",
+      "bass": "acid-303",
+      "lead": "techno"
+     },
+     "files": {
+      "chords": "E-minor/04-techno-i-i-iv-v/chords.mid",
+      "arp": "E-minor/04-techno-i-i-iv-v/arp.mid",
+      "bass": "E-minor/04-techno-i-i-iv-v/bass.mid",
+      "lead": "E-minor/04-techno-i-i-iv-v/lead.mid",
+      "all": "E-minor/04-techno-i-i-iv-v/all.mid"
+     }
+    },
+    {
+     "id": "05-pop-i-III-VII-VI",
+     "n": 5,
+     "genre": "pop",
+     "genre_name": "Pop",
+     "bpm": 112,
+     "about": "Minor pop loop",
+     "roman": [
+      "i",
+      "III",
+      "VII",
+      "VI"
+     ],
+     "chords": [
+      "Em",
+      "G",
+      "D",
+      "C"
+     ],
+     "voicings": [
+      [
+       59,
+       64,
+       67
+      ],
+      [
+       59,
+       62,
+       67
+      ],
+      [
+       57,
+       62,
+       66
+      ],
+      [
+       60,
+       64,
+       67
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "pumping-root-fifth",
+      "lead": "pop"
+     },
+     "files": {
+      "chords": "E-minor/05-pop-i-III-VII-VI/chords.mid",
+      "arp": "E-minor/05-pop-i-III-VII-VI/arp.mid",
+      "bass": "E-minor/05-pop-i-III-VII-VI/bass.mid",
+      "lead": "E-minor/05-pop-i-III-VII-VI/lead.mid",
+      "all": "E-minor/05-pop-i-III-VII-VI/all.mid"
+     }
+    },
+    {
+     "id": "06-cinematic-i-bII-VI-V",
+     "n": 6,
+     "genre": "cinematic",
+     "genre_name": "Dark / Cinematic",
+     "bpm": 90,
+     "about": "Phrygian bII + major V: dark and tense",
+     "roman": [
+      "i",
+      "bII",
+      "VI",
+      "V"
+     ],
+     "chords": [
+      "Em",
+      "F",
+      "C",
+      "B"
+     ],
+     "voicings": [
+      [
+       55,
+       59,
+       64
+      ],
+      [
+       57,
+       60,
+       65
+      ],
+      [
+       55,
+       60,
+       64
+      ],
+      [
+       54,
+       59,
+       63
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "broken",
+      "bass": "sub-glide",
+      "lead": "cinematic"
+     },
+     "files": {
+      "chords": "E-minor/06-cinematic-i-bII-VI-V/chords.mid",
+      "arp": "E-minor/06-cinematic-i-bII-VI-V/arp.mid",
+      "bass": "E-minor/06-cinematic-i-bII-VI-V/bass.mid",
+      "lead": "E-minor/06-cinematic-i-bII-VI-V/lead.mid",
+      "all": "E-minor/06-cinematic-i-bII-VI-V/all.mid"
+     }
+    }
+   ]
+  },
+  {
+   "id": "E-major",
+   "name": "E major",
+   "tonic": "E",
+   "tonic_pc": 4,
+   "mode": "major",
+   "kits": [
+    {
+     "id": "01-synthwave-I-vi-bVI-bVII",
+     "n": 1,
+     "genre": "synthwave",
+     "genre_name": "Synthwave",
+     "bpm": 100,
+     "about": "Borrowed bVI-bVII lift (80s soundtrack)",
+     "roman": [
+      "I",
+      "vi",
+      "bVI",
+      "bVII"
+     ],
+     "chords": [
+      "E",
+      "C#m",
+      "C",
+      "D"
+     ],
+     "voicings": [
+      [
+       56,
+       59,
+       64
+      ],
+      [
+       56,
+       61,
+       64
+      ],
+      [
+       55,
+       60,
+       64
+      ],
+      [
+       57,
+       62,
+       66
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "up",
+      "bass": "octave-bounce",
+      "lead": "synthwave"
+     },
+     "files": {
+      "chords": "E-major/01-synthwave-I-vi-bVI-bVII/chords.mid",
+      "arp": "E-major/01-synthwave-I-vi-bVI-bVII/arp.mid",
+      "bass": "E-major/01-synthwave-I-vi-bVI-bVII/bass.mid",
+      "lead": "E-major/01-synthwave-I-vi-bVI-bVII/lead.mid",
+      "all": "E-major/01-synthwave-I-vi-bVI-bVII/all.mid"
+     }
+    },
+    {
+     "id": "02-house-IVmaj7-V7-iii7-vi7",
+     "n": 2,
+     "genre": "house",
+     "genre_name": "House",
+     "bpm": 124,
+     "about": "Royal road with 7ths (city pop / piano house)",
+     "roman": [
+      "IVmaj7",
+      "V7",
+      "iii7",
+      "vi7"
+     ],
+     "chords": [
+      "Amaj7",
+      "B7",
+      "G#m7",
+      "C#m7"
+     ],
+     "voicings": [
+      [
+       52,
+       57,
+       61,
+       68
+      ],
+      [
+       54,
+       59,
+       63,
+       69
+      ],
+      [
+       54,
+       59,
+       63,
+       68
+      ],
+      [
+       52,
+       59,
+       61,
+       68
+      ]
+     ],
+     "styles": {
+      "chords": "stabs",
+      "arp": "broken",
+      "bass": "offbeat-root-fifth",
+      "lead": "house"
+     },
+     "files": {
+      "chords": "E-major/02-house-IVmaj7-V7-iii7-vi7/chords.mid",
+      "arp": "E-major/02-house-IVmaj7-V7-iii7-vi7/arp.mid",
+      "bass": "E-major/02-house-IVmaj7-V7-iii7-vi7/bass.mid",
+      "lead": "E-major/02-house-IVmaj7-V7-iii7-vi7/lead.mid",
+      "all": "E-major/02-house-IVmaj7-V7-iii7-vi7/all.mid"
+     }
+    },
+    {
+     "id": "03-lofi-ii9-V9-Imaj9-vi9",
+     "n": 3,
+     "genre": "lofi",
+     "genre_name": "Lo-fi",
+     "bpm": 80,
+     "about": "ii-V-I in 9ths with a vi9 turnaround",
+     "roman": [
+      "ii9",
+      "V9",
+      "Imaj9",
+      "vi9"
+     ],
+     "chords": [
+      "F#m9",
+      "B9",
+      "Emaj9",
+      "C#m9"
+     ],
+     "voicings": [
+      [
+       54,
+       57,
+       64,
+       68
+      ],
+      [
+       57,
+       59,
+       61,
+       63
+      ],
+      [
+       52,
+       56,
+       63,
+       66
+      ],
+      [
+       51,
+       59,
+       61,
+       64
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "walking",
+      "lead": "lofi"
+     },
+     "files": {
+      "chords": "E-major/03-lofi-ii9-V9-Imaj9-vi9/chords.mid",
+      "arp": "E-major/03-lofi-ii9-V9-Imaj9-vi9/arp.mid",
+      "bass": "E-major/03-lofi-ii9-V9-Imaj9-vi9/bass.mid",
+      "lead": "E-major/03-lofi-ii9-V9-Imaj9-vi9/lead.mid",
+      "all": "E-major/03-lofi-ii9-V9-Imaj9-vi9/all.mid"
+     }
+    },
+    {
+     "id": "04-techno-I-I-bVII-IV",
+     "n": 4,
+     "genre": "techno",
+     "genre_name": "Techno",
+     "bpm": 132,
+     "about": "Mixolydian I-bVII-IV",
+     "roman": [
+      "I",
+      "I",
+      "bVII",
+      "IV"
+     ],
+     "chords": [
+      "E",
+      "E",
+      "D",
+      "A"
+     ],
+     "voicings": [
+      [
+       56,
+       59,
+       64
+      ],
+      [
+       56,
+       59,
+       64
+      ],
+      [
+       57,
+       62,
+       66
+      ],
+      [
+       57,
+       61,
+       64
+      ]
+     ],
+     "styles": {
+      "chords": "offbeat",
+      "arp": "down",
+      "bass": "acid-303",
+      "lead": "techno"
+     },
+     "files": {
+      "chords": "E-major/04-techno-I-I-bVII-IV/chords.mid",
+      "arp": "E-major/04-techno-I-I-bVII-IV/arp.mid",
+      "bass": "E-major/04-techno-I-I-bVII-IV/bass.mid",
+      "lead": "E-major/04-techno-I-I-bVII-IV/lead.mid",
+      "all": "E-major/04-techno-I-I-bVII-IV/all.mid"
+     }
+    },
+    {
+     "id": "05-pop-vi-IV-I-V",
+     "n": 5,
+     "genre": "pop",
+     "genre_name": "Pop",
+     "bpm": 112,
+     "about": "The axis progression",
+     "roman": [
+      "vi",
+      "IV",
+      "I",
+      "V"
+     ],
+     "chords": [
+      "C#m",
+      "A",
+      "E",
+      "B"
+     ],
+     "voicings": [
+      [
+       56,
+       61,
+       64
+      ],
+      [
+       57,
+       61,
+       64
+      ],
+      [
+       56,
+       59,
+       64
+      ],
+      [
+       54,
+       59,
+       63
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "pumping-root-fifth",
+      "lead": "pop"
+     },
+     "files": {
+      "chords": "E-major/05-pop-vi-IV-I-V/chords.mid",
+      "arp": "E-major/05-pop-vi-IV-I-V/arp.mid",
+      "bass": "E-major/05-pop-vi-IV-I-V/bass.mid",
+      "lead": "E-major/05-pop-vi-IV-I-V/lead.mid",
+      "all": "E-major/05-pop-vi-IV-I-V/all.mid"
+     }
+    },
+    {
+     "id": "06-cinematic-I-III-IV-iv",
+     "n": 6,
+     "genre": "cinematic",
+     "genre_name": "Dark / Cinematic",
+     "bpm": 90,
+     "about": "Chromatic-mediant III and borrowed iv",
+     "roman": [
+      "I",
+      "III",
+      "IV",
+      "iv"
+     ],
+     "chords": [
+      "E",
+      "G#",
+      "A",
+      "Am"
+     ],
+     "voicings": [
+      [
+       56,
+       59,
+       64
+      ],
+      [
+       56,
+       60,
+       63
+      ],
+      [
+       57,
+       61,
+       64
+      ],
+      [
+       57,
+       60,
+       64
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "broken",
+      "bass": "sub-glide",
+      "lead": "cinematic"
+     },
+     "files": {
+      "chords": "E-major/06-cinematic-I-III-IV-iv/chords.mid",
+      "arp": "E-major/06-cinematic-I-III-IV-iv/arp.mid",
+      "bass": "E-major/06-cinematic-I-III-IV-iv/bass.mid",
+      "lead": "E-major/06-cinematic-I-III-IV-iv/lead.mid",
+      "all": "E-major/06-cinematic-I-III-IV-iv/all.mid"
+     }
+    }
+   ]
+  },
+  {
+   "id": "F-minor",
+   "name": "F minor",
+   "tonic": "F",
+   "tonic_pc": 5,
+   "mode": "minor",
+   "kits": [
+    {
+     "id": "01-synthwave-i-VI-III-VII",
+     "n": 1,
+     "genre": "synthwave",
+     "genre_name": "Synthwave",
+     "bpm": 100,
+     "about": "Aeolian anthem: the classic 80s minor loop",
+     "roman": [
+      "i",
+      "VI",
+      "III",
+      "VII"
+     ],
+     "chords": [
+      "Fm",
+      "Db",
+      "Ab",
+      "Eb"
+     ],
+     "voicings": [
+      [
+       56,
+       60,
+       65
+      ],
+      [
+       56,
+       61,
+       65
+      ],
+      [
+       56,
+       60,
+       63
+      ],
+      [
+       55,
+       58,
+       63
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "up",
+      "bass": "octave-bounce",
+      "lead": "synthwave"
+     },
+     "files": {
+      "chords": "F-minor/01-synthwave-i-VI-III-VII/chords.mid",
+      "arp": "F-minor/01-synthwave-i-VI-III-VII/arp.mid",
+      "bass": "F-minor/01-synthwave-i-VI-III-VII/bass.mid",
+      "lead": "F-minor/01-synthwave-i-VI-III-VII/lead.mid",
+      "all": "F-minor/01-synthwave-i-VI-III-VII/all.mid"
+     }
+    },
+    {
+     "id": "02-house-i9-iv7-VImaj7-v7",
+     "n": 2,
+     "genre": "house",
+     "genre_name": "House",
+     "bpm": 124,
+     "about": "Deep-house minor 7ths/9ths",
+     "roman": [
+      "i9",
+      "iv7",
+      "VImaj7",
+      "v7"
+     ],
+     "chords": [
+      "Fm9",
+      "Bbm7",
+      "Dbmaj7",
+      "Cm7"
+     ],
+     "voicings": [
+      [
+       55,
+       63,
+       65,
+       68
+      ],
+      [
+       56,
+       61,
+       65,
+       70
+      ],
+      [
+       56,
+       61,
+       65,
+       72
+      ],
+      [
+       55,
+       60,
+       63,
+       70
+      ]
+     ],
+     "styles": {
+      "chords": "stabs",
+      "arp": "broken",
+      "bass": "offbeat-root-fifth",
+      "lead": "house"
+     },
+     "files": {
+      "chords": "F-minor/02-house-i9-iv7-VImaj7-v7/chords.mid",
+      "arp": "F-minor/02-house-i9-iv7-VImaj7-v7/arp.mid",
+      "bass": "F-minor/02-house-i9-iv7-VImaj7-v7/bass.mid",
+      "lead": "F-minor/02-house-i9-iv7-VImaj7-v7/lead.mid",
+      "all": "F-minor/02-house-i9-iv7-VImaj7-v7/all.mid"
+     }
+    },
+    {
+     "id": "03-lofi-iim7b5-V7-i9-VImaj7",
+     "n": 3,
+     "genre": "lofi",
+     "genre_name": "Lo-fi",
+     "bpm": 80,
+     "about": "Jazz minor ii-V-i with a VImaj7 turnaround",
+     "roman": [
+      "iiø7",
+      "V7",
+      "i9",
+      "VImaj7"
+     ],
+     "chords": [
+      "Gm7b5",
+      "C7",
+      "Fm9",
+      "Dbmaj7"
+     ],
+     "voicings": [
+      [
+       55,
+       61,
+       65,
+       70
+      ],
+      [
+       55,
+       60,
+       64,
+       70
+      ],
+      [
+       55,
+       63,
+       65,
+       68
+      ],
+      [
+       56,
+       61,
+       65,
+       72
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "walking",
+      "lead": "lofi"
+     },
+     "files": {
+      "chords": "F-minor/03-lofi-iim7b5-V7-i9-VImaj7/chords.mid",
+      "arp": "F-minor/03-lofi-iim7b5-V7-i9-VImaj7/arp.mid",
+      "bass": "F-minor/03-lofi-iim7b5-V7-i9-VImaj7/bass.mid",
+      "lead": "F-minor/03-lofi-iim7b5-V7-i9-VImaj7/lead.mid",
+      "all": "F-minor/03-lofi-iim7b5-V7-i9-VImaj7/all.mid"
+     }
+    },
+    {
+     "id": "04-techno-i-i-iv-v",
+     "n": 4,
+     "genre": "techno",
+     "genre_name": "Techno",
+     "bpm": 132,
+     "about": "Hypnotic i-iv-v stabs",
+     "roman": [
+      "i",
+      "i",
+      "iv",
+      "v"
+     ],
+     "chords": [
+      "Fm",
+      "Fm",
+      "Bbm",
+      "Cm"
+     ],
+     "voicings": [
+      [
+       56,
+       60,
+       65
+      ],
+      [
+       56,
+       60,
+       65
+      ],
+      [
+       58,
+       61,
+       65
+      ],
+      [
+       55,
+       60,
+       63
+      ]
+     ],
+     "styles": {
+      "chords": "offbeat",
+      "arp": "down",
+      "bass": "acid-303",
+      "lead": "techno"
+     },
+     "files": {
+      "chords": "F-minor/04-techno-i-i-iv-v/chords.mid",
+      "arp": "F-minor/04-techno-i-i-iv-v/arp.mid",
+      "bass": "F-minor/04-techno-i-i-iv-v/bass.mid",
+      "lead": "F-minor/04-techno-i-i-iv-v/lead.mid",
+      "all": "F-minor/04-techno-i-i-iv-v/all.mid"
+     }
+    },
+    {
+     "id": "05-pop-i-III-VII-VI",
+     "n": 5,
+     "genre": "pop",
+     "genre_name": "Pop",
+     "bpm": 112,
+     "about": "Minor pop loop",
+     "roman": [
+      "i",
+      "III",
+      "VII",
+      "VI"
+     ],
+     "chords": [
+      "Fm",
+      "Ab",
+      "Eb",
+      "Db"
+     ],
+     "voicings": [
+      [
+       56,
+       60,
+       65
+      ],
+      [
+       56,
+       60,
+       63
+      ],
+      [
+       55,
+       58,
+       63
+      ],
+      [
+       56,
+       61,
+       65
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "pumping-root-fifth",
+      "lead": "pop"
+     },
+     "files": {
+      "chords": "F-minor/05-pop-i-III-VII-VI/chords.mid",
+      "arp": "F-minor/05-pop-i-III-VII-VI/arp.mid",
+      "bass": "F-minor/05-pop-i-III-VII-VI/bass.mid",
+      "lead": "F-minor/05-pop-i-III-VII-VI/lead.mid",
+      "all": "F-minor/05-pop-i-III-VII-VI/all.mid"
+     }
+    },
+    {
+     "id": "06-cinematic-i-bII-VI-V",
+     "n": 6,
+     "genre": "cinematic",
+     "genre_name": "Dark / Cinematic",
+     "bpm": 90,
+     "about": "Phrygian bII + major V: dark and tense",
+     "roman": [
+      "i",
+      "bII",
+      "VI",
+      "V"
+     ],
+     "chords": [
+      "Fm",
+      "Gb",
+      "Db",
+      "C"
+     ],
+     "voicings": [
+      [
+       56,
+       60,
+       65
+      ],
+      [
+       58,
+       61,
+       66
+      ],
+      [
+       56,
+       61,
+       65
+      ],
+      [
+       55,
+       60,
+       64
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "broken",
+      "bass": "sub-glide",
+      "lead": "cinematic"
+     },
+     "files": {
+      "chords": "F-minor/06-cinematic-i-bII-VI-V/chords.mid",
+      "arp": "F-minor/06-cinematic-i-bII-VI-V/arp.mid",
+      "bass": "F-minor/06-cinematic-i-bII-VI-V/bass.mid",
+      "lead": "F-minor/06-cinematic-i-bII-VI-V/lead.mid",
+      "all": "F-minor/06-cinematic-i-bII-VI-V/all.mid"
+     }
+    }
+   ]
+  },
+  {
+   "id": "F-major",
+   "name": "F major",
+   "tonic": "F",
+   "tonic_pc": 5,
+   "mode": "major",
+   "kits": [
+    {
+     "id": "01-synthwave-I-vi-bVI-bVII",
+     "n": 1,
+     "genre": "synthwave",
+     "genre_name": "Synthwave",
+     "bpm": 100,
+     "about": "Borrowed bVI-bVII lift (80s soundtrack)",
+     "roman": [
+      "I",
+      "vi",
+      "bVI",
+      "bVII"
+     ],
+     "chords": [
+      "F",
+      "Dm",
+      "Db",
+      "Eb"
+     ],
+     "voicings": [
+      [
+       57,
+       60,
+       65
+      ],
+      [
+       57,
+       62,
+       65
+      ],
+      [
+       56,
+       61,
+       65
+      ],
+      [
+       58,
+       63,
+       67
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "up",
+      "bass": "octave-bounce",
+      "lead": "synthwave"
+     },
+     "files": {
+      "chords": "F-major/01-synthwave-I-vi-bVI-bVII/chords.mid",
+      "arp": "F-major/01-synthwave-I-vi-bVI-bVII/arp.mid",
+      "bass": "F-major/01-synthwave-I-vi-bVI-bVII/bass.mid",
+      "lead": "F-major/01-synthwave-I-vi-bVI-bVII/lead.mid",
+      "all": "F-major/01-synthwave-I-vi-bVI-bVII/all.mid"
+     }
+    },
+    {
+     "id": "02-house-IVmaj7-V7-iii7-vi7",
+     "n": 2,
+     "genre": "house",
+     "genre_name": "House",
+     "bpm": 124,
+     "about": "Royal road with 7ths (city pop / piano house)",
+     "roman": [
+      "IVmaj7",
+      "V7",
+      "iii7",
+      "vi7"
+     ],
+     "chords": [
+      "Bbmaj7",
+      "C7",
+      "Am7",
+      "Dm7"
+     ],
+     "voicings": [
+      [
+       53,
+       58,
+       62,
+       69
+      ],
+      [
+       55,
+       60,
+       64,
+       70
+      ],
+      [
+       55,
+       60,
+       64,
+       69
+      ],
+      [
+       53,
+       60,
+       62,
+       69
+      ]
+     ],
+     "styles": {
+      "chords": "stabs",
+      "arp": "broken",
+      "bass": "offbeat-root-fifth",
+      "lead": "house"
+     },
+     "files": {
+      "chords": "F-major/02-house-IVmaj7-V7-iii7-vi7/chords.mid",
+      "arp": "F-major/02-house-IVmaj7-V7-iii7-vi7/arp.mid",
+      "bass": "F-major/02-house-IVmaj7-V7-iii7-vi7/bass.mid",
+      "lead": "F-major/02-house-IVmaj7-V7-iii7-vi7/lead.mid",
+      "all": "F-major/02-house-IVmaj7-V7-iii7-vi7/all.mid"
+     }
+    },
+    {
+     "id": "03-lofi-ii9-V9-Imaj9-vi9",
+     "n": 3,
+     "genre": "lofi",
+     "genre_name": "Lo-fi",
+     "bpm": 80,
+     "about": "ii-V-I in 9ths with a vi9 turnaround",
+     "roman": [
+      "ii9",
+      "V9",
+      "Imaj9",
+      "vi9"
+     ],
+     "chords": [
+      "Gm9",
+      "C9",
+      "Fmaj9",
+      "Dm9"
+     ],
+     "voicings": [
+      [
+       53,
+       55,
+       58,
+       69
+      ],
+      [
+       50,
+       58,
+       60,
+       64
+      ],
+      [
+       52,
+       55,
+       57,
+       65
+      ],
+      [
+       50,
+       52,
+       60,
+       65
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "walking",
+      "lead": "lofi"
+     },
+     "files": {
+      "chords": "F-major/03-lofi-ii9-V9-Imaj9-vi9/chords.mid",
+      "arp": "F-major/03-lofi-ii9-V9-Imaj9-vi9/arp.mid",
+      "bass": "F-major/03-lofi-ii9-V9-Imaj9-vi9/bass.mid",
+      "lead": "F-major/03-lofi-ii9-V9-Imaj9-vi9/lead.mid",
+      "all": "F-major/03-lofi-ii9-V9-Imaj9-vi9/all.mid"
+     }
+    },
+    {
+     "id": "04-techno-I-I-bVII-IV",
+     "n": 4,
+     "genre": "techno",
+     "genre_name": "Techno",
+     "bpm": 132,
+     "about": "Mixolydian I-bVII-IV",
+     "roman": [
+      "I",
+      "I",
+      "bVII",
+      "IV"
+     ],
+     "chords": [
+      "F",
+      "F",
+      "Eb",
+      "Bb"
+     ],
+     "voicings": [
+      [
+       57,
+       60,
+       65
+      ],
+      [
+       57,
+       60,
+       65
+      ],
+      [
+       58,
+       63,
+       67
+      ],
+      [
+       58,
+       62,
+       65
+      ]
+     ],
+     "styles": {
+      "chords": "offbeat",
+      "arp": "down",
+      "bass": "acid-303",
+      "lead": "techno"
+     },
+     "files": {
+      "chords": "F-major/04-techno-I-I-bVII-IV/chords.mid",
+      "arp": "F-major/04-techno-I-I-bVII-IV/arp.mid",
+      "bass": "F-major/04-techno-I-I-bVII-IV/bass.mid",
+      "lead": "F-major/04-techno-I-I-bVII-IV/lead.mid",
+      "all": "F-major/04-techno-I-I-bVII-IV/all.mid"
+     }
+    },
+    {
+     "id": "05-pop-vi-IV-I-V",
+     "n": 5,
+     "genre": "pop",
+     "genre_name": "Pop",
+     "bpm": 112,
+     "about": "The axis progression",
+     "roman": [
+      "vi",
+      "IV",
+      "I",
+      "V"
+     ],
+     "chords": [
+      "Dm",
+      "Bb",
+      "F",
+      "C"
+     ],
+     "voicings": [
+      [
+       57,
+       62,
+       65
+      ],
+      [
+       58,
+       62,
+       65
+      ],
+      [
+       57,
+       60,
+       65
+      ],
+      [
+       55,
+       60,
+       64
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "pumping-root-fifth",
+      "lead": "pop"
+     },
+     "files": {
+      "chords": "F-major/05-pop-vi-IV-I-V/chords.mid",
+      "arp": "F-major/05-pop-vi-IV-I-V/arp.mid",
+      "bass": "F-major/05-pop-vi-IV-I-V/bass.mid",
+      "lead": "F-major/05-pop-vi-IV-I-V/lead.mid",
+      "all": "F-major/05-pop-vi-IV-I-V/all.mid"
+     }
+    },
+    {
+     "id": "06-cinematic-I-III-IV-iv",
+     "n": 6,
+     "genre": "cinematic",
+     "genre_name": "Dark / Cinematic",
+     "bpm": 90,
+     "about": "Chromatic-mediant III and borrowed iv",
+     "roman": [
+      "I",
+      "III",
+      "IV",
+      "iv"
+     ],
+     "chords": [
+      "F",
+      "A",
+      "Bb",
+      "Bbm"
+     ],
+     "voicings": [
+      [
+       57,
+       60,
+       65
+      ],
+      [
+       57,
+       61,
+       64
+      ],
+      [
+       58,
+       62,
+       65
+      ],
+      [
+       58,
+       61,
+       65
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "broken",
+      "bass": "sub-glide",
+      "lead": "cinematic"
+     },
+     "files": {
+      "chords": "F-major/06-cinematic-I-III-IV-iv/chords.mid",
+      "arp": "F-major/06-cinematic-I-III-IV-iv/arp.mid",
+      "bass": "F-major/06-cinematic-I-III-IV-iv/bass.mid",
+      "lead": "F-major/06-cinematic-I-III-IV-iv/lead.mid",
+      "all": "F-major/06-cinematic-I-III-IV-iv/all.mid"
+     }
+    }
+   ]
+  },
+  {
+   "id": "Fs-minor",
+   "name": "F# minor",
+   "tonic": "F#",
+   "tonic_pc": 6,
+   "mode": "minor",
+   "kits": [
+    {
+     "id": "01-synthwave-i-VI-III-VII",
+     "n": 1,
+     "genre": "synthwave",
+     "genre_name": "Synthwave",
+     "bpm": 100,
+     "about": "Aeolian anthem: the classic 80s minor loop",
+     "roman": [
+      "i",
+      "VI",
+      "III",
+      "VII"
+     ],
+     "chords": [
+      "F#m",
+      "D",
+      "A",
+      "E"
+     ],
+     "voicings": [
+      [
+       57,
+       61,
+       66
+      ],
+      [
+       57,
+       62,
+       66
+      ],
+      [
+       57,
+       61,
+       64
+      ],
+      [
+       56,
+       59,
+       64
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "up",
+      "bass": "octave-bounce",
+      "lead": "synthwave"
+     },
+     "files": {
+      "chords": "Fs-minor/01-synthwave-i-VI-III-VII/chords.mid",
+      "arp": "Fs-minor/01-synthwave-i-VI-III-VII/arp.mid",
+      "bass": "Fs-minor/01-synthwave-i-VI-III-VII/bass.mid",
+      "lead": "Fs-minor/01-synthwave-i-VI-III-VII/lead.mid",
+      "all": "Fs-minor/01-synthwave-i-VI-III-VII/all.mid"
+     }
+    },
+    {
+     "id": "02-house-i9-iv7-VImaj7-v7",
+     "n": 2,
+     "genre": "house",
+     "genre_name": "House",
+     "bpm": 124,
+     "about": "Deep-house minor 7ths/9ths",
+     "roman": [
+      "i9",
+      "iv7",
+      "VImaj7",
+      "v7"
+     ],
+     "chords": [
+      "F#m9",
+      "Bm7",
+      "Dmaj7",
+      "C#m7"
+     ],
+     "voicings": [
+      [
+       52,
+       57,
+       66,
+       68
+      ],
+      [
+       50,
+       57,
+       59,
+       66
+      ],
+      [
+       50,
+       57,
+       61,
+       66
+      ],
+      [
+       52,
+       59,
+       61,
+       68
+      ]
+     ],
+     "styles": {
+      "chords": "stabs",
+      "arp": "broken",
+      "bass": "offbeat-root-fifth",
+      "lead": "house"
+     },
+     "files": {
+      "chords": "Fs-minor/02-house-i9-iv7-VImaj7-v7/chords.mid",
+      "arp": "Fs-minor/02-house-i9-iv7-VImaj7-v7/arp.mid",
+      "bass": "Fs-minor/02-house-i9-iv7-VImaj7-v7/bass.mid",
+      "lead": "Fs-minor/02-house-i9-iv7-VImaj7-v7/lead.mid",
+      "all": "Fs-minor/02-house-i9-iv7-VImaj7-v7/all.mid"
+     }
+    },
+    {
+     "id": "03-lofi-iim7b5-V7-i9-VImaj7",
+     "n": 3,
+     "genre": "lofi",
+     "genre_name": "Lo-fi",
+     "bpm": 80,
+     "about": "Jazz minor ii-V-i with a VImaj7 turnaround",
+     "roman": [
+      "iiø7",
+      "V7",
+      "i9",
+      "VImaj7"
+     ],
+     "chords": [
+      "G#m7b5",
+      "C#7",
+      "F#m9",
+      "Dmaj7"
+     ],
+     "voicings": [
+      [
+       54,
+       59,
+       62,
+       68
+      ],
+      [
+       53,
+       59,
+       61,
+       68
+      ],
+      [
+       54,
+       57,
+       64,
+       68
+      ],
+      [
+       50,
+       57,
+       61,
+       66
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "walking",
+      "lead": "lofi"
+     },
+     "files": {
+      "chords": "Fs-minor/03-lofi-iim7b5-V7-i9-VImaj7/chords.mid",
+      "arp": "Fs-minor/03-lofi-iim7b5-V7-i9-VImaj7/arp.mid",
+      "bass": "Fs-minor/03-lofi-iim7b5-V7-i9-VImaj7/bass.mid",
+      "lead": "Fs-minor/03-lofi-iim7b5-V7-i9-VImaj7/lead.mid",
+      "all": "Fs-minor/03-lofi-iim7b5-V7-i9-VImaj7/all.mid"
+     }
+    },
+    {
+     "id": "04-techno-i-i-iv-v",
+     "n": 4,
+     "genre": "techno",
+     "genre_name": "Techno",
+     "bpm": 132,
+     "about": "Hypnotic i-iv-v stabs",
+     "roman": [
+      "i",
+      "i",
+      "iv",
+      "v"
+     ],
+     "chords": [
+      "F#m",
+      "F#m",
+      "Bm",
+      "C#m"
+     ],
+     "voicings": [
+      [
+       57,
+       61,
+       66
+      ],
+      [
+       57,
+       61,
+       66
+      ],
+      [
+       59,
+       62,
+       66
+      ],
+      [
+       56,
+       61,
+       64
+      ]
+     ],
+     "styles": {
+      "chords": "offbeat",
+      "arp": "down",
+      "bass": "acid-303",
+      "lead": "techno"
+     },
+     "files": {
+      "chords": "Fs-minor/04-techno-i-i-iv-v/chords.mid",
+      "arp": "Fs-minor/04-techno-i-i-iv-v/arp.mid",
+      "bass": "Fs-minor/04-techno-i-i-iv-v/bass.mid",
+      "lead": "Fs-minor/04-techno-i-i-iv-v/lead.mid",
+      "all": "Fs-minor/04-techno-i-i-iv-v/all.mid"
+     }
+    },
+    {
+     "id": "05-pop-i-III-VII-VI",
+     "n": 5,
+     "genre": "pop",
+     "genre_name": "Pop",
+     "bpm": 112,
+     "about": "Minor pop loop",
+     "roman": [
+      "i",
+      "III",
+      "VII",
+      "VI"
+     ],
+     "chords": [
+      "F#m",
+      "A",
+      "E",
+      "D"
+     ],
+     "voicings": [
+      [
+       57,
+       61,
+       66
+      ],
+      [
+       57,
+       61,
+       64
+      ],
+      [
+       56,
+       59,
+       64
+      ],
+      [
+       57,
+       62,
+       66
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "pumping-root-fifth",
+      "lead": "pop"
+     },
+     "files": {
+      "chords": "Fs-minor/05-pop-i-III-VII-VI/chords.mid",
+      "arp": "Fs-minor/05-pop-i-III-VII-VI/arp.mid",
+      "bass": "Fs-minor/05-pop-i-III-VII-VI/bass.mid",
+      "lead": "Fs-minor/05-pop-i-III-VII-VI/lead.mid",
+      "all": "Fs-minor/05-pop-i-III-VII-VI/all.mid"
+     }
+    },
+    {
+     "id": "06-cinematic-i-bII-VI-V",
+     "n": 6,
+     "genre": "cinematic",
+     "genre_name": "Dark / Cinematic",
+     "bpm": 90,
+     "about": "Phrygian bII + major V: dark and tense",
+     "roman": [
+      "i",
+      "bII",
+      "VI",
+      "V"
+     ],
+     "chords": [
+      "F#m",
+      "G",
+      "D",
+      "C#"
+     ],
+     "voicings": [
+      [
+       57,
+       61,
+       66
+      ],
+      [
+       59,
+       62,
+       67
+      ],
+      [
+       57,
+       62,
+       66
+      ],
+      [
+       56,
+       61,
+       65
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "broken",
+      "bass": "sub-glide",
+      "lead": "cinematic"
+     },
+     "files": {
+      "chords": "Fs-minor/06-cinematic-i-bII-VI-V/chords.mid",
+      "arp": "Fs-minor/06-cinematic-i-bII-VI-V/arp.mid",
+      "bass": "Fs-minor/06-cinematic-i-bII-VI-V/bass.mid",
+      "lead": "Fs-minor/06-cinematic-i-bII-VI-V/lead.mid",
+      "all": "Fs-minor/06-cinematic-i-bII-VI-V/all.mid"
+     }
+    }
+   ]
+  },
+  {
+   "id": "Fs-major",
+   "name": "F# major",
+   "tonic": "F#",
+   "tonic_pc": 6,
+   "mode": "major",
+   "kits": [
+    {
+     "id": "01-synthwave-I-vi-bVI-bVII",
+     "n": 1,
+     "genre": "synthwave",
+     "genre_name": "Synthwave",
+     "bpm": 100,
+     "about": "Borrowed bVI-bVII lift (80s soundtrack)",
+     "roman": [
+      "I",
+      "vi",
+      "bVI",
+      "bVII"
+     ],
+     "chords": [
+      "F#",
+      "D#m",
+      "D",
+      "E"
+     ],
+     "voicings": [
+      [
+       58,
+       61,
+       66
+      ],
+      [
+       58,
+       63,
+       66
+      ],
+      [
+       57,
+       62,
+       66
+      ],
+      [
+       56,
+       59,
+       64
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "up",
+      "bass": "octave-bounce",
+      "lead": "synthwave"
+     },
+     "files": {
+      "chords": "Fs-major/01-synthwave-I-vi-bVI-bVII/chords.mid",
+      "arp": "Fs-major/01-synthwave-I-vi-bVI-bVII/arp.mid",
+      "bass": "Fs-major/01-synthwave-I-vi-bVI-bVII/bass.mid",
+      "lead": "Fs-major/01-synthwave-I-vi-bVI-bVII/lead.mid",
+      "all": "Fs-major/01-synthwave-I-vi-bVI-bVII/all.mid"
+     }
+    },
+    {
+     "id": "02-house-IVmaj7-V7-iii7-vi7",
+     "n": 2,
+     "genre": "house",
+     "genre_name": "House",
+     "bpm": 124,
+     "about": "Royal road with 7ths (city pop / piano house)",
+     "roman": [
+      "IVmaj7",
+      "V7",
+      "iii7",
+      "vi7"
+     ],
+     "chords": [
+      "Bmaj7",
+      "C#7",
+      "A#m7",
+      "D#m7"
+     ],
+     "voicings": [
+      [
+       54,
+       59,
+       63,
+       70
+      ],
+      [
+       56,
+       61,
+       65,
+       71
+      ],
+      [
+       56,
+       61,
+       65,
+       70
+      ],
+      [
+       54,
+       61,
+       63,
+       70
+      ]
+     ],
+     "styles": {
+      "chords": "stabs",
+      "arp": "broken",
+      "bass": "offbeat-root-fifth",
+      "lead": "house"
+     },
+     "files": {
+      "chords": "Fs-major/02-house-IVmaj7-V7-iii7-vi7/chords.mid",
+      "arp": "Fs-major/02-house-IVmaj7-V7-iii7-vi7/arp.mid",
+      "bass": "Fs-major/02-house-IVmaj7-V7-iii7-vi7/bass.mid",
+      "lead": "Fs-major/02-house-IVmaj7-V7-iii7-vi7/lead.mid",
+      "all": "Fs-major/02-house-IVmaj7-V7-iii7-vi7/all.mid"
+     }
+    },
+    {
+     "id": "03-lofi-ii9-V9-Imaj9-vi9",
+     "n": 3,
+     "genre": "lofi",
+     "genre_name": "Lo-fi",
+     "bpm": 80,
+     "about": "ii-V-I in 9ths with a vi9 turnaround",
+     "roman": [
+      "ii9",
+      "V9",
+      "Imaj9",
+      "vi9"
+     ],
+     "chords": [
+      "G#m9",
+      "C#9",
+      "F#maj9",
+      "D#m9"
+     ],
+     "voicings": [
+      [
+       54,
+       56,
+       59,
+       70
+      ],
+      [
+       51,
+       59,
+       61,
+       65
+      ],
+      [
+       53,
+       56,
+       58,
+       66
+      ],
+      [
+       51,
+       53,
+       61,
+       66
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "walking",
+      "lead": "lofi"
+     },
+     "files": {
+      "chords": "Fs-major/03-lofi-ii9-V9-Imaj9-vi9/chords.mid",
+      "arp": "Fs-major/03-lofi-ii9-V9-Imaj9-vi9/arp.mid",
+      "bass": "Fs-major/03-lofi-ii9-V9-Imaj9-vi9/bass.mid",
+      "lead": "Fs-major/03-lofi-ii9-V9-Imaj9-vi9/lead.mid",
+      "all": "Fs-major/03-lofi-ii9-V9-Imaj9-vi9/all.mid"
+     }
+    },
+    {
+     "id": "04-techno-I-I-bVII-IV",
+     "n": 4,
+     "genre": "techno",
+     "genre_name": "Techno",
+     "bpm": 132,
+     "about": "Mixolydian I-bVII-IV",
+     "roman": [
+      "I",
+      "I",
+      "bVII",
+      "IV"
+     ],
+     "chords": [
+      "F#",
+      "F#",
+      "E",
+      "B"
+     ],
+     "voicings": [
+      [
+       58,
+       61,
+       66
+      ],
+      [
+       58,
+       61,
+       66
+      ],
+      [
+       59,
+       64,
+       68
+      ],
+      [
+       59,
+       63,
+       66
+      ]
+     ],
+     "styles": {
+      "chords": "offbeat",
+      "arp": "down",
+      "bass": "acid-303",
+      "lead": "techno"
+     },
+     "files": {
+      "chords": "Fs-major/04-techno-I-I-bVII-IV/chords.mid",
+      "arp": "Fs-major/04-techno-I-I-bVII-IV/arp.mid",
+      "bass": "Fs-major/04-techno-I-I-bVII-IV/bass.mid",
+      "lead": "Fs-major/04-techno-I-I-bVII-IV/lead.mid",
+      "all": "Fs-major/04-techno-I-I-bVII-IV/all.mid"
+     }
+    },
+    {
+     "id": "05-pop-vi-IV-I-V",
+     "n": 5,
+     "genre": "pop",
+     "genre_name": "Pop",
+     "bpm": 112,
+     "about": "The axis progression",
+     "roman": [
+      "vi",
+      "IV",
+      "I",
+      "V"
+     ],
+     "chords": [
+      "D#m",
+      "B",
+      "F#",
+      "C#"
+     ],
+     "voicings": [
+      [
+       58,
+       63,
+       66
+      ],
+      [
+       59,
+       63,
+       66
+      ],
+      [
+       58,
+       61,
+       66
+      ],
+      [
+       56,
+       61,
+       65
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "pumping-root-fifth",
+      "lead": "pop"
+     },
+     "files": {
+      "chords": "Fs-major/05-pop-vi-IV-I-V/chords.mid",
+      "arp": "Fs-major/05-pop-vi-IV-I-V/arp.mid",
+      "bass": "Fs-major/05-pop-vi-IV-I-V/bass.mid",
+      "lead": "Fs-major/05-pop-vi-IV-I-V/lead.mid",
+      "all": "Fs-major/05-pop-vi-IV-I-V/all.mid"
+     }
+    },
+    {
+     "id": "06-cinematic-I-III-IV-iv",
+     "n": 6,
+     "genre": "cinematic",
+     "genre_name": "Dark / Cinematic",
+     "bpm": 90,
+     "about": "Chromatic-mediant III and borrowed iv",
+     "roman": [
+      "I",
+      "III",
+      "IV",
+      "iv"
+     ],
+     "chords": [
+      "F#",
+      "A#",
+      "B",
+      "Bm"
+     ],
+     "voicings": [
+      [
+       58,
+       61,
+       66
+      ],
+      [
+       58,
+       62,
+       65
+      ],
+      [
+       59,
+       63,
+       66
+      ],
+      [
+       59,
+       62,
+       66
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "broken",
+      "bass": "sub-glide",
+      "lead": "cinematic"
+     },
+     "files": {
+      "chords": "Fs-major/06-cinematic-I-III-IV-iv/chords.mid",
+      "arp": "Fs-major/06-cinematic-I-III-IV-iv/arp.mid",
+      "bass": "Fs-major/06-cinematic-I-III-IV-iv/bass.mid",
+      "lead": "Fs-major/06-cinematic-I-III-IV-iv/lead.mid",
+      "all": "Fs-major/06-cinematic-I-III-IV-iv/all.mid"
+     }
+    }
+   ]
+  },
+  {
+   "id": "G-minor",
+   "name": "G minor",
+   "tonic": "G",
+   "tonic_pc": 7,
+   "mode": "minor",
+   "kits": [
+    {
+     "id": "01-synthwave-i-VI-III-VII",
+     "n": 1,
+     "genre": "synthwave",
+     "genre_name": "Synthwave",
+     "bpm": 100,
+     "about": "Aeolian anthem: the classic 80s minor loop",
+     "roman": [
+      "i",
+      "VI",
+      "III",
+      "VII"
+     ],
+     "chords": [
+      "Gm",
+      "Eb",
+      "Bb",
+      "F"
+     ],
+     "voicings": [
+      [
+       58,
+       62,
+       67
+      ],
+      [
+       58,
+       63,
+       67
+      ],
+      [
+       58,
+       62,
+       65
+      ],
+      [
+       57,
+       60,
+       65
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "up",
+      "bass": "octave-bounce",
+      "lead": "synthwave"
+     },
+     "files": {
+      "chords": "G-minor/01-synthwave-i-VI-III-VII/chords.mid",
+      "arp": "G-minor/01-synthwave-i-VI-III-VII/arp.mid",
+      "bass": "G-minor/01-synthwave-i-VI-III-VII/bass.mid",
+      "lead": "G-minor/01-synthwave-i-VI-III-VII/lead.mid",
+      "all": "G-minor/01-synthwave-i-VI-III-VII/all.mid"
+     }
+    },
+    {
+     "id": "02-house-i9-iv7-VImaj7-v7",
+     "n": 2,
+     "genre": "house",
+     "genre_name": "House",
+     "bpm": 124,
+     "about": "Deep-house minor 7ths/9ths",
+     "roman": [
+      "i9",
+      "iv7",
+      "VImaj7",
+      "v7"
+     ],
+     "chords": [
+      "Gm9",
+      "Cm7",
+      "Ebmaj7",
+      "Dm7"
+     ],
+     "voicings": [
+      [
+       53,
+       55,
+       58,
+       69
+      ],
+      [
+       51,
+       58,
+       60,
+       67
+      ],
+      [
+       51,
+       58,
+       62,
+       67
+      ],
+      [
+       53,
+       60,
+       62,
+       69
+      ]
+     ],
+     "styles": {
+      "chords": "stabs",
+      "arp": "broken",
+      "bass": "offbeat-root-fifth",
+      "lead": "house"
+     },
+     "files": {
+      "chords": "G-minor/02-house-i9-iv7-VImaj7-v7/chords.mid",
+      "arp": "G-minor/02-house-i9-iv7-VImaj7-v7/arp.mid",
+      "bass": "G-minor/02-house-i9-iv7-VImaj7-v7/bass.mid",
+      "lead": "G-minor/02-house-i9-iv7-VImaj7-v7/lead.mid",
+      "all": "G-minor/02-house-i9-iv7-VImaj7-v7/all.mid"
+     }
+    },
+    {
+     "id": "03-lofi-iim7b5-V7-i9-VImaj7",
+     "n": 3,
+     "genre": "lofi",
+     "genre_name": "Lo-fi",
+     "bpm": 80,
+     "about": "Jazz minor ii-V-i with a VImaj7 turnaround",
+     "roman": [
+      "iiø7",
+      "V7",
+      "i9",
+      "VImaj7"
+     ],
+     "chords": [
+      "Am7b5",
+      "D7",
+      "Gm9",
+      "Ebmaj7"
+     ],
+     "voicings": [
+      [
+       55,
+       60,
+       63,
+       69
+      ],
+      [
+       54,
+       60,
+       62,
+       69
+      ],
+      [
+       55,
+       58,
+       65,
+       69
+      ],
+      [
+       51,
+       58,
+       62,
+       67
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "walking",
+      "lead": "lofi"
+     },
+     "files": {
+      "chords": "G-minor/03-lofi-iim7b5-V7-i9-VImaj7/chords.mid",
+      "arp": "G-minor/03-lofi-iim7b5-V7-i9-VImaj7/arp.mid",
+      "bass": "G-minor/03-lofi-iim7b5-V7-i9-VImaj7/bass.mid",
+      "lead": "G-minor/03-lofi-iim7b5-V7-i9-VImaj7/lead.mid",
+      "all": "G-minor/03-lofi-iim7b5-V7-i9-VImaj7/all.mid"
+     }
+    },
+    {
+     "id": "04-techno-i-i-iv-v",
+     "n": 4,
+     "genre": "techno",
+     "genre_name": "Techno",
+     "bpm": 132,
+     "about": "Hypnotic i-iv-v stabs",
+     "roman": [
+      "i",
+      "i",
+      "iv",
+      "v"
+     ],
+     "chords": [
+      "Gm",
+      "Gm",
+      "Cm",
+      "Dm"
+     ],
+     "voicings": [
+      [
+       58,
+       62,
+       67
+      ],
+      [
+       58,
+       62,
+       67
+      ],
+      [
+       60,
+       63,
+       67
+      ],
+      [
+       57,
+       62,
+       65
+      ]
+     ],
+     "styles": {
+      "chords": "offbeat",
+      "arp": "down",
+      "bass": "acid-303",
+      "lead": "techno"
+     },
+     "files": {
+      "chords": "G-minor/04-techno-i-i-iv-v/chords.mid",
+      "arp": "G-minor/04-techno-i-i-iv-v/arp.mid",
+      "bass": "G-minor/04-techno-i-i-iv-v/bass.mid",
+      "lead": "G-minor/04-techno-i-i-iv-v/lead.mid",
+      "all": "G-minor/04-techno-i-i-iv-v/all.mid"
+     }
+    },
+    {
+     "id": "05-pop-i-III-VII-VI",
+     "n": 5,
+     "genre": "pop",
+     "genre_name": "Pop",
+     "bpm": 112,
+     "about": "Minor pop loop",
+     "roman": [
+      "i",
+      "III",
+      "VII",
+      "VI"
+     ],
+     "chords": [
+      "Gm",
+      "Bb",
+      "F",
+      "Eb"
+     ],
+     "voicings": [
+      [
+       58,
+       62,
+       67
+      ],
+      [
+       58,
+       62,
+       65
+      ],
+      [
+       57,
+       60,
+       65
+      ],
+      [
+       58,
+       63,
+       67
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "pumping-root-fifth",
+      "lead": "pop"
+     },
+     "files": {
+      "chords": "G-minor/05-pop-i-III-VII-VI/chords.mid",
+      "arp": "G-minor/05-pop-i-III-VII-VI/arp.mid",
+      "bass": "G-minor/05-pop-i-III-VII-VI/bass.mid",
+      "lead": "G-minor/05-pop-i-III-VII-VI/lead.mid",
+      "all": "G-minor/05-pop-i-III-VII-VI/all.mid"
+     }
+    },
+    {
+     "id": "06-cinematic-i-bII-VI-V",
+     "n": 6,
+     "genre": "cinematic",
+     "genre_name": "Dark / Cinematic",
+     "bpm": 90,
+     "about": "Phrygian bII + major V: dark and tense",
+     "roman": [
+      "i",
+      "bII",
+      "VI",
+      "V"
+     ],
+     "chords": [
+      "Gm",
+      "Ab",
+      "Eb",
+      "D"
+     ],
+     "voicings": [
+      [
+       58,
+       62,
+       67
+      ],
+      [
+       60,
+       63,
+       68
+      ],
+      [
+       58,
+       63,
+       67
+      ],
+      [
+       57,
+       62,
+       66
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "broken",
+      "bass": "sub-glide",
+      "lead": "cinematic"
+     },
+     "files": {
+      "chords": "G-minor/06-cinematic-i-bII-VI-V/chords.mid",
+      "arp": "G-minor/06-cinematic-i-bII-VI-V/arp.mid",
+      "bass": "G-minor/06-cinematic-i-bII-VI-V/bass.mid",
+      "lead": "G-minor/06-cinematic-i-bII-VI-V/lead.mid",
+      "all": "G-minor/06-cinematic-i-bII-VI-V/all.mid"
+     }
+    }
+   ]
+  },
+  {
+   "id": "G-major",
+   "name": "G major",
+   "tonic": "G",
+   "tonic_pc": 7,
+   "mode": "major",
+   "kits": [
+    {
+     "id": "01-synthwave-I-vi-bVI-bVII",
+     "n": 1,
+     "genre": "synthwave",
+     "genre_name": "Synthwave",
+     "bpm": 100,
+     "about": "Borrowed bVI-bVII lift (80s soundtrack)",
+     "roman": [
+      "I",
+      "vi",
+      "bVI",
+      "bVII"
+     ],
+     "chords": [
+      "G",
+      "Em",
+      "Eb",
+      "F"
+     ],
+     "voicings": [
+      [
+       59,
+       62,
+       67
+      ],
+      [
+       59,
+       64,
+       67
+      ],
+      [
+       58,
+       63,
+       67
+      ],
+      [
+       57,
+       60,
+       65
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "up",
+      "bass": "octave-bounce",
+      "lead": "synthwave"
+     },
+     "files": {
+      "chords": "G-major/01-synthwave-I-vi-bVI-bVII/chords.mid",
+      "arp": "G-major/01-synthwave-I-vi-bVI-bVII/arp.mid",
+      "bass": "G-major/01-synthwave-I-vi-bVI-bVII/bass.mid",
+      "lead": "G-major/01-synthwave-I-vi-bVI-bVII/lead.mid",
+      "all": "G-major/01-synthwave-I-vi-bVI-bVII/all.mid"
+     }
+    },
+    {
+     "id": "02-house-IVmaj7-V7-iii7-vi7",
+     "n": 2,
+     "genre": "house",
+     "genre_name": "House",
+     "bpm": 124,
+     "about": "Royal road with 7ths (city pop / piano house)",
+     "roman": [
+      "IVmaj7",
+      "V7",
+      "iii7",
+      "vi7"
+     ],
+     "chords": [
+      "Cmaj7",
+      "D7",
+      "Bm7",
+      "Em7"
+     ],
+     "voicings": [
+      [
+       55,
+       60,
+       64,
+       71
+      ],
+      [
+       54,
+       60,
+       62,
+       69
+      ],
+      [
+       54,
+       59,
+       62,
+       69
+      ],
+      [
+       52,
+       59,
+       62,
+       67
+      ]
+     ],
+     "styles": {
+      "chords": "stabs",
+      "arp": "broken",
+      "bass": "offbeat-root-fifth",
+      "lead": "house"
+     },
+     "files": {
+      "chords": "G-major/02-house-IVmaj7-V7-iii7-vi7/chords.mid",
+      "arp": "G-major/02-house-IVmaj7-V7-iii7-vi7/arp.mid",
+      "bass": "G-major/02-house-IVmaj7-V7-iii7-vi7/bass.mid",
+      "lead": "G-major/02-house-IVmaj7-V7-iii7-vi7/lead.mid",
+      "all": "G-major/02-house-IVmaj7-V7-iii7-vi7/all.mid"
+     }
+    },
+    {
+     "id": "03-lofi-ii9-V9-Imaj9-vi9",
+     "n": 3,
+     "genre": "lofi",
+     "genre_name": "Lo-fi",
+     "bpm": 80,
+     "about": "ii-V-I in 9ths with a vi9 turnaround",
+     "roman": [
+      "ii9",
+      "V9",
+      "Imaj9",
+      "vi9"
+     ],
+     "chords": [
+      "Am9",
+      "D9",
+      "Gmaj9",
+      "Em9"
+     ],
+     "voicings": [
+      [
+       55,
+       57,
+       60,
+       71
+      ],
+      [
+       52,
+       60,
+       62,
+       66
+      ],
+      [
+       54,
+       57,
+       59,
+       67
+      ],
+      [
+       52,
+       54,
+       62,
+       67
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "walking",
+      "lead": "lofi"
+     },
+     "files": {
+      "chords": "G-major/03-lofi-ii9-V9-Imaj9-vi9/chords.mid",
+      "arp": "G-major/03-lofi-ii9-V9-Imaj9-vi9/arp.mid",
+      "bass": "G-major/03-lofi-ii9-V9-Imaj9-vi9/bass.mid",
+      "lead": "G-major/03-lofi-ii9-V9-Imaj9-vi9/lead.mid",
+      "all": "G-major/03-lofi-ii9-V9-Imaj9-vi9/all.mid"
+     }
+    },
+    {
+     "id": "04-techno-I-I-bVII-IV",
+     "n": 4,
+     "genre": "techno",
+     "genre_name": "Techno",
+     "bpm": 132,
+     "about": "Mixolydian I-bVII-IV",
+     "roman": [
+      "I",
+      "I",
+      "bVII",
+      "IV"
+     ],
+     "chords": [
+      "G",
+      "G",
+      "F",
+      "C"
+     ],
+     "voicings": [
+      [
+       55,
+       59,
+       62
+      ],
+      [
+       55,
+       59,
+       62
+      ],
+      [
+       57,
+       60,
+       65
+      ],
+      [
+       55,
+       60,
+       64
+      ]
+     ],
+     "styles": {
+      "chords": "offbeat",
+      "arp": "down",
+      "bass": "acid-303",
+      "lead": "techno"
+     },
+     "files": {
+      "chords": "G-major/04-techno-I-I-bVII-IV/chords.mid",
+      "arp": "G-major/04-techno-I-I-bVII-IV/arp.mid",
+      "bass": "G-major/04-techno-I-I-bVII-IV/bass.mid",
+      "lead": "G-major/04-techno-I-I-bVII-IV/lead.mid",
+      "all": "G-major/04-techno-I-I-bVII-IV/all.mid"
+     }
+    },
+    {
+     "id": "05-pop-vi-IV-I-V",
+     "n": 5,
+     "genre": "pop",
+     "genre_name": "Pop",
+     "bpm": 112,
+     "about": "The axis progression",
+     "roman": [
+      "vi",
+      "IV",
+      "I",
+      "V"
+     ],
+     "chords": [
+      "Em",
+      "C",
+      "G",
+      "D"
+     ],
+     "voicings": [
+      [
+       59,
+       64,
+       67
+      ],
+      [
+       60,
+       64,
+       67
+      ],
+      [
+       59,
+       62,
+       67
+      ],
+      [
+       57,
+       62,
+       66
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "pumping-root-fifth",
+      "lead": "pop"
+     },
+     "files": {
+      "chords": "G-major/05-pop-vi-IV-I-V/chords.mid",
+      "arp": "G-major/05-pop-vi-IV-I-V/arp.mid",
+      "bass": "G-major/05-pop-vi-IV-I-V/bass.mid",
+      "lead": "G-major/05-pop-vi-IV-I-V/lead.mid",
+      "all": "G-major/05-pop-vi-IV-I-V/all.mid"
+     }
+    },
+    {
+     "id": "06-cinematic-I-III-IV-iv",
+     "n": 6,
+     "genre": "cinematic",
+     "genre_name": "Dark / Cinematic",
+     "bpm": 90,
+     "about": "Chromatic-mediant III and borrowed iv",
+     "roman": [
+      "I",
+      "III",
+      "IV",
+      "iv"
+     ],
+     "chords": [
+      "G",
+      "B",
+      "C",
+      "Cm"
+     ],
+     "voicings": [
+      [
+       55,
+       59,
+       62
+      ],
+      [
+       54,
+       59,
+       63
+      ],
+      [
+       55,
+       60,
+       64
+      ],
+      [
+       55,
+       60,
+       63
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "broken",
+      "bass": "sub-glide",
+      "lead": "cinematic"
+     },
+     "files": {
+      "chords": "G-major/06-cinematic-I-III-IV-iv/chords.mid",
+      "arp": "G-major/06-cinematic-I-III-IV-iv/arp.mid",
+      "bass": "G-major/06-cinematic-I-III-IV-iv/bass.mid",
+      "lead": "G-major/06-cinematic-I-III-IV-iv/lead.mid",
+      "all": "G-major/06-cinematic-I-III-IV-iv/all.mid"
+     }
+    }
+   ]
+  },
+  {
+   "id": "Gs-minor",
+   "name": "G# minor",
+   "tonic": "G#",
+   "tonic_pc": 8,
+   "mode": "minor",
+   "kits": [
+    {
+     "id": "01-synthwave-i-VI-III-VII",
+     "n": 1,
+     "genre": "synthwave",
+     "genre_name": "Synthwave",
+     "bpm": 100,
+     "about": "Aeolian anthem: the classic 80s minor loop",
+     "roman": [
+      "i",
+      "VI",
+      "III",
+      "VII"
+     ],
+     "chords": [
+      "G#m",
+      "E",
+      "B",
+      "F#"
+     ],
+     "voicings": [
+      [
+       59,
+       63,
+       68
+      ],
+      [
+       59,
+       64,
+       68
+      ],
+      [
+       59,
+       63,
+       66
+      ],
+      [
+       58,
+       61,
+       66
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "up",
+      "bass": "octave-bounce",
+      "lead": "synthwave"
+     },
+     "files": {
+      "chords": "Gs-minor/01-synthwave-i-VI-III-VII/chords.mid",
+      "arp": "Gs-minor/01-synthwave-i-VI-III-VII/arp.mid",
+      "bass": "Gs-minor/01-synthwave-i-VI-III-VII/bass.mid",
+      "lead": "Gs-minor/01-synthwave-i-VI-III-VII/lead.mid",
+      "all": "Gs-minor/01-synthwave-i-VI-III-VII/all.mid"
+     }
+    },
+    {
+     "id": "02-house-i9-iv7-VImaj7-v7",
+     "n": 2,
+     "genre": "house",
+     "genre_name": "House",
+     "bpm": 124,
+     "about": "Deep-house minor 7ths/9ths",
+     "roman": [
+      "i9",
+      "iv7",
+      "VImaj7",
+      "v7"
+     ],
+     "chords": [
+      "G#m9",
+      "C#m7",
+      "Emaj7",
+      "D#m7"
+     ],
+     "voicings": [
+      [
+       54,
+       56,
+       59,
+       70
+      ],
+      [
+       52,
+       59,
+       61,
+       68
+      ],
+      [
+       52,
+       59,
+       63,
+       68
+      ],
+      [
+       54,
+       61,
+       63,
+       70
+      ]
+     ],
+     "styles": {
+      "chords": "stabs",
+      "arp": "broken",
+      "bass": "offbeat-root-fifth",
+      "lead": "house"
+     },
+     "files": {
+      "chords": "Gs-minor/02-house-i9-iv7-VImaj7-v7/chords.mid",
+      "arp": "Gs-minor/02-house-i9-iv7-VImaj7-v7/arp.mid",
+      "bass": "Gs-minor/02-house-i9-iv7-VImaj7-v7/bass.mid",
+      "lead": "Gs-minor/02-house-i9-iv7-VImaj7-v7/lead.mid",
+      "all": "Gs-minor/02-house-i9-iv7-VImaj7-v7/all.mid"
+     }
+    },
+    {
+     "id": "03-lofi-iim7b5-V7-i9-VImaj7",
+     "n": 3,
+     "genre": "lofi",
+     "genre_name": "Lo-fi",
+     "bpm": 80,
+     "about": "Jazz minor ii-V-i with a VImaj7 turnaround",
+     "roman": [
+      "iiø7",
+      "V7",
+      "i9",
+      "VImaj7"
+     ],
+     "chords": [
+      "A#m7b5",
+      "D#7",
+      "G#m9",
+      "Emaj7"
+     ],
+     "voicings": [
+      [
+       56,
+       61,
+       64,
+       70
+      ],
+      [
+       55,
+       61,
+       63,
+       70
+      ],
+      [
+       56,
+       59,
+       66,
+       70
+      ],
+      [
+       52,
+       59,
+       63,
+       68
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "walking",
+      "lead": "lofi"
+     },
+     "files": {
+      "chords": "Gs-minor/03-lofi-iim7b5-V7-i9-VImaj7/chords.mid",
+      "arp": "Gs-minor/03-lofi-iim7b5-V7-i9-VImaj7/arp.mid",
+      "bass": "Gs-minor/03-lofi-iim7b5-V7-i9-VImaj7/bass.mid",
+      "lead": "Gs-minor/03-lofi-iim7b5-V7-i9-VImaj7/lead.mid",
+      "all": "Gs-minor/03-lofi-iim7b5-V7-i9-VImaj7/all.mid"
+     }
+    },
+    {
+     "id": "04-techno-i-i-iv-v",
+     "n": 4,
+     "genre": "techno",
+     "genre_name": "Techno",
+     "bpm": 132,
+     "about": "Hypnotic i-iv-v stabs",
+     "roman": [
+      "i",
+      "i",
+      "iv",
+      "v"
+     ],
+     "chords": [
+      "G#m",
+      "G#m",
+      "C#m",
+      "D#m"
+     ],
+     "voicings": [
+      [
+       56,
+       59,
+       63
+      ],
+      [
+       56,
+       59,
+       63
+      ],
+      [
+       56,
+       61,
+       64
+      ],
+      [
+       54,
+       58,
+       63
+      ]
+     ],
+     "styles": {
+      "chords": "offbeat",
+      "arp": "down",
+      "bass": "acid-303",
+      "lead": "techno"
+     },
+     "files": {
+      "chords": "Gs-minor/04-techno-i-i-iv-v/chords.mid",
+      "arp": "Gs-minor/04-techno-i-i-iv-v/arp.mid",
+      "bass": "Gs-minor/04-techno-i-i-iv-v/bass.mid",
+      "lead": "Gs-minor/04-techno-i-i-iv-v/lead.mid",
+      "all": "Gs-minor/04-techno-i-i-iv-v/all.mid"
+     }
+    },
+    {
+     "id": "05-pop-i-III-VII-VI",
+     "n": 5,
+     "genre": "pop",
+     "genre_name": "Pop",
+     "bpm": 112,
+     "about": "Minor pop loop",
+     "roman": [
+      "i",
+      "III",
+      "VII",
+      "VI"
+     ],
+     "chords": [
+      "G#m",
+      "B",
+      "F#",
+      "E"
+     ],
+     "voicings": [
+      [
+       59,
+       63,
+       68
+      ],
+      [
+       59,
+       63,
+       66
+      ],
+      [
+       58,
+       61,
+       66
+      ],
+      [
+       59,
+       64,
+       68
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "pumping-root-fifth",
+      "lead": "pop"
+     },
+     "files": {
+      "chords": "Gs-minor/05-pop-i-III-VII-VI/chords.mid",
+      "arp": "Gs-minor/05-pop-i-III-VII-VI/arp.mid",
+      "bass": "Gs-minor/05-pop-i-III-VII-VI/bass.mid",
+      "lead": "Gs-minor/05-pop-i-III-VII-VI/lead.mid",
+      "all": "Gs-minor/05-pop-i-III-VII-VI/all.mid"
+     }
+    },
+    {
+     "id": "06-cinematic-i-bII-VI-V",
+     "n": 6,
+     "genre": "cinematic",
+     "genre_name": "Dark / Cinematic",
+     "bpm": 90,
+     "about": "Phrygian bII + major V: dark and tense",
+     "roman": [
+      "i",
+      "bII",
+      "VI",
+      "V"
+     ],
+     "chords": [
+      "G#m",
+      "A",
+      "E",
+      "D#"
+     ],
+     "voicings": [
+      [
+       56,
+       59,
+       63
+      ],
+      [
+       57,
+       61,
+       64
+      ],
+      [
+       56,
+       59,
+       64
+      ],
+      [
+       55,
+       58,
+       63
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "broken",
+      "bass": "sub-glide",
+      "lead": "cinematic"
+     },
+     "files": {
+      "chords": "Gs-minor/06-cinematic-i-bII-VI-V/chords.mid",
+      "arp": "Gs-minor/06-cinematic-i-bII-VI-V/arp.mid",
+      "bass": "Gs-minor/06-cinematic-i-bII-VI-V/bass.mid",
+      "lead": "Gs-minor/06-cinematic-i-bII-VI-V/lead.mid",
+      "all": "Gs-minor/06-cinematic-i-bII-VI-V/all.mid"
+     }
+    }
+   ]
+  },
+  {
+   "id": "Ab-major",
+   "name": "Ab major",
+   "tonic": "Ab",
+   "tonic_pc": 8,
+   "mode": "major",
+   "kits": [
+    {
+     "id": "01-synthwave-I-vi-bVI-bVII",
+     "n": 1,
+     "genre": "synthwave",
+     "genre_name": "Synthwave",
+     "bpm": 100,
+     "about": "Borrowed bVI-bVII lift (80s soundtrack)",
+     "roman": [
+      "I",
+      "vi",
+      "bVI",
+      "bVII"
+     ],
+     "chords": [
+      "Ab",
+      "Fm",
+      "E",
+      "Gb"
+     ],
+     "voicings": [
+      [
+       56,
+       60,
+       63
+      ],
+      [
+       56,
+       60,
+       65
+      ],
+      [
+       56,
+       59,
+       64
+      ],
+      [
+       58,
+       61,
+       66
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "up",
+      "bass": "octave-bounce",
+      "lead": "synthwave"
+     },
+     "files": {
+      "chords": "Ab-major/01-synthwave-I-vi-bVI-bVII/chords.mid",
+      "arp": "Ab-major/01-synthwave-I-vi-bVI-bVII/arp.mid",
+      "bass": "Ab-major/01-synthwave-I-vi-bVI-bVII/bass.mid",
+      "lead": "Ab-major/01-synthwave-I-vi-bVI-bVII/lead.mid",
+      "all": "Ab-major/01-synthwave-I-vi-bVI-bVII/all.mid"
+     }
+    },
+    {
+     "id": "02-house-IVmaj7-V7-iii7-vi7",
+     "n": 2,
+     "genre": "house",
+     "genre_name": "House",
+     "bpm": 124,
+     "about": "Royal road with 7ths (city pop / piano house)",
+     "roman": [
+      "IVmaj7",
+      "V7",
+      "iii7",
+      "vi7"
+     ],
+     "chords": [
+      "Dbmaj7",
+      "Eb7",
+      "Cm7",
+      "Fm7"
+     ],
+     "voicings": [
+      [
+       49,
+       56,
+       60,
+       65
+      ],
+      [
+       51,
+       58,
+       61,
+       67
+      ],
+      [
+       51,
+       58,
+       60,
+       67
+      ],
+      [
+       51,
+       56,
+       60,
+       65
+      ]
+     ],
+     "styles": {
+      "chords": "stabs",
+      "arp": "broken",
+      "bass": "offbeat-root-fifth",
+      "lead": "house"
+     },
+     "files": {
+      "chords": "Ab-major/02-house-IVmaj7-V7-iii7-vi7/chords.mid",
+      "arp": "Ab-major/02-house-IVmaj7-V7-iii7-vi7/arp.mid",
+      "bass": "Ab-major/02-house-IVmaj7-V7-iii7-vi7/bass.mid",
+      "lead": "Ab-major/02-house-IVmaj7-V7-iii7-vi7/lead.mid",
+      "all": "Ab-major/02-house-IVmaj7-V7-iii7-vi7/all.mid"
+     }
+    },
+    {
+     "id": "03-lofi-ii9-V9-Imaj9-vi9",
+     "n": 3,
+     "genre": "lofi",
+     "genre_name": "Lo-fi",
+     "bpm": 80,
+     "about": "ii-V-I in 9ths with a vi9 turnaround",
+     "roman": [
+      "ii9",
+      "V9",
+      "Imaj9",
+      "vi9"
+     ],
+     "chords": [
+      "Bbm9",
+      "Eb9",
+      "Abmaj9",
+      "Fm9"
+     ],
+     "voicings": [
+      [
+       56,
+       58,
+       61,
+       72
+      ],
+      [
+       53,
+       61,
+       63,
+       67
+      ],
+      [
+       55,
+       58,
+       60,
+       68
+      ],
+      [
+       53,
+       55,
+       63,
+       68
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "walking",
+      "lead": "lofi"
+     },
+     "files": {
+      "chords": "Ab-major/03-lofi-ii9-V9-Imaj9-vi9/chords.mid",
+      "arp": "Ab-major/03-lofi-ii9-V9-Imaj9-vi9/arp.mid",
+      "bass": "Ab-major/03-lofi-ii9-V9-Imaj9-vi9/bass.mid",
+      "lead": "Ab-major/03-lofi-ii9-V9-Imaj9-vi9/lead.mid",
+      "all": "Ab-major/03-lofi-ii9-V9-Imaj9-vi9/all.mid"
+     }
+    },
+    {
+     "id": "04-techno-I-I-bVII-IV",
+     "n": 4,
+     "genre": "techno",
+     "genre_name": "Techno",
+     "bpm": 132,
+     "about": "Mixolydian I-bVII-IV",
+     "roman": [
+      "I",
+      "I",
+      "bVII",
+      "IV"
+     ],
+     "chords": [
+      "Ab",
+      "Ab",
+      "Gb",
+      "Db"
+     ],
+     "voicings": [
+      [
+       56,
+       60,
+       63
+      ],
+      [
+       56,
+       60,
+       63
+      ],
+      [
+       58,
+       61,
+       66
+      ],
+      [
+       56,
+       61,
+       65
+      ]
+     ],
+     "styles": {
+      "chords": "offbeat",
+      "arp": "down",
+      "bass": "acid-303",
+      "lead": "techno"
+     },
+     "files": {
+      "chords": "Ab-major/04-techno-I-I-bVII-IV/chords.mid",
+      "arp": "Ab-major/04-techno-I-I-bVII-IV/arp.mid",
+      "bass": "Ab-major/04-techno-I-I-bVII-IV/bass.mid",
+      "lead": "Ab-major/04-techno-I-I-bVII-IV/lead.mid",
+      "all": "Ab-major/04-techno-I-I-bVII-IV/all.mid"
+     }
+    },
+    {
+     "id": "05-pop-vi-IV-I-V",
+     "n": 5,
+     "genre": "pop",
+     "genre_name": "Pop",
+     "bpm": 112,
+     "about": "The axis progression",
+     "roman": [
+      "vi",
+      "IV",
+      "I",
+      "V"
+     ],
+     "chords": [
+      "Fm",
+      "Db",
+      "Ab",
+      "Eb"
+     ],
+     "voicings": [
+      [
+       56,
+       60,
+       65
+      ],
+      [
+       56,
+       61,
+       65
+      ],
+      [
+       56,
+       60,
+       63
+      ],
+      [
+       55,
+       58,
+       63
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "pumping-root-fifth",
+      "lead": "pop"
+     },
+     "files": {
+      "chords": "Ab-major/05-pop-vi-IV-I-V/chords.mid",
+      "arp": "Ab-major/05-pop-vi-IV-I-V/arp.mid",
+      "bass": "Ab-major/05-pop-vi-IV-I-V/bass.mid",
+      "lead": "Ab-major/05-pop-vi-IV-I-V/lead.mid",
+      "all": "Ab-major/05-pop-vi-IV-I-V/all.mid"
+     }
+    },
+    {
+     "id": "06-cinematic-I-III-IV-iv",
+     "n": 6,
+     "genre": "cinematic",
+     "genre_name": "Dark / Cinematic",
+     "bpm": 90,
+     "about": "Chromatic-mediant III and borrowed iv",
+     "roman": [
+      "I",
+      "III",
+      "IV",
+      "iv"
+     ],
+     "chords": [
+      "Ab",
+      "C",
+      "Db",
+      "Dbm"
+     ],
+     "voicings": [
+      [
+       56,
+       60,
+       63
+      ],
+      [
+       55,
+       60,
+       64
+      ],
+      [
+       56,
+       61,
+       65
+      ],
+      [
+       56,
+       61,
+       64
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "broken",
+      "bass": "sub-glide",
+      "lead": "cinematic"
+     },
+     "files": {
+      "chords": "Ab-major/06-cinematic-I-III-IV-iv/chords.mid",
+      "arp": "Ab-major/06-cinematic-I-III-IV-iv/arp.mid",
+      "bass": "Ab-major/06-cinematic-I-III-IV-iv/bass.mid",
+      "lead": "Ab-major/06-cinematic-I-III-IV-iv/lead.mid",
+      "all": "Ab-major/06-cinematic-I-III-IV-iv/all.mid"
+     }
+    }
+   ]
+  },
+  {
+   "id": "A-minor",
+   "name": "A minor",
+   "tonic": "A",
+   "tonic_pc": 9,
+   "mode": "minor",
+   "kits": [
+    {
+     "id": "01-synthwave-i-VI-III-VII",
+     "n": 1,
+     "genre": "synthwave",
+     "genre_name": "Synthwave",
+     "bpm": 100,
+     "about": "Aeolian anthem: the classic 80s minor loop",
+     "roman": [
+      "i",
+      "VI",
+      "III",
+      "VII"
+     ],
+     "chords": [
+      "Am",
+      "F",
+      "C",
+      "G"
+     ],
+     "voicings": [
+      [
+       57,
+       60,
+       64
+      ],
+      [
+       57,
+       60,
+       65
+      ],
+      [
+       55,
+       60,
+       64
+      ],
+      [
+       55,
+       59,
+       62
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "up",
+      "bass": "octave-bounce",
+      "lead": "synthwave"
+     },
+     "files": {
+      "chords": "A-minor/01-synthwave-i-VI-III-VII/chords.mid",
+      "arp": "A-minor/01-synthwave-i-VI-III-VII/arp.mid",
+      "bass": "A-minor/01-synthwave-i-VI-III-VII/bass.mid",
+      "lead": "A-minor/01-synthwave-i-VI-III-VII/lead.mid",
+      "all": "A-minor/01-synthwave-i-VI-III-VII/all.mid"
+     }
+    },
+    {
+     "id": "02-house-i9-iv7-VImaj7-v7",
+     "n": 2,
+     "genre": "house",
+     "genre_name": "House",
+     "bpm": 124,
+     "about": "Deep-house minor 7ths/9ths",
+     "roman": [
+      "i9",
+      "iv7",
+      "VImaj7",
+      "v7"
+     ],
+     "chords": [
+      "Am9",
+      "Dm7",
+      "Fmaj7",
+      "Em7"
+     ],
+     "voicings": [
+      [
+       55,
+       57,
+       60,
+       71
+      ],
+      [
+       53,
+       60,
+       62,
+       69
+      ],
+      [
+       53,
+       60,
+       64,
+       69
+      ],
+      [
+       55,
+       62,
+       64,
+       71
+      ]
+     ],
+     "styles": {
+      "chords": "stabs",
+      "arp": "broken",
+      "bass": "offbeat-root-fifth",
+      "lead": "house"
+     },
+     "files": {
+      "chords": "A-minor/02-house-i9-iv7-VImaj7-v7/chords.mid",
+      "arp": "A-minor/02-house-i9-iv7-VImaj7-v7/arp.mid",
+      "bass": "A-minor/02-house-i9-iv7-VImaj7-v7/bass.mid",
+      "lead": "A-minor/02-house-i9-iv7-VImaj7-v7/lead.mid",
+      "all": "A-minor/02-house-i9-iv7-VImaj7-v7/all.mid"
+     }
+    },
+    {
+     "id": "03-lofi-iim7b5-V7-i9-VImaj7",
+     "n": 3,
+     "genre": "lofi",
+     "genre_name": "Lo-fi",
+     "bpm": 80,
+     "about": "Jazz minor ii-V-i with a VImaj7 turnaround",
+     "roman": [
+      "iiø7",
+      "V7",
+      "i9",
+      "VImaj7"
+     ],
+     "chords": [
+      "Bm7b5",
+      "E7",
+      "Am9",
+      "Fmaj7"
+     ],
+     "voicings": [
+      [
+       57,
+       62,
+       65,
+       71
+      ],
+      [
+       56,
+       62,
+       64,
+       71
+      ],
+      [
+       57,
+       60,
+       67,
+       71
+      ],
+      [
+       53,
+       60,
+       64,
+       69
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "walking",
+      "lead": "lofi"
+     },
+     "files": {
+      "chords": "A-minor/03-lofi-iim7b5-V7-i9-VImaj7/chords.mid",
+      "arp": "A-minor/03-lofi-iim7b5-V7-i9-VImaj7/arp.mid",
+      "bass": "A-minor/03-lofi-iim7b5-V7-i9-VImaj7/bass.mid",
+      "lead": "A-minor/03-lofi-iim7b5-V7-i9-VImaj7/lead.mid",
+      "all": "A-minor/03-lofi-iim7b5-V7-i9-VImaj7/all.mid"
+     }
+    },
+    {
+     "id": "04-techno-i-i-iv-v",
+     "n": 4,
+     "genre": "techno",
+     "genre_name": "Techno",
+     "bpm": 132,
+     "about": "Hypnotic i-iv-v stabs",
+     "roman": [
+      "i",
+      "i",
+      "iv",
+      "v"
+     ],
+     "chords": [
+      "Am",
+      "Am",
+      "Dm",
+      "Em"
+     ],
+     "voicings": [
+      [
+       57,
+       60,
+       64
+      ],
+      [
+       57,
+       60,
+       64
+      ],
+      [
+       57,
+       62,
+       65
+      ],
+      [
+       55,
+       59,
+       64
+      ]
+     ],
+     "styles": {
+      "chords": "offbeat",
+      "arp": "down",
+      "bass": "acid-303",
+      "lead": "techno"
+     },
+     "files": {
+      "chords": "A-minor/04-techno-i-i-iv-v/chords.mid",
+      "arp": "A-minor/04-techno-i-i-iv-v/arp.mid",
+      "bass": "A-minor/04-techno-i-i-iv-v/bass.mid",
+      "lead": "A-minor/04-techno-i-i-iv-v/lead.mid",
+      "all": "A-minor/04-techno-i-i-iv-v/all.mid"
+     }
+    },
+    {
+     "id": "05-pop-i-III-VII-VI",
+     "n": 5,
+     "genre": "pop",
+     "genre_name": "Pop",
+     "bpm": 112,
+     "about": "Minor pop loop",
+     "roman": [
+      "i",
+      "III",
+      "VII",
+      "VI"
+     ],
+     "chords": [
+      "Am",
+      "C",
+      "G",
+      "F"
+     ],
+     "voicings": [
+      [
+       57,
+       60,
+       64
+      ],
+      [
+       55,
+       60,
+       64
+      ],
+      [
+       55,
+       59,
+       62
+      ],
+      [
+       57,
+       60,
+       65
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "pumping-root-fifth",
+      "lead": "pop"
+     },
+     "files": {
+      "chords": "A-minor/05-pop-i-III-VII-VI/chords.mid",
+      "arp": "A-minor/05-pop-i-III-VII-VI/arp.mid",
+      "bass": "A-minor/05-pop-i-III-VII-VI/bass.mid",
+      "lead": "A-minor/05-pop-i-III-VII-VI/lead.mid",
+      "all": "A-minor/05-pop-i-III-VII-VI/all.mid"
+     }
+    },
+    {
+     "id": "06-cinematic-i-bII-VI-V",
+     "n": 6,
+     "genre": "cinematic",
+     "genre_name": "Dark / Cinematic",
+     "bpm": 90,
+     "about": "Phrygian bII + major V: dark and tense",
+     "roman": [
+      "i",
+      "bII",
+      "VI",
+      "V"
+     ],
+     "chords": [
+      "Am",
+      "Bb",
+      "F",
+      "E"
+     ],
+     "voicings": [
+      [
+       57,
+       60,
+       64
+      ],
+      [
+       58,
+       62,
+       65
+      ],
+      [
+       57,
+       60,
+       65
+      ],
+      [
+       56,
+       59,
+       64
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "broken",
+      "bass": "sub-glide",
+      "lead": "cinematic"
+     },
+     "files": {
+      "chords": "A-minor/06-cinematic-i-bII-VI-V/chords.mid",
+      "arp": "A-minor/06-cinematic-i-bII-VI-V/arp.mid",
+      "bass": "A-minor/06-cinematic-i-bII-VI-V/bass.mid",
+      "lead": "A-minor/06-cinematic-i-bII-VI-V/lead.mid",
+      "all": "A-minor/06-cinematic-i-bII-VI-V/all.mid"
+     }
+    }
+   ]
+  },
+  {
+   "id": "A-major",
+   "name": "A major",
+   "tonic": "A",
+   "tonic_pc": 9,
+   "mode": "major",
+   "kits": [
+    {
+     "id": "01-synthwave-I-vi-bVI-bVII",
+     "n": 1,
+     "genre": "synthwave",
+     "genre_name": "Synthwave",
+     "bpm": 100,
+     "about": "Borrowed bVI-bVII lift (80s soundtrack)",
+     "roman": [
+      "I",
+      "vi",
+      "bVI",
+      "bVII"
+     ],
+     "chords": [
+      "A",
+      "F#m",
+      "F",
+      "G"
+     ],
+     "voicings": [
+      [
+       57,
+       61,
+       64
+      ],
+      [
+       57,
+       61,
+       66
+      ],
+      [
+       57,
+       60,
+       65
+      ],
+      [
+       59,
+       62,
+       67
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "up",
+      "bass": "octave-bounce",
+      "lead": "synthwave"
+     },
+     "files": {
+      "chords": "A-major/01-synthwave-I-vi-bVI-bVII/chords.mid",
+      "arp": "A-major/01-synthwave-I-vi-bVI-bVII/arp.mid",
+      "bass": "A-major/01-synthwave-I-vi-bVI-bVII/bass.mid",
+      "lead": "A-major/01-synthwave-I-vi-bVI-bVII/lead.mid",
+      "all": "A-major/01-synthwave-I-vi-bVI-bVII/all.mid"
+     }
+    },
+    {
+     "id": "02-house-IVmaj7-V7-iii7-vi7",
+     "n": 2,
+     "genre": "house",
+     "genre_name": "House",
+     "bpm": 124,
+     "about": "Royal road with 7ths (city pop / piano house)",
+     "roman": [
+      "IVmaj7",
+      "V7",
+      "iii7",
+      "vi7"
+     ],
+     "chords": [
+      "Dmaj7",
+      "E7",
+      "C#m7",
+      "F#m7"
+     ],
+     "voicings": [
+      [
+       50,
+       57,
+       61,
+       66
+      ],
+      [
+       52,
+       59,
+       62,
+       68
+      ],
+      [
+       52,
+       59,
+       61,
+       68
+      ],
+      [
+       52,
+       57,
+       61,
+       66
+      ]
+     ],
+     "styles": {
+      "chords": "stabs",
+      "arp": "broken",
+      "bass": "offbeat-root-fifth",
+      "lead": "house"
+     },
+     "files": {
+      "chords": "A-major/02-house-IVmaj7-V7-iii7-vi7/chords.mid",
+      "arp": "A-major/02-house-IVmaj7-V7-iii7-vi7/arp.mid",
+      "bass": "A-major/02-house-IVmaj7-V7-iii7-vi7/bass.mid",
+      "lead": "A-major/02-house-IVmaj7-V7-iii7-vi7/lead.mid",
+      "all": "A-major/02-house-IVmaj7-V7-iii7-vi7/all.mid"
+     }
+    },
+    {
+     "id": "03-lofi-ii9-V9-Imaj9-vi9",
+     "n": 3,
+     "genre": "lofi",
+     "genre_name": "Lo-fi",
+     "bpm": 80,
+     "about": "ii-V-I in 9ths with a vi9 turnaround",
+     "roman": [
+      "ii9",
+      "V9",
+      "Imaj9",
+      "vi9"
+     ],
+     "chords": [
+      "Bm9",
+      "E9",
+      "Amaj9",
+      "F#m9"
+     ],
+     "voicings": [
+      [
+       49,
+       57,
+       59,
+       62
+      ],
+      [
+       52,
+       56,
+       62,
+       66
+      ],
+      [
+       56,
+       59,
+       61,
+       69
+      ],
+      [
+       54,
+       57,
+       64,
+       68
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "walking",
+      "lead": "lofi"
+     },
+     "files": {
+      "chords": "A-major/03-lofi-ii9-V9-Imaj9-vi9/chords.mid",
+      "arp": "A-major/03-lofi-ii9-V9-Imaj9-vi9/arp.mid",
+      "bass": "A-major/03-lofi-ii9-V9-Imaj9-vi9/bass.mid",
+      "lead": "A-major/03-lofi-ii9-V9-Imaj9-vi9/lead.mid",
+      "all": "A-major/03-lofi-ii9-V9-Imaj9-vi9/all.mid"
+     }
+    },
+    {
+     "id": "04-techno-I-I-bVII-IV",
+     "n": 4,
+     "genre": "techno",
+     "genre_name": "Techno",
+     "bpm": 132,
+     "about": "Mixolydian I-bVII-IV",
+     "roman": [
+      "I",
+      "I",
+      "bVII",
+      "IV"
+     ],
+     "chords": [
+      "A",
+      "A",
+      "G",
+      "D"
+     ],
+     "voicings": [
+      [
+       57,
+       61,
+       64
+      ],
+      [
+       57,
+       61,
+       64
+      ],
+      [
+       59,
+       62,
+       67
+      ],
+      [
+       57,
+       62,
+       66
+      ]
+     ],
+     "styles": {
+      "chords": "offbeat",
+      "arp": "down",
+      "bass": "acid-303",
+      "lead": "techno"
+     },
+     "files": {
+      "chords": "A-major/04-techno-I-I-bVII-IV/chords.mid",
+      "arp": "A-major/04-techno-I-I-bVII-IV/arp.mid",
+      "bass": "A-major/04-techno-I-I-bVII-IV/bass.mid",
+      "lead": "A-major/04-techno-I-I-bVII-IV/lead.mid",
+      "all": "A-major/04-techno-I-I-bVII-IV/all.mid"
+     }
+    },
+    {
+     "id": "05-pop-vi-IV-I-V",
+     "n": 5,
+     "genre": "pop",
+     "genre_name": "Pop",
+     "bpm": 112,
+     "about": "The axis progression",
+     "roman": [
+      "vi",
+      "IV",
+      "I",
+      "V"
+     ],
+     "chords": [
+      "F#m",
+      "D",
+      "A",
+      "E"
+     ],
+     "voicings": [
+      [
+       57,
+       61,
+       66
+      ],
+      [
+       57,
+       62,
+       66
+      ],
+      [
+       57,
+       61,
+       64
+      ],
+      [
+       56,
+       59,
+       64
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "pumping-root-fifth",
+      "lead": "pop"
+     },
+     "files": {
+      "chords": "A-major/05-pop-vi-IV-I-V/chords.mid",
+      "arp": "A-major/05-pop-vi-IV-I-V/arp.mid",
+      "bass": "A-major/05-pop-vi-IV-I-V/bass.mid",
+      "lead": "A-major/05-pop-vi-IV-I-V/lead.mid",
+      "all": "A-major/05-pop-vi-IV-I-V/all.mid"
+     }
+    },
+    {
+     "id": "06-cinematic-I-III-IV-iv",
+     "n": 6,
+     "genre": "cinematic",
+     "genre_name": "Dark / Cinematic",
+     "bpm": 90,
+     "about": "Chromatic-mediant III and borrowed iv",
+     "roman": [
+      "I",
+      "III",
+      "IV",
+      "iv"
+     ],
+     "chords": [
+      "A",
+      "C#",
+      "D",
+      "Dm"
+     ],
+     "voicings": [
+      [
+       57,
+       61,
+       64
+      ],
+      [
+       56,
+       61,
+       65
+      ],
+      [
+       57,
+       62,
+       66
+      ],
+      [
+       57,
+       62,
+       65
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "broken",
+      "bass": "sub-glide",
+      "lead": "cinematic"
+     },
+     "files": {
+      "chords": "A-major/06-cinematic-I-III-IV-iv/chords.mid",
+      "arp": "A-major/06-cinematic-I-III-IV-iv/arp.mid",
+      "bass": "A-major/06-cinematic-I-III-IV-iv/bass.mid",
+      "lead": "A-major/06-cinematic-I-III-IV-iv/lead.mid",
+      "all": "A-major/06-cinematic-I-III-IV-iv/all.mid"
+     }
+    }
+   ]
+  },
+  {
+   "id": "Bb-minor",
+   "name": "Bb minor",
+   "tonic": "Bb",
+   "tonic_pc": 10,
+   "mode": "minor",
+   "kits": [
+    {
+     "id": "01-synthwave-i-VI-III-VII",
+     "n": 1,
+     "genre": "synthwave",
+     "genre_name": "Synthwave",
+     "bpm": 100,
+     "about": "Aeolian anthem: the classic 80s minor loop",
+     "roman": [
+      "i",
+      "VI",
+      "III",
+      "VII"
+     ],
+     "chords": [
+      "Bbm",
+      "Gb",
+      "Db",
+      "Ab"
+     ],
+     "voicings": [
+      [
+       58,
+       61,
+       65
+      ],
+      [
+       58,
+       61,
+       66
+      ],
+      [
+       56,
+       61,
+       65
+      ],
+      [
+       56,
+       60,
+       63
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "up",
+      "bass": "octave-bounce",
+      "lead": "synthwave"
+     },
+     "files": {
+      "chords": "Bb-minor/01-synthwave-i-VI-III-VII/chords.mid",
+      "arp": "Bb-minor/01-synthwave-i-VI-III-VII/arp.mid",
+      "bass": "Bb-minor/01-synthwave-i-VI-III-VII/bass.mid",
+      "lead": "Bb-minor/01-synthwave-i-VI-III-VII/lead.mid",
+      "all": "Bb-minor/01-synthwave-i-VI-III-VII/all.mid"
+     }
+    },
+    {
+     "id": "02-house-i9-iv7-VImaj7-v7",
+     "n": 2,
+     "genre": "house",
+     "genre_name": "House",
+     "bpm": 124,
+     "about": "Deep-house minor 7ths/9ths",
+     "roman": [
+      "i9",
+      "iv7",
+      "VImaj7",
+      "v7"
+     ],
+     "chords": [
+      "Bbm9",
+      "Ebm7",
+      "Gbmaj7",
+      "Fm7"
+     ],
+     "voicings": [
+      [
+       56,
+       58,
+       61,
+       72
+      ],
+      [
+       54,
+       61,
+       63,
+       70
+      ],
+      [
+       54,
+       61,
+       65,
+       70
+      ],
+      [
+       53,
+       60,
+       63,
+       68
+      ]
+     ],
+     "styles": {
+      "chords": "stabs",
+      "arp": "broken",
+      "bass": "offbeat-root-fifth",
+      "lead": "house"
+     },
+     "files": {
+      "chords": "Bb-minor/02-house-i9-iv7-VImaj7-v7/chords.mid",
+      "arp": "Bb-minor/02-house-i9-iv7-VImaj7-v7/arp.mid",
+      "bass": "Bb-minor/02-house-i9-iv7-VImaj7-v7/bass.mid",
+      "lead": "Bb-minor/02-house-i9-iv7-VImaj7-v7/lead.mid",
+      "all": "Bb-minor/02-house-i9-iv7-VImaj7-v7/all.mid"
+     }
+    },
+    {
+     "id": "03-lofi-iim7b5-V7-i9-VImaj7",
+     "n": 3,
+     "genre": "lofi",
+     "genre_name": "Lo-fi",
+     "bpm": 80,
+     "about": "Jazz minor ii-V-i with a VImaj7 turnaround",
+     "roman": [
+      "iiø7",
+      "V7",
+      "i9",
+      "VImaj7"
+     ],
+     "chords": [
+      "Cm7b5",
+      "F7",
+      "Bbm9",
+      "Gbmaj7"
+     ],
+     "voicings": [
+      [
+       48,
+       54,
+       58,
+       63
+      ],
+      [
+       48,
+       53,
+       57,
+       63
+      ],
+      [
+       48,
+       56,
+       58,
+       61
+      ],
+      [
+       49,
+       54,
+       58,
+       65
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "walking",
+      "lead": "lofi"
+     },
+     "files": {
+      "chords": "Bb-minor/03-lofi-iim7b5-V7-i9-VImaj7/chords.mid",
+      "arp": "Bb-minor/03-lofi-iim7b5-V7-i9-VImaj7/arp.mid",
+      "bass": "Bb-minor/03-lofi-iim7b5-V7-i9-VImaj7/bass.mid",
+      "lead": "Bb-minor/03-lofi-iim7b5-V7-i9-VImaj7/lead.mid",
+      "all": "Bb-minor/03-lofi-iim7b5-V7-i9-VImaj7/all.mid"
+     }
+    },
+    {
+     "id": "04-techno-i-i-iv-v",
+     "n": 4,
+     "genre": "techno",
+     "genre_name": "Techno",
+     "bpm": 132,
+     "about": "Hypnotic i-iv-v stabs",
+     "roman": [
+      "i",
+      "i",
+      "iv",
+      "v"
+     ],
+     "chords": [
+      "Bbm",
+      "Bbm",
+      "Ebm",
+      "Fm"
+     ],
+     "voicings": [
+      [
+       58,
+       61,
+       65
+      ],
+      [
+       58,
+       61,
+       65
+      ],
+      [
+       58,
+       63,
+       66
+      ],
+      [
+       56,
+       60,
+       65
+      ]
+     ],
+     "styles": {
+      "chords": "offbeat",
+      "arp": "down",
+      "bass": "acid-303",
+      "lead": "techno"
+     },
+     "files": {
+      "chords": "Bb-minor/04-techno-i-i-iv-v/chords.mid",
+      "arp": "Bb-minor/04-techno-i-i-iv-v/arp.mid",
+      "bass": "Bb-minor/04-techno-i-i-iv-v/bass.mid",
+      "lead": "Bb-minor/04-techno-i-i-iv-v/lead.mid",
+      "all": "Bb-minor/04-techno-i-i-iv-v/all.mid"
+     }
+    },
+    {
+     "id": "05-pop-i-III-VII-VI",
+     "n": 5,
+     "genre": "pop",
+     "genre_name": "Pop",
+     "bpm": 112,
+     "about": "Minor pop loop",
+     "roman": [
+      "i",
+      "III",
+      "VII",
+      "VI"
+     ],
+     "chords": [
+      "Bbm",
+      "Db",
+      "Ab",
+      "Gb"
+     ],
+     "voicings": [
+      [
+       58,
+       61,
+       65
+      ],
+      [
+       56,
+       61,
+       65
+      ],
+      [
+       56,
+       60,
+       63
+      ],
+      [
+       58,
+       61,
+       66
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "pumping-root-fifth",
+      "lead": "pop"
+     },
+     "files": {
+      "chords": "Bb-minor/05-pop-i-III-VII-VI/chords.mid",
+      "arp": "Bb-minor/05-pop-i-III-VII-VI/arp.mid",
+      "bass": "Bb-minor/05-pop-i-III-VII-VI/bass.mid",
+      "lead": "Bb-minor/05-pop-i-III-VII-VI/lead.mid",
+      "all": "Bb-minor/05-pop-i-III-VII-VI/all.mid"
+     }
+    },
+    {
+     "id": "06-cinematic-i-bII-VI-V",
+     "n": 6,
+     "genre": "cinematic",
+     "genre_name": "Dark / Cinematic",
+     "bpm": 90,
+     "about": "Phrygian bII + major V: dark and tense",
+     "roman": [
+      "i",
+      "bII",
+      "VI",
+      "V"
+     ],
+     "chords": [
+      "Bbm",
+      "B",
+      "Gb",
+      "F"
+     ],
+     "voicings": [
+      [
+       58,
+       61,
+       65
+      ],
+      [
+       59,
+       63,
+       66
+      ],
+      [
+       58,
+       61,
+       66
+      ],
+      [
+       57,
+       60,
+       65
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "broken",
+      "bass": "sub-glide",
+      "lead": "cinematic"
+     },
+     "files": {
+      "chords": "Bb-minor/06-cinematic-i-bII-VI-V/chords.mid",
+      "arp": "Bb-minor/06-cinematic-i-bII-VI-V/arp.mid",
+      "bass": "Bb-minor/06-cinematic-i-bII-VI-V/bass.mid",
+      "lead": "Bb-minor/06-cinematic-i-bII-VI-V/lead.mid",
+      "all": "Bb-minor/06-cinematic-i-bII-VI-V/all.mid"
+     }
+    }
+   ]
+  },
+  {
+   "id": "Bb-major",
+   "name": "Bb major",
+   "tonic": "Bb",
+   "tonic_pc": 10,
+   "mode": "major",
+   "kits": [
+    {
+     "id": "01-synthwave-I-vi-bVI-bVII",
+     "n": 1,
+     "genre": "synthwave",
+     "genre_name": "Synthwave",
+     "bpm": 100,
+     "about": "Borrowed bVI-bVII lift (80s soundtrack)",
+     "roman": [
+      "I",
+      "vi",
+      "bVI",
+      "bVII"
+     ],
+     "chords": [
+      "Bb",
+      "Gm",
+      "Gb",
+      "Ab"
+     ],
+     "voicings": [
+      [
+       58,
+       62,
+       65
+      ],
+      [
+       58,
+       62,
+       67
+      ],
+      [
+       58,
+       61,
+       66
+      ],
+      [
+       56,
+       60,
+       63
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "up",
+      "bass": "octave-bounce",
+      "lead": "synthwave"
+     },
+     "files": {
+      "chords": "Bb-major/01-synthwave-I-vi-bVI-bVII/chords.mid",
+      "arp": "Bb-major/01-synthwave-I-vi-bVI-bVII/arp.mid",
+      "bass": "Bb-major/01-synthwave-I-vi-bVI-bVII/bass.mid",
+      "lead": "Bb-major/01-synthwave-I-vi-bVI-bVII/lead.mid",
+      "all": "Bb-major/01-synthwave-I-vi-bVI-bVII/all.mid"
+     }
+    },
+    {
+     "id": "02-house-IVmaj7-V7-iii7-vi7",
+     "n": 2,
+     "genre": "house",
+     "genre_name": "House",
+     "bpm": 124,
+     "about": "Royal road with 7ths (city pop / piano house)",
+     "roman": [
+      "IVmaj7",
+      "V7",
+      "iii7",
+      "vi7"
+     ],
+     "chords": [
+      "Ebmaj7",
+      "F7",
+      "Dm7",
+      "Gm7"
+     ],
+     "voicings": [
+      [
+       51,
+       58,
+       62,
+       67
+      ],
+      [
+       53,
+       60,
+       63,
+       69
+      ],
+      [
+       53,
+       60,
+       62,
+       69
+      ],
+      [
+       53,
+       58,
+       62,
+       67
+      ]
+     ],
+     "styles": {
+      "chords": "stabs",
+      "arp": "broken",
+      "bass": "offbeat-root-fifth",
+      "lead": "house"
+     },
+     "files": {
+      "chords": "Bb-major/02-house-IVmaj7-V7-iii7-vi7/chords.mid",
+      "arp": "Bb-major/02-house-IVmaj7-V7-iii7-vi7/arp.mid",
+      "bass": "Bb-major/02-house-IVmaj7-V7-iii7-vi7/bass.mid",
+      "lead": "Bb-major/02-house-IVmaj7-V7-iii7-vi7/lead.mid",
+      "all": "Bb-major/02-house-IVmaj7-V7-iii7-vi7/all.mid"
+     }
+    },
+    {
+     "id": "03-lofi-ii9-V9-Imaj9-vi9",
+     "n": 3,
+     "genre": "lofi",
+     "genre_name": "Lo-fi",
+     "bpm": 80,
+     "about": "ii-V-I in 9ths with a vi9 turnaround",
+     "roman": [
+      "ii9",
+      "V9",
+      "Imaj9",
+      "vi9"
+     ],
+     "chords": [
+      "Cm9",
+      "F9",
+      "Bbmaj9",
+      "Gm9"
+     ],
+     "voicings": [
+      [
+       50,
+       58,
+       60,
+       63
+      ],
+      [
+       53,
+       57,
+       63,
+       67
+      ],
+      [
+       57,
+       60,
+       62,
+       70
+      ],
+      [
+       55,
+       58,
+       65,
+       69
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "walking",
+      "lead": "lofi"
+     },
+     "files": {
+      "chords": "Bb-major/03-lofi-ii9-V9-Imaj9-vi9/chords.mid",
+      "arp": "Bb-major/03-lofi-ii9-V9-Imaj9-vi9/arp.mid",
+      "bass": "Bb-major/03-lofi-ii9-V9-Imaj9-vi9/bass.mid",
+      "lead": "Bb-major/03-lofi-ii9-V9-Imaj9-vi9/lead.mid",
+      "all": "Bb-major/03-lofi-ii9-V9-Imaj9-vi9/all.mid"
+     }
+    },
+    {
+     "id": "04-techno-I-I-bVII-IV",
+     "n": 4,
+     "genre": "techno",
+     "genre_name": "Techno",
+     "bpm": 132,
+     "about": "Mixolydian I-bVII-IV",
+     "roman": [
+      "I",
+      "I",
+      "bVII",
+      "IV"
+     ],
+     "chords": [
+      "Bb",
+      "Bb",
+      "Ab",
+      "Eb"
+     ],
+     "voicings": [
+      [
+       58,
+       62,
+       65
+      ],
+      [
+       58,
+       62,
+       65
+      ],
+      [
+       60,
+       63,
+       68
+      ],
+      [
+       58,
+       63,
+       67
+      ]
+     ],
+     "styles": {
+      "chords": "offbeat",
+      "arp": "down",
+      "bass": "acid-303",
+      "lead": "techno"
+     },
+     "files": {
+      "chords": "Bb-major/04-techno-I-I-bVII-IV/chords.mid",
+      "arp": "Bb-major/04-techno-I-I-bVII-IV/arp.mid",
+      "bass": "Bb-major/04-techno-I-I-bVII-IV/bass.mid",
+      "lead": "Bb-major/04-techno-I-I-bVII-IV/lead.mid",
+      "all": "Bb-major/04-techno-I-I-bVII-IV/all.mid"
+     }
+    },
+    {
+     "id": "05-pop-vi-IV-I-V",
+     "n": 5,
+     "genre": "pop",
+     "genre_name": "Pop",
+     "bpm": 112,
+     "about": "The axis progression",
+     "roman": [
+      "vi",
+      "IV",
+      "I",
+      "V"
+     ],
+     "chords": [
+      "Gm",
+      "Eb",
+      "Bb",
+      "F"
+     ],
+     "voicings": [
+      [
+       58,
+       62,
+       67
+      ],
+      [
+       58,
+       63,
+       67
+      ],
+      [
+       58,
+       62,
+       65
+      ],
+      [
+       57,
+       60,
+       65
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "pumping-root-fifth",
+      "lead": "pop"
+     },
+     "files": {
+      "chords": "Bb-major/05-pop-vi-IV-I-V/chords.mid",
+      "arp": "Bb-major/05-pop-vi-IV-I-V/arp.mid",
+      "bass": "Bb-major/05-pop-vi-IV-I-V/bass.mid",
+      "lead": "Bb-major/05-pop-vi-IV-I-V/lead.mid",
+      "all": "Bb-major/05-pop-vi-IV-I-V/all.mid"
+     }
+    },
+    {
+     "id": "06-cinematic-I-III-IV-iv",
+     "n": 6,
+     "genre": "cinematic",
+     "genre_name": "Dark / Cinematic",
+     "bpm": 90,
+     "about": "Chromatic-mediant III and borrowed iv",
+     "roman": [
+      "I",
+      "III",
+      "IV",
+      "iv"
+     ],
+     "chords": [
+      "Bb",
+      "D",
+      "Eb",
+      "Ebm"
+     ],
+     "voicings": [
+      [
+       58,
+       62,
+       65
+      ],
+      [
+       57,
+       62,
+       66
+      ],
+      [
+       58,
+       63,
+       67
+      ],
+      [
+       58,
+       63,
+       66
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "broken",
+      "bass": "sub-glide",
+      "lead": "cinematic"
+     },
+     "files": {
+      "chords": "Bb-major/06-cinematic-I-III-IV-iv/chords.mid",
+      "arp": "Bb-major/06-cinematic-I-III-IV-iv/arp.mid",
+      "bass": "Bb-major/06-cinematic-I-III-IV-iv/bass.mid",
+      "lead": "Bb-major/06-cinematic-I-III-IV-iv/lead.mid",
+      "all": "Bb-major/06-cinematic-I-III-IV-iv/all.mid"
+     }
+    }
+   ]
+  },
+  {
+   "id": "B-minor",
+   "name": "B minor",
+   "tonic": "B",
+   "tonic_pc": 11,
+   "mode": "minor",
+   "kits": [
+    {
+     "id": "01-synthwave-i-VI-III-VII",
+     "n": 1,
+     "genre": "synthwave",
+     "genre_name": "Synthwave",
+     "bpm": 100,
+     "about": "Aeolian anthem: the classic 80s minor loop",
+     "roman": [
+      "i",
+      "VI",
+      "III",
+      "VII"
+     ],
+     "chords": [
+      "Bm",
+      "G",
+      "D",
+      "A"
+     ],
+     "voicings": [
+      [
+       59,
+       62,
+       66
+      ],
+      [
+       59,
+       62,
+       67
+      ],
+      [
+       57,
+       62,
+       66
+      ],
+      [
+       57,
+       61,
+       64
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "up",
+      "bass": "octave-bounce",
+      "lead": "synthwave"
+     },
+     "files": {
+      "chords": "B-minor/01-synthwave-i-VI-III-VII/chords.mid",
+      "arp": "B-minor/01-synthwave-i-VI-III-VII/arp.mid",
+      "bass": "B-minor/01-synthwave-i-VI-III-VII/bass.mid",
+      "lead": "B-minor/01-synthwave-i-VI-III-VII/lead.mid",
+      "all": "B-minor/01-synthwave-i-VI-III-VII/all.mid"
+     }
+    },
+    {
+     "id": "02-house-i9-iv7-VImaj7-v7",
+     "n": 2,
+     "genre": "house",
+     "genre_name": "House",
+     "bpm": 124,
+     "about": "Deep-house minor 7ths/9ths",
+     "roman": [
+      "i9",
+      "iv7",
+      "VImaj7",
+      "v7"
+     ],
+     "chords": [
+      "Bm9",
+      "Em7",
+      "Gmaj7",
+      "F#m7"
+     ],
+     "voicings": [
+      [
+       49,
+       57,
+       59,
+       62
+      ],
+      [
+       50,
+       55,
+       59,
+       64
+      ],
+      [
+       50,
+       55,
+       59,
+       66
+      ],
+      [
+       52,
+       57,
+       61,
+       66
+      ]
+     ],
+     "styles": {
+      "chords": "stabs",
+      "arp": "broken",
+      "bass": "offbeat-root-fifth",
+      "lead": "house"
+     },
+     "files": {
+      "chords": "B-minor/02-house-i9-iv7-VImaj7-v7/chords.mid",
+      "arp": "B-minor/02-house-i9-iv7-VImaj7-v7/arp.mid",
+      "bass": "B-minor/02-house-i9-iv7-VImaj7-v7/bass.mid",
+      "lead": "B-minor/02-house-i9-iv7-VImaj7-v7/lead.mid",
+      "all": "B-minor/02-house-i9-iv7-VImaj7-v7/all.mid"
+     }
+    },
+    {
+     "id": "03-lofi-iim7b5-V7-i9-VImaj7",
+     "n": 3,
+     "genre": "lofi",
+     "genre_name": "Lo-fi",
+     "bpm": 80,
+     "about": "Jazz minor ii-V-i with a VImaj7 turnaround",
+     "roman": [
+      "iiø7",
+      "V7",
+      "i9",
+      "VImaj7"
+     ],
+     "chords": [
+      "C#m7b5",
+      "F#7",
+      "Bm9",
+      "Gmaj7"
+     ],
+     "voicings": [
+      [
+       49,
+       55,
+       59,
+       64
+      ],
+      [
+       49,
+       54,
+       58,
+       64
+      ],
+      [
+       49,
+       57,
+       59,
+       62
+      ],
+      [
+       50,
+       55,
+       59,
+       66
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "walking",
+      "lead": "lofi"
+     },
+     "files": {
+      "chords": "B-minor/03-lofi-iim7b5-V7-i9-VImaj7/chords.mid",
+      "arp": "B-minor/03-lofi-iim7b5-V7-i9-VImaj7/arp.mid",
+      "bass": "B-minor/03-lofi-iim7b5-V7-i9-VImaj7/bass.mid",
+      "lead": "B-minor/03-lofi-iim7b5-V7-i9-VImaj7/lead.mid",
+      "all": "B-minor/03-lofi-iim7b5-V7-i9-VImaj7/all.mid"
+     }
+    },
+    {
+     "id": "04-techno-i-i-iv-v",
+     "n": 4,
+     "genre": "techno",
+     "genre_name": "Techno",
+     "bpm": 132,
+     "about": "Hypnotic i-iv-v stabs",
+     "roman": [
+      "i",
+      "i",
+      "iv",
+      "v"
+     ],
+     "chords": [
+      "Bm",
+      "Bm",
+      "Em",
+      "F#m"
+     ],
+     "voicings": [
+      [
+       59,
+       62,
+       66
+      ],
+      [
+       59,
+       62,
+       66
+      ],
+      [
+       59,
+       64,
+       67
+      ],
+      [
+       57,
+       61,
+       66
+      ]
+     ],
+     "styles": {
+      "chords": "offbeat",
+      "arp": "down",
+      "bass": "acid-303",
+      "lead": "techno"
+     },
+     "files": {
+      "chords": "B-minor/04-techno-i-i-iv-v/chords.mid",
+      "arp": "B-minor/04-techno-i-i-iv-v/arp.mid",
+      "bass": "B-minor/04-techno-i-i-iv-v/bass.mid",
+      "lead": "B-minor/04-techno-i-i-iv-v/lead.mid",
+      "all": "B-minor/04-techno-i-i-iv-v/all.mid"
+     }
+    },
+    {
+     "id": "05-pop-i-III-VII-VI",
+     "n": 5,
+     "genre": "pop",
+     "genre_name": "Pop",
+     "bpm": 112,
+     "about": "Minor pop loop",
+     "roman": [
+      "i",
+      "III",
+      "VII",
+      "VI"
+     ],
+     "chords": [
+      "Bm",
+      "D",
+      "A",
+      "G"
+     ],
+     "voicings": [
+      [
+       59,
+       62,
+       66
+      ],
+      [
+       57,
+       62,
+       66
+      ],
+      [
+       57,
+       61,
+       64
+      ],
+      [
+       59,
+       62,
+       67
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "pumping-root-fifth",
+      "lead": "pop"
+     },
+     "files": {
+      "chords": "B-minor/05-pop-i-III-VII-VI/chords.mid",
+      "arp": "B-minor/05-pop-i-III-VII-VI/arp.mid",
+      "bass": "B-minor/05-pop-i-III-VII-VI/bass.mid",
+      "lead": "B-minor/05-pop-i-III-VII-VI/lead.mid",
+      "all": "B-minor/05-pop-i-III-VII-VI/all.mid"
+     }
+    },
+    {
+     "id": "06-cinematic-i-bII-VI-V",
+     "n": 6,
+     "genre": "cinematic",
+     "genre_name": "Dark / Cinematic",
+     "bpm": 90,
+     "about": "Phrygian bII + major V: dark and tense",
+     "roman": [
+      "i",
+      "bII",
+      "VI",
+      "V"
+     ],
+     "chords": [
+      "Bm",
+      "C",
+      "G",
+      "F#"
+     ],
+     "voicings": [
+      [
+       59,
+       62,
+       66
+      ],
+      [
+       60,
+       64,
+       67
+      ],
+      [
+       59,
+       62,
+       67
+      ],
+      [
+       58,
+       61,
+       66
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "broken",
+      "bass": "sub-glide",
+      "lead": "cinematic"
+     },
+     "files": {
+      "chords": "B-minor/06-cinematic-i-bII-VI-V/chords.mid",
+      "arp": "B-minor/06-cinematic-i-bII-VI-V/arp.mid",
+      "bass": "B-minor/06-cinematic-i-bII-VI-V/bass.mid",
+      "lead": "B-minor/06-cinematic-i-bII-VI-V/lead.mid",
+      "all": "B-minor/06-cinematic-i-bII-VI-V/all.mid"
+     }
+    }
+   ]
+  },
+  {
+   "id": "B-major",
+   "name": "B major",
+   "tonic": "B",
+   "tonic_pc": 11,
+   "mode": "major",
+   "kits": [
+    {
+     "id": "01-synthwave-I-vi-bVI-bVII",
+     "n": 1,
+     "genre": "synthwave",
+     "genre_name": "Synthwave",
+     "bpm": 100,
+     "about": "Borrowed bVI-bVII lift (80s soundtrack)",
+     "roman": [
+      "I",
+      "vi",
+      "bVI",
+      "bVII"
+     ],
+     "chords": [
+      "B",
+      "G#m",
+      "G",
+      "A"
+     ],
+     "voicings": [
+      [
+       59,
+       63,
+       66
+      ],
+      [
+       59,
+       63,
+       68
+      ],
+      [
+       59,
+       62,
+       67
+      ],
+      [
+       57,
+       61,
+       64
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "up",
+      "bass": "octave-bounce",
+      "lead": "synthwave"
+     },
+     "files": {
+      "chords": "B-major/01-synthwave-I-vi-bVI-bVII/chords.mid",
+      "arp": "B-major/01-synthwave-I-vi-bVI-bVII/arp.mid",
+      "bass": "B-major/01-synthwave-I-vi-bVI-bVII/bass.mid",
+      "lead": "B-major/01-synthwave-I-vi-bVI-bVII/lead.mid",
+      "all": "B-major/01-synthwave-I-vi-bVI-bVII/all.mid"
+     }
+    },
+    {
+     "id": "02-house-IVmaj7-V7-iii7-vi7",
+     "n": 2,
+     "genre": "house",
+     "genre_name": "House",
+     "bpm": 124,
+     "about": "Royal road with 7ths (city pop / piano house)",
+     "roman": [
+      "IVmaj7",
+      "V7",
+      "iii7",
+      "vi7"
+     ],
+     "chords": [
+      "Emaj7",
+      "F#7",
+      "D#m7",
+      "G#m7"
+     ],
+     "voicings": [
+      [
+       52,
+       59,
+       63,
+       68
+      ],
+      [
+       54,
+       61,
+       64,
+       70
+      ],
+      [
+       54,
+       61,
+       63,
+       70
+      ],
+      [
+       54,
+       59,
+       63,
+       68
+      ]
+     ],
+     "styles": {
+      "chords": "stabs",
+      "arp": "broken",
+      "bass": "offbeat-root-fifth",
+      "lead": "house"
+     },
+     "files": {
+      "chords": "B-major/02-house-IVmaj7-V7-iii7-vi7/chords.mid",
+      "arp": "B-major/02-house-IVmaj7-V7-iii7-vi7/arp.mid",
+      "bass": "B-major/02-house-IVmaj7-V7-iii7-vi7/bass.mid",
+      "lead": "B-major/02-house-IVmaj7-V7-iii7-vi7/lead.mid",
+      "all": "B-major/02-house-IVmaj7-V7-iii7-vi7/all.mid"
+     }
+    },
+    {
+     "id": "03-lofi-ii9-V9-Imaj9-vi9",
+     "n": 3,
+     "genre": "lofi",
+     "genre_name": "Lo-fi",
+     "bpm": 80,
+     "about": "ii-V-I in 9ths with a vi9 turnaround",
+     "roman": [
+      "ii9",
+      "V9",
+      "Imaj9",
+      "vi9"
+     ],
+     "chords": [
+      "C#m9",
+      "F#9",
+      "Bmaj9",
+      "G#m9"
+     ],
+     "voicings": [
+      [
+       51,
+       59,
+       61,
+       64
+      ],
+      [
+       54,
+       58,
+       64,
+       68
+      ],
+      [
+       58,
+       61,
+       63,
+       71
+      ],
+      [
+       56,
+       59,
+       66,
+       70
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "walking",
+      "lead": "lofi"
+     },
+     "files": {
+      "chords": "B-major/03-lofi-ii9-V9-Imaj9-vi9/chords.mid",
+      "arp": "B-major/03-lofi-ii9-V9-Imaj9-vi9/arp.mid",
+      "bass": "B-major/03-lofi-ii9-V9-Imaj9-vi9/bass.mid",
+      "lead": "B-major/03-lofi-ii9-V9-Imaj9-vi9/lead.mid",
+      "all": "B-major/03-lofi-ii9-V9-Imaj9-vi9/all.mid"
+     }
+    },
+    {
+     "id": "04-techno-I-I-bVII-IV",
+     "n": 4,
+     "genre": "techno",
+     "genre_name": "Techno",
+     "bpm": 132,
+     "about": "Mixolydian I-bVII-IV",
+     "roman": [
+      "I",
+      "I",
+      "bVII",
+      "IV"
+     ],
+     "chords": [
+      "B",
+      "B",
+      "A",
+      "E"
+     ],
+     "voicings": [
+      [
+       54,
+       59,
+       63
+      ],
+      [
+       54,
+       59,
+       63
+      ],
+      [
+       57,
+       61,
+       64
+      ],
+      [
+       56,
+       59,
+       64
+      ]
+     ],
+     "styles": {
+      "chords": "offbeat",
+      "arp": "down",
+      "bass": "acid-303",
+      "lead": "techno"
+     },
+     "files": {
+      "chords": "B-major/04-techno-I-I-bVII-IV/chords.mid",
+      "arp": "B-major/04-techno-I-I-bVII-IV/arp.mid",
+      "bass": "B-major/04-techno-I-I-bVII-IV/bass.mid",
+      "lead": "B-major/04-techno-I-I-bVII-IV/lead.mid",
+      "all": "B-major/04-techno-I-I-bVII-IV/all.mid"
+     }
+    },
+    {
+     "id": "05-pop-vi-IV-I-V",
+     "n": 5,
+     "genre": "pop",
+     "genre_name": "Pop",
+     "bpm": 112,
+     "about": "The axis progression",
+     "roman": [
+      "vi",
+      "IV",
+      "I",
+      "V"
+     ],
+     "chords": [
+      "G#m",
+      "E",
+      "B",
+      "F#"
+     ],
+     "voicings": [
+      [
+       59,
+       63,
+       68
+      ],
+      [
+       59,
+       64,
+       68
+      ],
+      [
+       59,
+       63,
+       66
+      ],
+      [
+       58,
+       61,
+       66
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "updown",
+      "bass": "pumping-root-fifth",
+      "lead": "pop"
+     },
+     "files": {
+      "chords": "B-major/05-pop-vi-IV-I-V/chords.mid",
+      "arp": "B-major/05-pop-vi-IV-I-V/arp.mid",
+      "bass": "B-major/05-pop-vi-IV-I-V/bass.mid",
+      "lead": "B-major/05-pop-vi-IV-I-V/lead.mid",
+      "all": "B-major/05-pop-vi-IV-I-V/all.mid"
+     }
+    },
+    {
+     "id": "06-cinematic-I-III-IV-iv",
+     "n": 6,
+     "genre": "cinematic",
+     "genre_name": "Dark / Cinematic",
+     "bpm": 90,
+     "about": "Chromatic-mediant III and borrowed iv",
+     "roman": [
+      "I",
+      "III",
+      "IV",
+      "iv"
+     ],
+     "chords": [
+      "B",
+      "D#",
+      "E",
+      "Em"
+     ],
+     "voicings": [
+      [
+       54,
+       59,
+       63
+      ],
+      [
+       55,
+       58,
+       63
+      ],
+      [
+       56,
+       59,
+       64
+      ],
+      [
+       55,
+       59,
+       64
+      ]
+     ],
+     "styles": {
+      "chords": "held",
+      "arp": "broken",
+      "bass": "sub-glide",
+      "lead": "cinematic"
+     },
+     "files": {
+      "chords": "B-major/06-cinematic-I-III-IV-iv/chords.mid",
+      "arp": "B-major/06-cinematic-I-III-IV-iv/arp.mid",
+      "bass": "B-major/06-cinematic-I-III-IV-iv/bass.mid",
+      "lead": "B-major/06-cinematic-I-III-IV-iv/lead.mid",
+      "all": "B-major/06-cinematic-I-III-IV-iv/all.mid"
+     }
+    }
+   ]
+  }
+ ]
+}
