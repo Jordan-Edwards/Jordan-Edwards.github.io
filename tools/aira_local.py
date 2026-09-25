@@ -80,7 +80,8 @@ def _varlen(buf, i):
 
 def read_smf(path):
     """Return (ticks_per_quarter, [(track_index, abs_tick, status, d1, d2)], tempo_map)."""
-    data = open(path, "rb").read()
+    with open(path, "rb") as f:
+        data = f.read()
     if data[:4] != b"MThd":
         raise ValueError(f"{path}: not a MIDI file")
     _, fmt, ntrk, tpq = struct.unpack(">IHHH", data[4:14])
@@ -771,8 +772,8 @@ class Capture:
             clocks = [c for c in clocks if c >= self.start_t]
         clocked = len(clocks) >= CLOCK_PPQ
         if clocked:
-            gaps = sorted(b - a for a, b in zip(clocks, clocks[1:]))
-            iv = gaps[len(gaps) // 2]
+            # average over the whole take: per-pulse USB jitter cancels out
+            iv = (clocks[-1] - clocks[0]) / (len(clocks) - 1)
             bpm = 60.0 / (CLOCK_PPQ * iv)
 
             def pos(t):
@@ -806,10 +807,19 @@ class Capture:
         else:
             bpm = round(bpm, 1)
 
+        raw = [(tick(t_on), tick(t_off), p, v, ch) for t_on, t_off, p, v, ch in self.raw]
+        # USB/MIDI latency shows up as every note landing a few ms late. If the
+        # first note sits just off a 16th, slide the whole take onto the grid.
+        if raw:
+            first = min(r[0] for r in raw)
+            grid = tpq // 4
+            off = first - int(round(first / grid)) * grid
+            if abs(off) <= tpq // 16:
+                raw = [(s - off, e - off, p, v, ch) for s, e, p, v, ch in raw]
         notes = []
-        for t_on, t_off, p, v, ch in self.raw:
-            s = max(0, tick(t_on))
-            notes.append((s, max(s + 1, tick(t_off)), p, v, ch))
+        for s, e, p, v, ch in raw:
+            s = max(0, s)
+            notes.append((s, max(s + 1, e), p, v, ch))
         notes.sort()
 
         bar = tpq * 4
