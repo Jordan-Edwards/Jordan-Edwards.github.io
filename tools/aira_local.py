@@ -883,7 +883,12 @@ def song_path(name):
 
 
 def cmd_ports(args):
-    names = list_ports()
+    try:
+        names = list_ports()
+    except Exception as e:                            # no ALSA/CoreMIDI/WinMM
+        print(f"MIDI backend could not start: {e}")
+        print("This machine has no MIDI subsystem - run it on the PC the units are plugged into.")
+        return 1
     if names is None:
         print("No MIDI backend installed.\n  pip install mido python-rtmidi")
         return 1
@@ -899,6 +904,8 @@ def cmd_ports(args):
     s1 = guess(names, "s-1", "s1")
     print(f"\n  J-6 -> {j6 or 'not found - pass --j6 <name>'}")
     print(f"  S-1 -> {s1 or 'not found - pass --s1 <name>'}")
+    xy = guess(names, "op-xy", "opxy", "op xy")
+    print(f"  OP-XY -> {xy or 'not found - pass --to <name>'}")
     ins = list_inputs() or []
     print()
     _print_inputs(ins)
