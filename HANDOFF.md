@@ -15,6 +15,26 @@ cd Jordan-Edwards.github.io
 pip install mido python-rtmidi
 ```
 
+## Read this first: what the job is
+
+The job is **a general toolkit/library for Jordan's own music**, not songs to recreate.
+It is a library of parts that combine with the J-6 and S-1: chord progressions,
+chord arps, S-1 bass lines, leads and polyrhythm loops, in every key. The genres
+are the ones Jordan makes and listens to (synthwave, acid, deep/Chicago house,
+lo-fi, Berlin/melodic techno, UK garage, DnB, trap/dark pop, ambient/cinematic,
+future garage). Jordan MIDI-copies these parts out of the OP-XY onto different
+tracks and synths.
+
+**Not the job:**
+- the Zelda songs
+- the old songbook tunes (Greensleeves, Ode to Joy, Rising Sun, etc.)
+- transcribing any existing song
+
+Those are older, separate work. Don't search Jordan's other local projects for this.
+
+The library is already built on this branch (see Goals 2). What's left needs the
+PC: capture the units' own patterns, then use the sets from the OP-XY.
+
 ## Goals
 
 1. **Pull the patterns stored on the J-6 and S-1 into a MIDI library.** Both
