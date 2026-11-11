@@ -1,34 +1,38 @@
-option,category,item,unit_price_usd,qty_1tool,qty_2tool,qty_4tool,vendor,url,stock_2026-11-11,confidence,notes
-C-INDX,must-buy,Bondtech INDX Toolhead (Smart Head + Link Board + crimp kit),390.00,1,1,1,Bondtech,https://www.bondtech.se/product/bondtech-indx-toolhead/,backorder,fact,Price excl. tax; no lead time given
-C-INDX,must-buy,INDX Link Cable XT30,20.90,1,1,1,Bondtech,https://www.bondtech.se/product-category/indx/,unknown,fact,From-price; 100 cm or 178 cm; may already be included with the toolhead
-C-INDX,must-buy,Bondtech INDX Radial Part Cooling,28.90,1,1,1,Bondtech,https://www.bondtech.se/product-category/indx/,unknown,fact,Ducts-only version is 16.90
-C-INDX,must-buy,INDX Nozzle Silicone Sock 5-pack,4.90,1,1,1,Bondtech,https://www.bondtech.se/product-category/indx/,unknown,fact,
-C-INDX,must-buy,INDX Passive Tool (Steel CHT or 0.4 Standard Flow),45.00,1,2,4,Bondtech,https://www.bondtech.se/product-category/indx/,unknown,fact,Non-abrasive filaments only at present
-C-INDX,must-buy,INDX Tool Dock 1515,14.90,0,2,4,Bondtech,https://www.bondtech.se/product-category/indx/,unknown,fact,Printable from BondtechAB/INDX CAD folder instead
-C-INDX,must-buy,INDX Tool Dock Hardware Accessories,4.90,0,1,1,Bondtech,https://www.bondtech.se/product-category/indx/,unknown,fact,Quantity needed per dock not confirmed
-C-INDX,must-buy,"USB cable, wire, ring terminals, fasteners, heat-set inserts",33.00,1,1,1,local,,n/a,guess,Lump sum
-C-INDX,must-buy,PTFE tube and fittings (lump sum per configuration),,10,15,25,local,,n/a,guess,Quantity columns hold USD for this row
-C-INDX,must-buy,15x15 extrusion for dock rail,15.00,0,1,1,local,,n/a,guess,MakerBeam XL class
-C-INDX,must-buy,Shipping from Sweden,35.00,1,1,1,Bondtech,,n/a,guess,Not researched
-C-INDX,must-buy,US import duty and brokerage (assumed 15% of Bondtech subtotal),,73,85,103,carrier,,n/a,guess,Quantity columns hold USD for this row
-C-INDX,optional,Raspberry Pi 5 4GB (external host),110.00,1,1,1,SparkFun,https://www.sparkfun.com/raspberry-pi-5-4gb.html,in stock,fact,Only if the printer CPU cannot keep up; add about 30 for supply/case/storage
-C-INDX,optional,INDX Eddy Current Scanner,14.90,1,1,1,Bondtech,https://www.bondtech.se/product-category/indx/,unknown,fact,Faster bed meshing
-C-INDX,optional,Eddy Current Scanner Mount,7.90,1,1,1,Bondtech,https://www.bondtech.se/product-category/indx/,unknown,fact,
-C-INDX,optional,Cover Set for INDX Development Kit,9.90,1,1,1,Bondtech,https://www.bondtech.se/product-category/indx/,unknown,fact,Cosmetic
-C-INDX,print,Carriage adapter (K2 X carriage to Smart Head),0,1,1,1,self,https://github.com/BondtechAB/INDX,n/a,estimate,Design from scratch using Bondtech reference STEP; filled nylon or PC
-C-INDX,print,Dock rail bracket to K2 frame,0,0,1,1,self,,n/a,estimate,Design from scratch; must be rigid
-C-INDX,print,Dock bodies,0,0,2,4,self,https://github.com/BondtechAB/INDX,n/a,fact,CAD exists in repo; alternative to buying docks
-C-INDX,print,"Link Board mount, tube guides, cable-chain adapter, nozzle-board parking bracket",0,1,1,1,self,,n/a,estimate,Design from scratch
-C-INDX,own,E3D High Flow ObXidian nozzle,0,0,0,0,owned,https://e3d-online.com/products/high-flow-obxidian-creality-k2-plus-nozzles,n/a,fact,Not usable in INDX; keep in stock toolhead
-C-INDX,own,Creality K2 Plus extruder kit,0,0,0,0,owned,https://store.creality.com/products/k2-plus-extruder-kit,n/a,fact,K2-specific; not usable in INDX
-C2-StealthChanger,must-buy,LDO StealthChanger Base Kit (Sub Kit 1 of 3),89.90,0,1,1,West3D,https://west3d.com/products/stealthchanger-base-kit-sub-kit-1-of-3-by-ldo-motors-based-on-draftshift-design,available,fact,Shuttle assumes a Voron carriage
-C2-StealthChanger,must-buy,LDO StealthChanger Toolhead and Dock Kit (Sub Kit 2 of 3),59.90,0,2,4,West3D,https://west3d.com/products/stealthchanger-toolhead-and-dock-kit-sub-kit-2-of-3-by-ldo-motors-based-on-draftshift-design,sold out,fact,No hotend or extruder included
-C2-StealthChanger,must-buy,TriangleLab Rapido ACE hotend,79.99,0,2,4,West3D,https://west3d.com/products/trianglelab-rapido-ace-hotend-hot-end-hf-uhf-with-104nt-or-pt1000-thermistor,in stock,fact,Sale price
-C2-StealthChanger,must-buy,LDO Orbiter Extruder V2.5,64.99,0,2,4,West3D,https://west3d.com/products/ldo-orbiter-extruder-v2-5-orbiter-v2-5-and-v2-0-to-v2-5-upgrade-kit,in stock,fact,Motor variant unclear
-C2-StealthChanger,must-buy,LDO Nema14 36mm Pancake Stepper Motor (LDO-36STH20-1004AHG),20.99,0,2,4,West3D,https://west3d.com/products/ldo-nema14-36mm-pancake-stepper-motor-ldo-36sth20-1004ahg,in stock,fact,May be redundant depending on extruder variant
-C2-StealthChanger,must-buy,External host (Raspberry Pi 5 4GB plus supply/case/storage),140.00,0,1,1,SparkFun,https://www.sparkfun.com/raspberry-pi-5-4gb.html,in stock,estimate,Pi is 110.00 fact; extras guessed
-C2-StealthChanger,must-buy,24 V PSU upgrade,40.00,0,0,1,unpriced,,n/a,guess,Not priced on a live page
-C2-StealthChanger,must-buy,"Wire, PTFE, fasteners (lump sum per configuration)",,0,60,80,local,,n/a,guess,Quantity columns hold USD for this row
-A-transplant,must-buy,BTT Manta M8P V2.0,81.29,1,1,1,3DJake,https://www.3djake.com/bigtreetech/manta-m8p-v20,in stock,fact,Ex-VAT; ships from EU; host module not included
-A-transplant,must-buy,Raspberry Pi 5 4GB,110.00,1,1,1,SparkFun,https://www.sparkfun.com/raspberry-pi-5-4gb.html,in stock,fact,
-A-transplant,must-buy,"Drivers, PSU, steppers, SSR, wiring, screen",,,,,unpriced,,n/a,guess,Not priced; transplant total guessed at 400-600
+option,category,item,unit_price_usd,qty_1tool,qty_2tool,qty_4tool,ext_1tool_usd,ext_2tool_usd,ext_4tool_usd,vendor,url,stock_2026-11-11,confidence,notes
+C-INDX,must-buy,Bondtech INDX Toolhead (Smart Head + Link Board),390.00,1,1,1,390.00,390.00,390.00,Bondtech,https://www.bondtech.se/product/bondtech-indx-toolhead/,backorder,fact,Price excl. tax; no lead time given
+C-INDX,must-buy,INDX Link Cable XT30,20.90,1,1,1,20.90,20.90,20.90,Bondtech,https://www.bondtech.se/product-category/indx/,not shown on page,fact,From-price; toolhead page says cabling is included while the README lists the Link Cable separately; confirm at checkout
+C-INDX,must-buy,Bondtech INDX Radial Part Cooling,28.90,1,1,1,28.90,28.90,28.90,Bondtech,https://www.bondtech.se/product-category/indx/,not shown on page,fact,Ducts-only version is 16.90
+C-INDX,must-buy,INDX Nozzle Silicone Sock 5-pack,4.90,1,1,1,4.90,4.90,4.90,Bondtech,https://www.bondtech.se/product-category/indx/,not shown on page,fact,
+C-INDX,must-buy,INDX Passive Tool (Steel CHT or 0.4 Standard Flow),45.00,1,2,4,45.00,90.00,180.00,Bondtech,https://www.bondtech.se/product-category/indx/,not shown on page,fact,Non-abrasive filaments only at present
+C-INDX,must-buy,INDX Tool Dock 1515,14.90,0,2,4,0.00,29.80,59.60,Bondtech,https://www.bondtech.se/product-category/indx/,not shown on page,fact,Printable from BondtechAB/INDX CAD folder instead
+C-INDX,must-buy,INDX Tool Dock Hardware Accessories,4.90,0,1,1,0.00,4.90,4.90,Bondtech,https://www.bondtech.se/product-category/indx/,not shown on page,fact,Quantity needed per dock not confirmed
+C-INDX,subtotal,Bondtech subtotal,,,,,489.70,569.40,689.20,Bondtech,,,fact,
+C-INDX,must-buy,"USB cable, wire, ring terminals, fasteners, heat-set inserts (lump sum)",33.00,1,1,1,33.00,33.00,33.00,local,,n/a,guess,
+C-INDX,must-buy,PTFE tube and fittings (lump sum),,1,1,1,10.00,15.00,25.00,local,,n/a,guess,Scales with tool count
+C-INDX,must-buy,15x15 extrusion for dock rail,15.00,0,1,1,0.00,15.00,15.00,local,,n/a,guess,
+C-INDX,must-buy,Shipping from Sweden,35.00,1,1,1,35.00,35.00,35.00,Bondtech,,n/a,guess,Not researched; US shipping unconfirmed
+C-INDX,must-buy,US import duty and brokerage (assumed 15% of Bondtech subtotal),,1,1,1,73.00,85.00,103.00,carrier,,n/a,guess,Not researched
+C-INDX,total,Option C total,,,,,640.70,752.40,900.20,,,,estimate,About a sixth of each total is guessed shipping and duty
+C-INDX,optional,Raspberry Pi 5 4GB (external host),110.00,1,1,1,110.00,110.00,110.00,SparkFun,https://www.sparkfun.com/raspberry-pi-5-4gb.html,in stock,fact,Only if the printer CPU cannot keep up; add about 30 for supply/case/storage
+C-INDX,optional,INDX Eddy Current Scanner,14.90,1,1,1,14.90,14.90,14.90,Bondtech,https://www.bondtech.se/product-category/indx/,not shown on page,fact,Faster bed meshing
+C-INDX,optional,Eddy Current Scanner Mount,7.90,1,1,1,7.90,7.90,7.90,Bondtech,https://www.bondtech.se/product-category/indx/,not shown on page,fact,
+C-INDX,optional,Cover Set for INDX Development Kit,9.90,1,1,1,9.90,9.90,9.90,Bondtech,https://www.bondtech.se/product-category/indx/,not shown on page,fact,Cosmetic
+C-INDX,optional,INDX MGN-12 X-Carriage,9.90,1,1,1,9.90,9.90,9.90,Bondtech,https://www.bondtech.se/product/indx-mgn-12-x-carriage/,not shown on page,fact,Needs MGN12H block and Voron 6 mm belt paths; probably not a K2 fit
+C-INDX,print,Carriage adapter (K2 X carriage to Smart Head),0,1,1,1,0,0,0,self,https://github.com/BondtechAB/INDX,n/a,estimate,Design from scratch using Bondtech reference STEP; filled nylon or PC
+C-INDX,print,Dock rail bracket to K2 frame,0,0,1,1,0,0,0,self,,n/a,estimate,Design from scratch; must be rigid
+C-INDX,print,Dock bodies,0,0,2,4,0,0,0,self,https://github.com/BondtechAB/INDX,n/a,fact,CAD exists in repo; alternative to buying docks
+C-INDX,print,"Link Board mount, tube guides, cable-chain adapter, parking bracket for stock toolhead electronics",0,1,1,1,0,0,0,self,,n/a,estimate,Design from scratch
+C-INDX,own,E3D High Flow ObXidian nozzle,0,0,0,0,0,0,0,owned,https://e3d-online.com/products/high-flow-obxidian-creality-k2-plus-nozzles,n/a,fact,Not usable in INDX; keep in stock toolhead
+C-INDX,own,Creality K2 Plus extruder kit,0,0,0,0,0,0,0,owned,https://store.creality.com/products/k2-plus-extruder-kit,n/a,fact,K2-specific; not usable in INDX
+C2-StealthChanger,must-buy,LDO StealthChanger Base Kit (Sub Kit 1 of 3),89.90,0,1,1,0.00,89.90,89.90,West3D,https://west3d.com/products/stealthchanger-base-kit-sub-kit-1-of-3-by-ldo-motors-based-on-draftshift-design,available,fact,Shuttle assumes a Voron carriage
+C2-StealthChanger,must-buy,LDO StealthChanger Toolhead and Dock Kit (Sub Kit 2 of 3),59.90,0,2,4,0.00,119.80,239.60,West3D,https://west3d.com/products/stealthchanger-toolhead-and-dock-kit-sub-kit-2-of-3-by-ldo-motors-based-on-draftshift-design,sold out,fact,No hotend or extruder included
+C2-StealthChanger,must-buy,TriangleLab Rapido ACE hotend,79.99,0,2,4,0.00,159.98,319.96,West3D,https://west3d.com/products/trianglelab-rapido-ace-hotend-hot-end-hf-uhf-with-104nt-or-pt1000-thermistor,in stock,fact,Sale price
+C2-StealthChanger,must-buy,LDO Orbiter Extruder V2.5,64.99,0,2,4,0.00,129.98,259.96,West3D,https://west3d.com/products/ldo-orbiter-extruder-v2-5-orbiter-v2-5-and-v2-0-to-v2-5-upgrade-kit,in stock,fact,Motor variant unclear
+C2-StealthChanger,must-buy,LDO Nema14 36mm Pancake Stepper Motor (LDO-36STH20-1004AHG),20.99,0,2,4,0.00,41.98,83.96,West3D,https://west3d.com/products/ldo-nema14-36mm-pancake-stepper-motor-ldo-36sth20-1004ahg,in stock,fact,May be redundant depending on extruder variant
+C2-StealthChanger,must-buy,External host (Raspberry Pi 5 4GB plus supply/case/storage),140.00,0,1,1,0.00,140.00,140.00,SparkFun,https://www.sparkfun.com/raspberry-pi-5-4gb.html,in stock,estimate,Pi is 110.00 fact; extras guessed
+C2-StealthChanger,must-buy,24 V PSU upgrade,40.00,0,0,1,0.00,0.00,40.00,unpriced,,n/a,guess,Not priced on a live page
+C2-StealthChanger,must-buy,"Wire, PTFE, fasteners (lump sum)",,0,1,1,0.00,60.00,80.00,local,,n/a,guess,
+C2-StealthChanger,total,Option C2 total,,,,,0.00,741.64,1253.38,,,,estimate,Includes a kit that is currently sold out
+A-transplant,must-buy,BTT Manta M8P V2.0,81.29,1,1,1,81.29,81.29,81.29,3DJake,https://www.3djake.com/bigtreetech/manta-m8p-v20,in stock,fact,Ex-VAT; ships from EU; host module not included
+A-transplant,must-buy,Raspberry Pi 5 4GB,110.00,1,1,1,110.00,110.00,110.00,SparkFun,https://www.sparkfun.com/raspberry-pi-5-4gb.html,in stock,fact,
+A-transplant,must-buy,"Drivers, PSU, steppers, SSR, wiring, screen",,,,,,,,unpriced,,n/a,guess,Not priced; transplant total guessed at 400-600
