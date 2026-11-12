@@ -13,6 +13,12 @@ Nothing below has been tested on hardware unless it says so.
 - **Effects that "do less" (Mother Gate/Color, Nitro, Punch):** knob ranges were checked against the Field and match (`G:\OPX1_AGENTS_20261110\fxranges\REPORT.md`). Next test on the device: put the track's send to that effect at maximum, then try Trim one or two steps higher. Still unverified: Mother's ported code was never compared against the Field code in the emulator.
 - **Mic vocoder (Field-style, no setup):** not started. Needs platform work (the Nightcall job).
 
+### Device report from Jordan, 12 November evening (0.2.10 running, boot write done)
+
+- **Both vocoders (vocoder, vocoder-f) ignore the voice.** They make whatever track they sit on sound vocoded. Cause, from the lane notes: the Field vocoder needs a second input, the modulator, written into its scratch before every block (`G:\OPX1_AGENTS_20261110\tune\vocoder-sound\HANDOFF.md`, lines 19-43; on the Field that is its selected input: mic, line or USB). A send effect on the OP-XY only receives the track's own audio, so the track ends up as both carrier and modulator. Fix: give the effect the OP-XY's live input (mic or line) as the modulator, which means finding the stock input buffer in OS 1.2.1 and exposing it to effects. This is the same platform job as the Nightcall mic path; do them together.
+- **Nitro still "doesn't work that well".** Not yet tested with the send at maximum and Trim raised. Do that first; if it is still weak, compare Nitro's capsule against the Field code in the emulator, as was done for dsynth and DrWave.
+- Castle and the 0.2.10 synths load.
+
 ## Dubious (new OP-XY synth, design only)
 
 - One instrument, five layers: forest (time of day), dirt (crunch), ore (bell sparkle), water (filter, turtles), underworld (reversed swell, inward reverb). Knobs: time, dig, glint, deep / tide, rift, air, wear.
