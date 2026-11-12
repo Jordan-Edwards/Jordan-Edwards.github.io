@@ -15,7 +15,13 @@
 - **Try on the device:** send to Nitro at full, Trim +48 or +54 dB, then Feedback or Follow up and Lows/Highs moved inward.
 - **Fix once you have heard it:** change Nitro's `trim` default in `definition.json` from 0.681818 (+42 dB) to 0.772727 (+48) or 0.863636 (+54) in a 0.2.11 build. Loudness stays the same and the filter gets 6-12 dB more drive. Very hot tracks may crunch. Not built yet: no point before you have listened.
 
-**Still running:** a search for the earlier Castle build. **The OP-XY was not in file-transfer mode this morning**, so nothing on it was checked or changed.
+**Castle: not found.** No file or folder named castle exists in any OP-XY or OPX1 project folder on G:, H: or F:, nor in the SDK's catalog or docs. The only mentions are the Dubious/Hamlet design notes, which describe Castle's look (pixel art, rising flames, the OP-1 vector feel) as a model to imitate. So Castle was most likely a machine from somewhere else (a community build or download), not something built here. Jordan to say where it came from.
+
+**Clean-room rewrite: started (Jordan's decision, 12 November).** Goal: every engine rewritten so it sounds the same but contains no TE code, data or art, so it can be released.
+- The wall: `G:\CLEANROOM-DIRTY\<engine>` is the spec side (may use the Field-derived models). `G:\CLEANROOM\<engine>` is the only folder the build side may read: SPEC.md in plain words and measurements, reference renders with their dry inputs, a neutral score.py, and WALL-LOG.md with every file's sha256.
+- Build-side agents get no paths outside `G:\CLEANROOM\<engine>` and are told never to open the Field material. This is enforced by instruction and logged, not by separate machines; the audit recommends moving the dirty material offline before a public release.
+- Pilot: the Nitro-like filter. Spec capture running. Next: a fresh build-side agent writes new DSP from the spec and scores it against the renders.
+- Before any public release: a lawyer on the distribution form (a patcher that the user runs on their own OS, never a shipped `os.ldr`), the names, and the art. **The OP-XY was not in file-transfer mode this morning**, so nothing on it was checked or changed.
 
 
 Written 12 November 2026 at the end of a long cloud session, so the work can carry on from the PC.
