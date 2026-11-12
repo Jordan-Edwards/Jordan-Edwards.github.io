@@ -60,6 +60,24 @@ multiple of a record size also scores — a "768-byte record" is usually eight 9
 ones. It is validated both ways: it recovers a planted record structure with its exact
 header bytes, and claims nothing at all on random noise.
 
+## Taking it with you
+
+```sh
+python3 tools/make_portable.py
+```
+
+writes two files into `dist/`:
+
+- `s1-j6-songbook.html` — the whole songbook in **one file**, song data and MIDI
+  embedded. Opens straight from a USB stick or an email attachment: no network, no
+  web server, nothing to install.
+- `s1-j6-portable.zip` — that file plus the loose `.mid` files, `aira_local.py` and a
+  `START-HERE.txt`.
+
+Both are committed, so they can be downloaded from the repo directly. Re-run the
+script after `build_songs.py`; the zip is reproducible, so an unchanged songbook
+produces no diff.
+
 ## Rebuilding
 
 ```sh

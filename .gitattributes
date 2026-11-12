@@ -3,3 +3,6 @@
 
 # MIDI files are binary - never line-ending normalize them
 *.mid binary
+
+# The portable bundle is binary too
+*.zip binary
