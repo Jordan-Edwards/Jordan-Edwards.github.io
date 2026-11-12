@@ -1,0 +1,469 @@
+diff --git a/core/interface/loops/loopsEngine.cpp b/core/interface/loops/loopsEngine.cpp
+new file mode 100644
+index 0000000..116c63d
+--- /dev/null
++++ b/core/interface/loops/loopsEngine.cpp
+@@ -0,0 +1,324 @@
++#ifdef TRACKER_MINI
++
++#include "loops/loopsEngine.h"
++
++#include "mtAudioEngine.h"
++#include "mtSequencer.h"
++#include "mtStructs.h"
++
++LoopsEngine loopsEngine;
++
++static constexpr int8_t kLoopNote = 60; // C5: the sample at its stored speed
++static constexpr int8_t kNoVelocity = -1;
++static constexpr uint32_t kMinLoopFrames = 16;
++
++//==================================================================================================
++// main loop side
++//==================================================================================================
++void LoopsEngine::open(const LoopsConfig& config)
++{
++    AudioNoInterrupts();
++    cfg = config;
++    if (cfg.track >= 8)
++    {
++        cfg.track = 7;
++    }
++    machine.reset();
++    machine.setCycleSteps(cfg.cycleSteps);
++    stepEdge.reset();
++    queueHead = 0;
++    queueTail = 0;
++    reverseOnVoice = false;
++    publish();
++    opened = true;
++    AudioInterrupts();
++}
++
++void LoopsEngine::close()
++{
++    bool cut = false;
++    uint8_t track = 0;
++
++    AudioNoInterrupts();
++    if (opened)
++    {
++        cut = machine.isSounding() && voiceIsOurs();
++        track = cfg.track;
++        opened = false; // from here on audioTick() does nothing
++        machine.reset();
++        queueHead = 0;
++        queueTail = 0;
++        publish();
++    }
++    AudioInterrupts();
++
++    if (cut)
++    {
++        releaseVoice(track);
++    }
++}
++
++void LoopsEngine::setConfig(const LoopsConfig& config)
++{
++    AudioNoInterrupts();
++    const uint8_t track = cfg.track; // the track only moves through ecTrack
++    cfg = config;
++    cfg.track = track;
++    machine.setCycleSteps(cfg.cycleSteps);
++    AudioInterrupts();
++}
++
++void LoopsEngine::post(EngineCommand command, uint8_t arg)
++{
++    AudioNoInterrupts();
++    if (opened)
++    {
++        const uint8_t next = (uint8_t)((queueTail + 1) % kQueueSize);
++        if (next != queueHead) // full: drop it, the audio side empties the queue every 2.9 ms
++        {
++            queue[queueTail].command = command;
++            queue[queueTail].arg = arg;
++            queueTail = next;
++        }
++    }
++    AudioInterrupts();
++}
++
++LoopsStatus LoopsEngine::status() const
++{
++    LoopsStatus s;
++
++    AudioNoInterrupts();
++    s.open = opened;
++    s.state = pubState;
++    s.sounding = pubSounding;
++    s.armQuant = pubArmQuant;
++    s.track = pubTrack;
++    s.heldSlice = pubHeldSlice;
++    s.fireCount = pubFireCount;
++    s.regionStart = pubRegionStart;
++    s.regionEnd = pubRegionEnd;
++    AudioInterrupts();
++
++    return s;
++}
++
++//==================================================================================================
++// audio callback side: no allocation, no SD card, no logging
++//==================================================================================================
++AUDIO_CORE_RAM void LoopsEngine::audioTick()
++{
++    if (!opened)
++    {
++        return;
++    }
++
++    const bool playing = sequencer.isPlay();
++    const uint16_t globalPos = sequencer.ptrPlayer->globalPos;
++
++    while (queueHead != queueTail)
++    {
++        const QueuedCommand q = queue[queueHead];
++        queueHead = (uint8_t)((queueHead + 1) % kQueueSize);
++
++        switch (q.command)
++        {
++            case ecToggle: perform(machine.onCommand(loops::cmdToggle, 0, playing)); break;
++            case ecPadDown: perform(machine.onCommand(loops::cmdPadDown, q.arg, playing)); break;
++            case ecPadUp: perform(machine.onCommand(loops::cmdPadUp, 0, playing)); break;
++            case ecRearm: perform(machine.onCommand(loops::cmdRearm, 0, playing)); break;
++            case ecTrack:
++                if (q.arg < 8 && q.arg != cfg.track)
++                {
++                    // the loop moves: silence the old voice, then come back in on the new one
++                    if (machine.isSounding())
++                    {
++                        cutVoice();
++                        machine.clearSounding();
++                    }
++                    cfg.track = q.arg;
++                    perform(machine.onCommand(loops::cmdRearm, 0, playing));
++                }
++                break;
++            default: break;
++        }
++    }
++
++    const bool edge = stepEdge.update(playing, globalPos);
++    const bool lost = machine.isSounding() && !voiceIsOurs();
++
++    perform(machine.onBlock(playing, edge, globalPos, lost));
++
++    publish();
++}
++
++AUDIO_CORE_FLASH void LoopsEngine::perform(const loops::Step& step)
++{
++    switch (step.action)
++    {
++        case loops::actFireFull:
++            if (!fire(true, 0))
++            {
++                // nothing started: do not leave an older note of ours hanging
++                cutVoice();
++                machine.reset();
++            }
++            break;
++        case loops::actFireSlice:
++            if (!fire(false, step.slice))
++            {
++                cutVoice();
++                machine.reset();
++            }
++            break;
++        case loops::actStop: cutVoice(); break;
++        default: break;
++    }
++}
++
++// Play the instrument as a loop on our track voice. The player reads play mode, points and
++// tune from the instrument inside noteOn (the voice is cut first, so play() runs at once and
++// nothing is deferred). We put our values in for that one call and put the owner's values
++// back before returning. This runs in the audio callback, so the sequencer cannot run in
++// between and never sees the borrowed values.
++AUDIO_CORE_FLASH bool LoopsEngine::fire(bool full, uint8_t slice)
++{
++    if (cfg.instr >= kSampleInstrumentsCount || cfg.track >= 8)
++    {
++        return false;
++    }
++
++    strInstrument& ins = mtProject.instrument[cfg.instr];
++    if (ins.isActive != 1)
++    {
++        return false;
++    }
++
++    uint16_t a = ins.startPoint;
++    uint16_t b = ins.endPoint;
++    if (!full)
++    {
++        const loops::Region r = loops::sliceBounds(a, b, slice, cfg.slices);
++        a = r.start;
++        b = r.end;
++    }
++    if (!loops::regionPlayable(a, b))
++    {
++        return false;
++    }
++    // too few frames to loop safely (a tiny sample cut into 16)
++    if (((uint64_t)ins.sample.length * (uint32_t)(b - a)) / 65535u < kMinLoopFrames)
++    {
++        return false;
++    }
++
++    const uint8_t savedPlayMode = ins.playMode;
++    const uint16_t savedStart = ins.startPoint;
++    const uint16_t savedLoop1 = ins.loopPoint1;
++    const uint16_t savedLoop2 = ins.loopPoint2;
++    const uint16_t savedEnd = ins.endPoint;
++    const int8_t savedTune = ins.tune;
++    const int8_t savedFineTune = ins.fineTune;
++
++    ins.playMode = (cfg.direction == loops::dirPingPong) ? playModePingpong : playModeLoopForward;
++    ins.startPoint = a;
++    ins.loopPoint1 = a;
++    ins.loopPoint2 = b;
++    ins.endPoint = b;
++
++    if (cfg.fit)
++    {
++        // the player adds tuneResample itself: take it out so the note lands on fitSemitones
++        ins.tune = (int8_t)(cfg.fitSemitones - ins.tuneResample);
++        ins.fineTune = cfg.fitCents;
++    }
++    else if (cfg.octave != 0)
++    {
++        int tune = savedTune + 12 * cfg.octave;
++        if (tune > 48)
++        {
++            tune = 48;
++        }
++        if (tune < -48)
++        {
++            tune = -48;
++        }
++        ins.tune = (int8_t)tune;
++    }
++
++    // Reverse is the stock loop with the stock "reverse playback" step effect; a plain note
++    // (effect 0) clears it again.
++    uint8_t fxId = 0;
++    uint8_t fxVal = 0;
++    if (cfg.direction == loops::dirReverse)
++    {
++        fxId = Sequencer::strFxConsts::FX_TYPE_REVERSE_PLAYBACK;
++        fxVal = 1;
++    }
++
++    playerEngine& player = instrumentPlayer[cfg.track];
++    player.noteOff(Sequencer::STEP_NOTE_OFF_CUT);
++    const uint8_t started = player.noteOn(cfg.instr, kLoopNote, kNoVelocity, fxId, fxVal, 0, 0);
++
++    ins.playMode = savedPlayMode;
++    ins.startPoint = savedStart;
++    ins.loopPoint1 = savedLoop1;
++    ins.loopPoint2 = savedLoop2;
++    ins.endPoint = savedEnd;
++    ins.tune = savedTune;
++    ins.fineTune = savedFineTune;
++
++    reverseOnVoice = (fxId != 0);
++
++    if (!started)
++    {
++        return false;
++    }
++    // The values above were only on loan for the call. If the player put the note off until
++    // later it would start with the owner's settings instead of ours: refuse it. With the
++    // cut in front this is not expected to happen; the check is here to fail safe.
++    if (player.getLengthIfPlaying() == 0)
++    {
++        return false;
++    }
++
++    pubRegionStart = a;
++    pubRegionEnd = b;
++    pubFireCount = (uint16_t)(pubFireCount + 1);
++    return true;
++}
++
++AUDIO_CORE_FLASH void LoopsEngine::cutVoice()
++{
++    if (cfg.track < 8 && voiceIsOurs())
++    {
++        releaseVoice(cfg.track);
++    }
++}
++
++// Cut the voice and take our reverse step effect off it, so the track is left as we found it.
++AUDIO_CORE_FLASH void LoopsEngine::releaseVoice(uint8_t track)
++{
++    instrumentPlayer[track].noteOff(Sequencer::STEP_NOTE_OFF_CUT);
++    if (reverseOnVoice)
++    {
++        instrumentPlayer[track].endFx(Sequencer::strFxConsts::FX_TYPE_REVERSE_PLAYBACK, 0);
++        reverseOnVoice = false;
++    }
++}
++
++AUDIO_CORE_RAM bool LoopsEngine::voiceIsOurs() const
++{
++    return instrumentPlayer[cfg.track].currentInstrument_idx == cfg.instr;
++}
++
++AUDIO_CORE_RAM void LoopsEngine::publish()
++{
++    pubState = machine.getState();
++    pubSounding = machine.isSounding();
++    pubArmQuant = machine.getArmQuant();
++    pubTrack = cfg.track;
++    pubHeldSlice = machine.getSlice();
++}
++
++#endif // TRACKER_MINI
+diff --git a/core/interface/loops/loopsEngine.h b/core/interface/loops/loopsEngine.h
+new file mode 100644
+index 0000000..01562a4
+--- /dev/null
++++ b/core/interface/loops/loopsEngine.h
+@@ -0,0 +1,109 @@
++#ifndef INTERFACE_LOOPS_LOOPSENGINE_H_
++#define INTERFACE_LOOPS_LOOPSENGINE_H_
++
++#ifdef TRACKER_MINI
++
++#include <stdint.h>
++
++#include "loops/loopsLogic.h"
++
++// Loops: the audio-side glue. It owns the state machine, turns its decisions into notes on
++// one of the stock track voices and tells the screen what is going on.
++//
++// Threads: post(), setConfig(), open(), close() and status() are called from the main loop
++// (the screen). audioTick() is called from the audio callback, right after the sequencer.
++// The two sides share state the way the rest of CE does: the screen writes inside
++// AudioNoInterrupts()/AudioInterrupts(), the audio side publishes volatile fields.
++
++struct LoopsConfig
++{
++    uint8_t instr = 0;
++    uint8_t track = 7;                      // 0..7; only read by open(), later changes use cmdTrack
++    uint8_t direction = loops::dirForward;  // loops::Direction
++    uint8_t slices = 8;                     // 8 or 16
++    uint8_t fit = 0;                        // 1 = repitch to whole bars with the two values below
++    int8_t fitSemitones = 0;
++    int8_t fitCents = 0;
++    int8_t octave = 0;                      // FREE: octave shift on top of the instrument's tune
++    uint16_t cycleSteps = 0;                // steps between re-fires while the pattern plays, 0 = none
++};
++
++struct LoopsStatus
++{
++    uint8_t open;
++    uint8_t state;       // loops::State
++    uint8_t sounding;    // the voice on `track` is ours
++    uint8_t armQuant;    // 16 = waiting for a bar, 4 = waiting for a beat
++    uint8_t track;
++    uint8_t heldSlice;   // valid in stStutter
++    uint16_t fireCount;  // goes up by one for every note fired
++    uint16_t regionStart; // region of the last note fired
++    uint16_t regionEnd;
++};
++
++class LoopsEngine
++{
++  public:
++    enum EngineCommand : uint8_t
++    {
++        ecNone,
++        ecToggle,
++        ecPadDown, // arg = slice
++        ecPadUp,
++        ecRearm,
++        ecTrack, // arg = new track
++    };
++
++    // main loop side
++    void open(const LoopsConfig& config);
++    void close();
++    void setConfig(const LoopsConfig& config);
++    void post(EngineCommand command, uint8_t arg = 0);
++    LoopsStatus status() const;
++    bool isOpen() const { return opened; }
++
++    // audio callback side
++    void audioTick();
++
++  private:
++    struct QueuedCommand
++    {
++        uint8_t command;
++        uint8_t arg;
++    };
++    static constexpr uint8_t kQueueSize = 8;
++
++    void perform(const loops::Step& step);
++    bool fire(bool full, uint8_t slice);
++    void cutVoice();
++    void releaseVoice(uint8_t track);
++    bool voiceIsOurs() const;
++    void publish();
++
++    volatile bool opened = false;
++    volatile bool reverseOnVoice = false;
++
++    LoopsConfig cfg;
++    loops::Machine machine;
++    loops::StepEdge stepEdge;
++
++    QueuedCommand queue[kQueueSize];
++    volatile uint8_t queueHead = 0; // next to read (audio)
++    volatile uint8_t queueTail = 0; // next to write (main loop)
++
++    // published by the audio side
++    volatile uint8_t pubState = loops::stIdle;
++    volatile uint8_t pubSounding = 0;
++    volatile uint8_t pubArmQuant = 16;
++    volatile uint8_t pubTrack = 7;
++    volatile uint8_t pubHeldSlice = 0;
++    volatile uint16_t pubFireCount = 0;
++    volatile uint16_t pubRegionStart = 0;
++    volatile uint16_t pubRegionEnd = 65535;
++};
++
++extern LoopsEngine loopsEngine;
++
++#endif // TRACKER_MINI
++
++#endif /* INTERFACE_LOOPS_LOOPSENGINE_H_ */
+diff --git a/core/source/Tracker.cpp b/core/source/Tracker.cpp
+index 5cb9724..1889405 100644
+--- a/core/source/Tracker.cpp
++++ b/core/source/Tracker.cpp
+@@ -5,6 +5,9 @@
+ #include "core/interface.h"
+ #include "elapsedMillis.h"
+ #include "fileManager.h"
++#ifdef TRACKER_MINI
++#include "loops/loopsEngine.h"
++#endif
+ #include "mtAudioEngine.h"
+ #include "mtAudioExport.h"
+ #include "mtConfig.h"
+@@ -202,6 +205,9 @@ void TrackerImpl::updateAudioBuffers(void* left, void* right, int length)
+ 
+     float updateIntervalSeconds = length / kAudioSampleRate;
+     sequencer.tick(updateIntervalSeconds);
++#ifdef TRACKER_MINI
++    loopsEngine.audioTick(); // Loops: does nothing unless the Loops screen is open
++#endif
+ 
+     engine.update();
+ 

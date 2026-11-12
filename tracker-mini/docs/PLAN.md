@@ -147,3 +147,55 @@ beat lamps, 1/16 px. Stopping after any step still shows the idea.
     and points are unchanged.
 11. Tell us: is the playhead smooth (a phone video helps), any click at the loop point, the CPU % in Config while a loop and a
     full pattern play, and anything that felt wrong.
+
+## 11. As built (slice 1), and where it differs from the plan above
+
+State: builds with `./build.sh loops`; 43 host tests pass (`tests/run.sh`). Not run on a device.
+
+Checked in the source before writing (section 5, "read these first"):
+1. `fxReversePlayback` takes any non-zero value (1 is used). A later note with another effect, or none, ends it (`seqFx` calls
+   `endFx` on the previous effect). Loops also ends it itself when it lets go of the voice.
+2. Something does defer: `envelopeNoteOn` only calls `play()` at once when the envelope is idle; otherwise it stacks the note
+   and plays it later, after our values are restored. `noteOff(STEP_NOTE_OFF_CUT)` sets the envelope idle first, so with the cut
+   in front `play()` runs inside `noteOn` and the borrow-and-restore holds. Without the cut it would not. Nothing else re-reads
+   points or play mode unless the instrument editor sets `refreshRegister`; a fine-tune LFO does re-read `fineTune`.
+3. The stock preview passes velocity as a Volume effect. Loops passes velocity -1 (none), so the instrument's own volume rules.
+4. `playLoopForward` accepts start = loop 1 and loop 2 = end, and pulls loop 2 one frame inside the end.
+5. `sequencer.stop()` only releases tracks the pattern has open notes on; our voice keeps playing. Stock Play, however, cuts all
+   8 voices and `play()` clears every voice's step effects.
+
+Differences from the plan:
+- **Play does not post Rearm.** Because of point 5 the state machine watches the pattern start from the audio side: a running
+  loop fires again on the pattern's first step (tested). Stopping the pattern leaves the loop running.
+- **Pad release while the pattern plays** is the ARMED state with a quantum of 4 steps instead of a fifth state. The slice keeps
+  sounding until the beat.
+- **A pad pressed while ARMED** counts as coming from a running loop: releasing it goes back to waiting for the beat.
+- **Fit cents** follow the player, which moves in a straight line between two semitones, not on a log scale. The shift shown on
+  the screen is still the true value in semitones. Error stays within the 1-cent step (tested).
+- **Track change** is its own command: the old voice is cut, then the loop comes back on the new track (at the bar if the
+  pattern plays).
+- **Middle, Up and Down act once per press.** Stock turns a held D-pad key into repeated presses; Left and Right may repeat.
+- **Value keys while the menu is up** move the menu selection, as stock. A pad that went down as a pad always comes up as one,
+  even if Shift is pressed in between.
+- **Ruler:** beat ticks are drawn up to 8 bars, bar ticks only above that. This keeps the waveform control's command list at
+  about 2.2 KB, close to what a stock waveform control sends in one go.
+- **Beat lamps and the arm countdown** are drawn by the playhead control, since they move.
+- **Guards added:** a region under 16 frames is not played; a note that fails to start cuts any older note of ours and goes to
+  idle. After every note-on the engine checks that the player really started (`getLengthIfPlaying()`); if the player had put
+  the note off until later, it would start with the instrument's own settings, so that case is refused instead.
+- **Section 2, `interfaceButtonGame`:** 11 stock screens register it, but the File screen does not. It makes no difference:
+  the menu switches through `eventSwitchModule` and the `modulesButtons` table, not through each screen's key handlers.
+- `kFnBindableModulesCount` is also used where the saved config is validated (`source/mtConfig.cpp`).
+- **Patches:** four numbered files instead of one. `build.sh` applies them in name order. `.gitattributes` keeps them
+  byte-exact, because two of the stock files they touch have Windows line ends.
+- **Build name:** `Loops_s1`, as planned.
+
+Not done:
+- The built `.ptf`, `out/SHA256SUMS` and the README table are left until after review.
+- DESIGN section 7 says the development build logs the real display-list size. That log line was not added.
+- Section 8 step 3, rebuilding stock to confirm it is still byte-identical, was not repeated: `./build.sh` (stock) applies no
+  patches, so nothing it uses has changed.
+
+Measured from the build (linker printout, stock -> Loops): flash 1,702,396 -> 1,716,076 B (+13,680 B); SRAM_DTC 343,392 ->
+346,680 B (+3,288 B); SRAM_ITC 114,640 -> 115,048 B (+408 B); SRAM_OC and EXTERNAL_RAM unchanged. SRAM_DTC is now 96.2 % full
+(about 13 KB free), which is the tightest budget for later slices.

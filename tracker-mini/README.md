@@ -15,6 +15,19 @@ Where things stand right now is in [STATUS.md](STATUS.md).
 
 Checksums are in [`out/SHA256SUMS`](out/SHA256SUMS).
 
+## Loops (in review, not flashed yet)
+
+"Loops" is our looper screen for the Mini: the current sample as a full-width
+waveform, looped forward, reversed or ping-pong with a sweeping playhead, fitted
+to bars, with slices on the four value keys. It is new code on top of CE, kept
+as patches in [`patches/`](patches/). The design is in
+[`docs/DESIGN.md`](docs/DESIGN.md), the build plan and what was actually built
+in [`docs/PLAN.md`](docs/PLAN.md).
+
+It builds (`./build.sh loops`) and its logic passes tests on a computer
+(`tests/run.sh`). It has not run on a Mini. The built file is added to the table
+above after review.
+
 ## Hands-off flashing (development console)
 
 With the `dev` build on the Mini and an empty file named `.develop` in the root
@@ -53,6 +66,12 @@ Mini yet.
 
 Linux x86_64 with `git`, `make`, `python3`, `curl`. The script downloads the Arm
 toolchain Polyend's CI uses (GNU Arm Embedded 10.3-2021.10).
+
+```bash
+tests/run.sh        # host tests for the Loops logic (needs g++ or clang++)
+```
+
+The tests compile the same `loopsLogic.cpp` that goes into the firmware.
 
 ## Licence
 

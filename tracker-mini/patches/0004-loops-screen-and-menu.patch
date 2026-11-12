@@ -1,0 +1,1373 @@
+diff --git a/core/interface/configEditor/configMenu.cpp b/core/interface/configEditor/configMenu.cpp
+index 90c89a7..4514d8f 100644
+--- a/core/interface/configEditor/configMenu.cpp
++++ b/core/interface/configEditor/configMenu.cpp
+@@ -340,21 +340,21 @@ cMenuItem melOpenManual3(menuCredits,
+ #ifdef TRACKER_MINI
+ 
+ const strItemTypeListTextWithAction setupFunctionKeys1{ &mtConfig.interface.functionKeysBinding[0],
+-	                                          kMenuModulesCount,  kModuleNamesList, setFunctionKey1 };
++	                                          kFnBindableModulesCount,  kModuleNamesList, setFunctionKey1 };
+ const strItemTypeListTextWithAction setupFunctionKeys2{ &mtConfig.interface.functionKeysBinding[1],
+-                                              kMenuModulesCount,  kModuleNamesList, setFunctionKey2 };
++                                              kFnBindableModulesCount,  kModuleNamesList, setFunctionKey2 };
+ const strItemTypeListTextWithAction setupFunctionKeys3{ &mtConfig.interface.functionKeysBinding[2],
+-                                              kMenuModulesCount, kModuleNamesList, setFunctionKey3 };
++                                              kFnBindableModulesCount, kModuleNamesList, setFunctionKey3 };
+ const strItemTypeListTextWithAction setupFunctionKeys4{ &mtConfig.interface.functionKeysBinding[3],
+-	                                          kMenuModulesCount,  kModuleNamesList, setFunctionKey4 };
++	                                          kFnBindableModulesCount,  kModuleNamesList, setFunctionKey4 };
+ const strItemTypeListTextWithAction setupFunctionKeys5{ &mtConfig.interface.functionKeysBinding[4],
+-	                                          kMenuModulesCount, kModuleNamesList, setFunctionKey5 };
++	                                          kFnBindableModulesCount, kModuleNamesList, setFunctionKey5 };
+ const strItemTypeListTextWithAction setupFunctionKeys6{ &mtConfig.interface.functionKeysBinding[5],
+-                                              kMenuModulesCount, kModuleNamesList, setFunctionKey6 };
++                                              kFnBindableModulesCount, kModuleNamesList, setFunctionKey6 };
+ const strItemTypeListTextWithAction setupFunctionKeys7{ &mtConfig.interface.functionKeysBinding[6],
+-                                              kMenuModulesCount, kModuleNamesList, setFunctionKey7 };
++                                              kFnBindableModulesCount, kModuleNamesList, setFunctionKey7 };
+ const strItemTypeListTextWithAction setupFunctionKeys8{ &mtConfig.interface.functionKeysBinding[7],
+-                                              kMenuModulesCount, kModuleNamesList, setFunctionKey8 };
++                                              kFnBindableModulesCount, kModuleNamesList, setFunctionKey8 };
+ 
+ cMenuItem melFunctionButtons1(menuFunctionButtons,
+                               "Fn1",
+diff --git a/core/interface/configEditor/connfigMenuActions.cpp b/core/interface/configEditor/connfigMenuActions.cpp
+index e2d23af..67d6994 100644
+--- a/core/interface/configEditor/connfigMenuActions.cpp
++++ b/core/interface/configEditor/connfigMenuActions.cpp
+@@ -203,7 +203,7 @@ void checkFuncitonKey(int key)
+             int firstFreeFunction = 0;
+             bool assigned;
+ 
+-            for (uint8_t functionIdx = 0; functionIdx < kMenuModulesCount; functionIdx++)
++            for (uint8_t functionIdx = 0; functionIdx < kFnBindableModulesCount; functionIdx++)
+             {
+                 assigned = false;
+                 for (uint8_t keyIdx = 0; keyIdx < 8; keyIdx++)
+diff --git a/core/interface/core/interface.cpp b/core/interface/core/interface.cpp
+index 16ce2b2..f0606ad 100644
+--- a/core/interface/core/interface.cpp
++++ b/core/interface/core/interface.cpp
+@@ -11,6 +11,9 @@
+ 
+ #include "imageViewer/imageViewer.h"
+ #include "instrumentEditor/instrumentEditor.h"
++#ifdef TRACKER_MINI
++#include "loops/loops.h"
++#endif
+ #include "masterParams/masterParams.h"
+ #include "patternEditor/patternEditor.h"
+ #include "performanceMode/performanceMode.h"
+@@ -66,11 +69,19 @@ const hModule Interface::modules[modulesCount] = {
+     &sampleRecorder,   // 8
+     &performanceMode,  // 9
+     &imageViewer,      // 10
+-    nullptr,           // 11
++#ifdef TRACKER_MINI
++    &loopsScreen, // 11
++#else
++    nullptr, // 11
++#endif
+     &masterParams,     // 12
+ };
+ 
++#ifdef TRACKER_MINI
++const uint8_t Interface::modulesButtonsCount = 12;
++#else
+ const uint8_t Interface::modulesButtonsCount = 11;
++#endif
+ const uint32_t Interface::modulesButtons[modulesButtonsCount][3] = {
+     { interfaceButtonPerformance, 9, 0 },
+     { interfaceButtonMaster, 12, 0 },
+@@ -83,6 +94,12 @@ const uint32_t Interface::modulesButtons[modulesButtonsCount][3] = {
+     { interfaceButtonSampleLoad, 1, 0 },
+     { interfaceButtonSong, 4, 0 },
+     { interfaceButtonConfig, 7, 0 },
++#ifdef TRACKER_MINI
++    // Loops. No key produces interfaceButtonGame. The Mini menu switches modules through
++    // this table (eventSwitchModule -> switchModuleByButton), so this one row makes Loops
++    // reachable from every screen.
++    { interfaceButtonGame, 11, 0 },
++#endif
+ };
+ 
+ //=======================================================================
+diff --git a/core/interface/core/interfaceMenuPopup.cpp b/core/interface/core/interfaceMenuPopup.cpp
+index f40162c..3c6ca31 100644
+--- a/core/interface/core/interfaceMenuPopup.cpp
++++ b/core/interface/core/interfaceMenuPopup.cpp
+@@ -3,7 +3,14 @@
+ 
+ InterfaceMenuPopup mtMenuPopup;
+ 
++// Modules that can be bound to an Fn key in Config. Loops is left out on purpose: a saved
++// config then never holds an entry that stock firmware could not read.
++const uint8_t kFnBindableModulesCount = 11;
++#ifdef TRACKER_MINI
++const uint8_t kMenuModulesCount = 12;
++#else
+ const uint8_t kMenuModulesCount = 11;
++#endif
+ const char* const kModuleNamesList[kMenuModulesCount] = { "Pattern",
+                                                           "Instrument Parameters",
+                                                           "Sample Playback",
+@@ -14,7 +21,11 @@ const char* const kModuleNamesList[kMenuModulesCount] = { "Pattern",
+                                                           "Config",
+                                                           "Perform",
+                                                           "Sample Editor",
+-                                                          "Sample Recorder" };
++                                                          "Sample Recorder",
++#ifdef TRACKER_MINI
++                                                          "Loops",
++#endif
++};
+ 
+ #ifdef TRACKER_MINI
+ 
+@@ -37,6 +48,7 @@ const InterfaceMenuPopup::ModuleRef InterfaceMenuPopup::modules[kMenuModulesCoun
+     { mtInterface.modules[9], interfaceButtonPerformance, 0, &performModes },
+     { mtInterface.modules[6], interfaceButtonSampleEdit, 0, nullptr },
+     { mtInterface.modules[8], interfaceButtonSampleRec, 0, nullptr },
++    { mtInterface.modules[11], interfaceButtonGame, 0, nullptr },
+ 
+ };
+ 
+diff --git a/core/interface/core/interfaceMenuPopup.h b/core/interface/core/interfaceMenuPopup.h
+index f4323aa..19c923a 100644
+--- a/core/interface/core/interfaceMenuPopup.h
++++ b/core/interface/core/interfaceMenuPopup.h
+@@ -6,6 +6,7 @@
+ #include <stdint.h>
+ 
+ extern const uint8_t kMenuModulesCount;
++extern const uint8_t kFnBindableModulesCount;
+ extern const char* const kModuleNamesList[];
+ 
+ #ifdef TRACKER_MINI
+diff --git a/core/interface/loops/fLoops.cpp b/core/interface/loops/fLoops.cpp
+new file mode 100644
+index 0000000..862a1f5
+--- /dev/null
++++ b/core/interface/loops/fLoops.cpp
+@@ -0,0 +1,649 @@
++#ifdef TRACKER_MINI
++
++#include "loops/loops.h"
++
++#include <math.h>
++#include <string.h>
++
++#include "core/graphicProcessing.h"
++#include "core/interface.h"
++#include "core/interfaceMenuPopup.h"
++
++#include "fileManager.h"
++#include "mtAudioEngine.h"
++#include "mtSequencer.h"
++#include "mtStructs.h"
++
++cLoops loopsScreen;
++static cLoops* LS = &loopsScreen;
++
++static constexpr uint32_t kHeadRefreshMs = 16;
++static constexpr uint32_t kArmedBlinkMs = 125; // 4 Hz
++static constexpr int8_t kMaxOctave = 2;
++
++static constexpr uint8_t kNavMiddle = 1;
++static constexpr uint8_t kNavUp = 2;
++static constexpr uint8_t kNavDown = 4;
++
++static void functSwitchModule(uint8_t button);
++static void functMenu(uint8_t state);
++static void functPlayAction();
++static void functMiddle(uint8_t state);
++static void functUp(uint8_t state);
++static void functDown(uint8_t state);
++static void functLeft();
++static void functRight();
++static void functFn(uint8_t button, uint8_t state);
++static void functValueKey(uint8_t button, uint8_t state);
++
++//==================================================================================================
++// module life cycle
++//==================================================================================================
++void cLoops::start(uint32_t options)
++{
++    (void)options;
++    moduleRefresh = 1;
++    menuOpen = false;
++    navDown = 0;
++
++    setInputs();
++
++    // The menu calls start() again when you pick the screen you are already on: keep a
++    // running loop running in that case.
++    const bool sameSession =
++      loopsEngine.isOpen() && playable && instr == mtProject.values.lastUsedInstrument;
++
++    if (!sameSession)
++    {
++        loopsEngine.close();
++        memset(fnShift, 0, sizeof(fnShift));
++        padMask = 0;
++        currentPad = -1;
++        stripData.playing = -1;
++        stripData.held = -1;
++
++        loadInstrument();
++
++        if (playable)
++        {
++            tempo = sequencer.getCurrentTempo();
++            computeFit();
++            loopsEngine.open(makeConfig());
++
++            lastFireCount = loopsEngine.status().fireCount;
++            head.reset(regionA, regionB, slices, 1);
++        }
++    }
++
++    headData = strLoopHeadData();
++    headData.lamps = playable ? 1 : 0;
++    headData.regionStartPx = (uint16_t)(((uint32_t)regionA * 800) / 65536);
++    headData.regionEndPx = (uint16_t)(((uint32_t)regionB * 800 + 65535) / 65536);
++    shownHead = headData;
++    headTimer = 0;
++    blinkTimer = 0;
++
++    showDefaultScreen();
++}
++
++void cLoops::stop()
++{
++    // The loop stops when you leave (it is cut only if the voice is still ours).
++    loopsEngine.close();
++
++    moduleRefresh = 0;
++    padMask = 0;
++    currentPad = -1;
++
++    // Mini: clearAllButtons() leaves Fn1..4 and the value keys alone, so hand them back
++    // to their stock jobs here.
++    mtInterface.initSpecialMiniTrackerButtons();
++}
++
++void cLoops::setInputs()
++{
++    ip->setButtonObj(interfaceButtonParams, buttonPress, functSwitchModule);
++    ip->setButtonObj(interfaceButtonPerformance, buttonPress, functSwitchModule);
++    ip->setButtonObj(interfaceButtonFile, buttonPress, functSwitchModule);
++    ip->setButtonObj(interfaceButtonConfig, buttonPress, functSwitchModule);
++    ip->setButtonObj(interfaceButtonMaster, buttonPress, functSwitchModule);
++    ip->setButtonObj(interfaceButtonSamplePlay, buttonPress, functSwitchModule);
++    ip->setButtonObj(interfaceButtonSampleEdit, buttonPress, functSwitchModule);
++    ip->setButtonObj(interfaceButtonSampleRec, buttonPress, functSwitchModule);
++    ip->setButtonObj(interfaceButtonSampleLoad, buttonPress, functSwitchModule);
++    ip->setButtonObj(interfaceButtonSong, buttonPress, functSwitchModule);
++    ip->setButtonObj(interfaceButtonPattern, buttonPress, functSwitchModule);
++    ip->setButtonObj(interfaceButtonGame, buttonPress, functSwitchModule);
++
++    ip->setButtonObj(interfaceButtonMiniMenu, functMenu);
++
++    ip->setButtonObj(interfaceButtonPlay, buttonPress, functPlayAction);
++
++    ip->setButtonObj(interfaceButtonMiniMiddle, functMiddle);
++    ip->setButtonObj(interfaceButtonUp, functUp);
++    ip->setButtonObj(interfaceButtonDown, functDown);
++    ip->setButtonObj(interfaceButtonLeft, buttonPress, functLeft);
++    ip->setButtonObj(interfaceButtonRight, buttonPress, functRight);
++
++    // Inside Loops the plain Fn keys are soft keys and the value keys are pads.
++    ip->setButtonObj(interfaceButtonMiniFn1, functFn);
++    ip->setButtonObj(interfaceButtonMiniFn2, functFn);
++    ip->setButtonObj(interfaceButtonMiniFn3, functFn);
++    ip->setButtonObj(interfaceButtonMiniFn4, functFn);
++
++    ip->setButtonObj(interfaceButtonMiniPlus10, functValueKey);
++    ip->setButtonObj(interfaceButtonMiniPlus1, functValueKey);
++    ip->setButtonObj(interfaceButtonMiniMinus1, functValueKey);
++    ip->setButtonObj(interfaceButtonMiniMinus10, functValueKey);
++}
++
++void cLoops::update()
++{
++    if (!playable || menuOpen)
++    {
++        return;
++    }
++
++    const LoopsStatus status = loopsEngine.status();
++
++    // follow the tempo: in FIT the next note fired uses the new pitch
++    const float nowTempo = sequencer.getCurrentTempo();
++    if (fabsf(nowTempo - tempo) > 0.01f)
++    {
++        tempo = nowTempo;
++        if (fitOn)
++        {
++            computeFit();
++            loopsEngine.setConfig(makeConfig());
++            refreshSoftKeys();
++            refreshWave();
++        }
++        refreshInfo(true);
++    }
++
++    refreshBadge(status.state, ((uint32_t)blinkTimer / kArmedBlinkMs) % 2 == 0, false);
++
++    const bool active = status.sounding || status.state == loops::stArmed ||
++                        head.view().flashStartMs > 0 || head.view().flashEndMs > 0 ||
++                        sequencer.isPlay();
++
++    if (headTimer >= kHeadRefreshMs && (active || headWasActive))
++    {
++        uint32_t dt = headTimer;
++        headTimer = 0;
++        if (dt > 250)
++        {
++            dt = 250;
++        }
++        refreshHead(status, (uint16_t)dt);
++        headWasActive = active;
++    }
++}
++
++//==================================================================================================
++// the instrument
++//==================================================================================================
++void cLoops::loadInstrument()
++{
++    playable = false;
++    message = nullptr;
++    instr = mtProject.values.lastUsedInstrument;
++
++    if (instr >= kSampleInstrumentsCount)
++    {
++        message = "Loops plays sample instruments. Pick a sample instrument first.";
++        return;
++    }
++
++    strInstrument* instrument = &mtProject.instrument[instr];
++    strSampleMemory* sampleMemory = &mtProject.sampleMemory[instr];
++
++    if (instrument->isActive != 1 || instrument->sample.length == 0)
++    {
++        message = "This instrument slot is empty. Load a sample first.";
++        return;
++    }
++    if (instrument->sample.type != mtSampleTypeWaveFile ||
++        instrument->playMode == playModeWavetable || instrument->playMode == playModeGranular)
++    {
++        message = "Wavetable and granular instruments cannot be looped here.";
++        return;
++    }
++    if (sampleMemory->isStreamed)
++    {
++        message = "This sample streams from the card. Loops needs a sample held in memory.";
++        return;
++    }
++    if (!loops::regionPlayable(instrument->startPoint, instrument->endPoint))
++    {
++        message = "The start and end points are too close together.";
++        return;
++    }
++
++    regionA = instrument->startPoint;
++    regionB = instrument->endPoint;
++    sampleFrames = instrument->sample.length;
++
++    // The stock code turns the sample into 600 columns per channel; we fold them to 200 bars.
++    spectrum[0].init();
++    spectrum[1].init();
++    GP.spectrumResetZoom(0, instrument->sample.length, &zoom);
++    GP.processSpectrum(
++      sampleMemory, instrument, &zoom, &spectrum[0], strSampleMemory::Channel::kLeft);
++
++    const bool stereo = newFileManager.isInstrumentStereo(instr);
++    if (stereo)
++    {
++        GP.processSpectrum(
++          sampleMemory, instrument, &zoom, &spectrum[1], strSampleMemory::Channel::kRight);
++    }
++
++    loops::reduceBars(spectrum[0].upperData,
++                      spectrum[0].lowerData,
++                      stereo ? spectrum[1].upperData : nullptr,
++                      stereo ? spectrum[1].lowerData : nullptr,
++                      waveData.barUp,
++                      waveData.barDown);
++
++    if (padBase + strLoopStripData::kPads > slices)
++    {
++        padBase = 0;
++    }
++
++    playable = true;
++}
++
++void cLoops::computeFit()
++{
++    if (!fitOn)
++    {
++        fit.valid = false;
++        return;
++    }
++
++    fit = loops::fitToBars(sampleFrames, regionA, regionB, tempo, loops::quarterBarsAt(barsIndex));
++    if (fit.valid)
++    {
++        return;
++    }
++
++    // the tempo moved this bar count out of range: take the nearest one that works
++    const int best = loops::autoBarsIndex(sampleFrames, regionA, regionB, tempo);
++    if (best < 0)
++    {
++        fitOn = false;
++        return;
++    }
++    barsIndex = (int8_t)best;
++    fit = loops::fitToBars(sampleFrames, regionA, regionB, tempo, loops::quarterBarsAt(barsIndex));
++}
++
++LoopsConfig cLoops::makeConfig()
++{
++    LoopsConfig config;
++    config.instr = instr;
++    config.track = track;
++    config.direction = direction;
++    config.slices = slices;
++    config.fit = (fitOn && fit.valid) ? 1 : 0;
++    config.fitSemitones = fit.semitones;
++    config.fitCents = fit.cents;
++    config.octave = octave;
++    config.cycleSteps =
++      config.fit ? loops::cycleSteps(loops::quarterBarsAt(barsIndex), direction) : 0;
++    return config;
++}
++
++void cLoops::applyConfig(bool rearm)
++{
++    computeFit();
++    loopsEngine.setConfig(makeConfig());
++    if (rearm)
++    {
++        loopsEngine.post(LoopsEngine::ecRearm);
++    }
++
++    refreshSoftKeys();
++    refreshInfo(true);
++    refreshWave();
++    refreshStrip(stripData.playing, stripData.held, true);
++}
++
++//==================================================================================================
++// what the keys do
++//==================================================================================================
++void cLoops::toggleLoop()
++{
++    loopsEngine.post(LoopsEngine::ecToggle);
++}
++
++void cLoops::nextDirection()
++{
++    direction = (uint8_t)((direction + 1) % loops::dirCount);
++    applyConfig(true);
++}
++
++void cLoops::toggleSync()
++{
++    if (!fitOn)
++    {
++        const int best = loops::autoBarsIndex(sampleFrames, regionA, regionB, tempo);
++        if (best < 0)
++        {
++            return; // no bar count is within two octaves: stay FREE
++        }
++        barsIndex = (int8_t)best;
++        fitOn = true;
++    }
++    else
++    {
++        fitOn = false;
++    }
++    applyConfig(true);
++}
++
++void cLoops::toggleSlices()
++{
++    if (slices == 8)
++    {
++        slices = 16;
++        padBase = (uint8_t)(padBase * 2);
++    }
++    else
++    {
++        slices = 8;
++        padBase = (uint8_t)((padBase / 8) * 4);
++    }
++    if (padBase + strLoopStripData::kPads > slices)
++    {
++        padBase = (uint8_t)(slices - strLoopStripData::kPads);
++    }
++    applyConfig(false);
++}
++
++void cLoops::nextTrack()
++{
++    track = (uint8_t)((track + 1) % 8);
++    loopsEngine.post(LoopsEngine::ecTrack, track);
++    refreshSoftKeys();
++    refreshInfo(true);
++}
++
++// direction +1 = twice as fast, -1 = half speed
++void cLoops::changeSpeed(int8_t dir)
++{
++    if (fitOn)
++    {
++        // faster = fewer bars
++        const int8_t wanted = (int8_t)(barsIndex - dir);
++        if (wanted < 0 || wanted >= loops::kBarChoices)
++        {
++            return;
++        }
++        if (!loops::fitToBars(sampleFrames, regionA, regionB, tempo, loops::quarterBarsAt(wanted))
++               .valid)
++        {
++            return; // more than two octaves away
++        }
++        barsIndex = wanted;
++    }
++    else
++    {
++        const int8_t wanted = (int8_t)(octave + dir);
++        if (wanted < -kMaxOctave || wanted > kMaxOctave)
++        {
++            return;
++        }
++        octave = wanted;
++    }
++    applyConfig(true);
++}
++
++void cLoops::movePads(int8_t dir)
++{
++    const int wanted = (int)padBase + dir * strLoopStripData::kPads;
++    if (wanted < 0 || wanted + strLoopStripData::kPads > slices)
++    {
++        return;
++    }
++    padBase = (uint8_t)wanted;
++    refreshStrip(stripData.playing, stripData.held, true);
++}
++
++void cLoops::padKey(uint8_t pad, uint8_t state)
++{
++    if (!playable || pad >= strLoopStripData::kPads)
++    {
++        return;
++    }
++
++    const uint8_t bit = (uint8_t)(1 << pad);
++
++    if (state == buttonPress)
++    {
++        padMask |= bit;
++        currentPad = (int8_t)pad;
++        loopsEngine.post(LoopsEngine::ecPadDown, (uint8_t)(padBase + pad));
++    }
++    else if (state == buttonRelease)
++    {
++        if (!(padMask & bit))
++        {
++            return;
++        }
++        padMask &= (uint8_t)~bit;
++
++        if (padMask == 0)
++        {
++            currentPad = -1;
++            loopsEngine.post(LoopsEngine::ecPadUp);
++        }
++        else if (pad == currentPad)
++        {
++            // another pad is still held: go on with that one
++            for (uint8_t i = 0; i < strLoopStripData::kPads; i++)
++            {
++                if (padMask & (1 << i))
++                {
++                    currentPad = (int8_t)i;
++                    loopsEngine.post(LoopsEngine::ecPadDown, (uint8_t)(padBase + i));
++                    break;
++                }
++            }
++        }
++    }
++    // buttonHold: ignored
++}
++
++//==================================================================================================
++// input callbacks
++//==================================================================================================
++static void functSwitchModule(uint8_t button)
++{
++    LS->eventFunct(eventSwitchModule, LS, &button, 0);
++}
++
++static void functMenu(uint8_t state)
++{
++    if (state == buttonPress)
++    {
++        mtMenuPopup.showModulePopup(LS);
++    }
++    else if (state == buttonRelease)
++    {
++        mtMenuPopup.hideModulePopup(LS);
++    }
++}
++
++// Stock Play. A running loop starts again with the pattern, on its first step: the state
++// machine sees the pattern start from the audio side.
++static void functPlayAction()
++{
++    if (sequencer.getSeqState() == Sequencer::SEQ_STATE_STOP)
++    {
++        for (uint8_t i = 0; i < 8; i++)
++        {
++            instrumentPlayer[i].noteOff(Sequencer::STEP_NOTE_OFF_CUT);
++        }
++
++        if (LS->buttons->isButtonPressed(interfaceButtonShift))
++        {
++            sequencer.playSong();
++        }
++        else
++        {
++            sequencer.playPattern();
++        }
++    }
++    else
++    {
++        sequencer.stop();
++    }
++}
++
++// The D-pad and Middle auto-repeat as presses while held. Middle, Up and Down act once per
++// press here; Left and Right may repeat.
++static bool navPressedOnce(uint8_t bit, uint8_t state)
++{
++    if (state == buttonRelease)
++    {
++        LS->navDown &= (uint8_t)~bit;
++        return false;
++    }
++    if (state != buttonPress || (LS->navDown & bit))
++    {
++        return false;
++    }
++    LS->navDown |= bit;
++    return true;
++}
++
++static void functMiddle(uint8_t state)
++{
++    if (navPressedOnce(kNavMiddle, state) && LS->playable)
++    {
++        LS->toggleLoop();
++    }
++}
++
++static void functUp(uint8_t state)
++{
++    if (navPressedOnce(kNavUp, state) && LS->playable)
++    {
++        LS->changeSpeed(1);
++    }
++}
++
++static void functDown(uint8_t state)
++{
++    if (navPressedOnce(kNavDown, state) && LS->playable)
++    {
++        LS->changeSpeed(-1);
++    }
++}
++
++static void functLeft()
++{
++    if (LS->playable)
++    {
++        LS->movePads(-1);
++    }
++}
++
++static void functRight()
++{
++    if (LS->playable)
++    {
++        LS->movePads(1);
++    }
++}
++
++static void functFn(uint8_t button, uint8_t state)
++{
++    if (button < interfaceButtonMiniFn1 || button > interfaceButtonMiniFn4)
++    {
++        return;
++    }
++    const uint8_t n = (uint8_t)(button - interfaceButtonMiniFn1);
++
++    if (state == buttonPress)
++    {
++        LS->fnShift[n] = LS->buttons->isButtonPressed(interfaceButtonShift);
++    }
++
++    const bool shifted = LS->fnShift[n];
++
++    if (state == buttonRelease)
++    {
++        LS->fnShift[n] = false;
++    }
++
++    if (shifted)
++    {
++        // Shift + Fn keeps its stock job: the Shift-layer module shortcut. This may leave
++        // the screen, so nothing of ours is touched after the call.
++        LS->ip->processButtonsInput(
++          InterfaceMenuPopup::modules[mtConfig.interface.functionKeysBinding[4 + n]].button, state);
++        return;
++    }
++
++    if (state != buttonPress || !LS->playable || mtMenuPopup.isPopupVisible())
++    {
++        return;
++    }
++
++    switch (n)
++    {
++        case 0: LS->nextDirection(); break;
++        case 1: LS->toggleSync(); break;
++        case 2: LS->toggleSlices(); break;
++        case 3: LS->nextTrack(); break;
++        default: break;
++    }
++}
++
++static void functValueKey(uint8_t button, uint8_t state)
++{
++    static const int8_t amounts[strLoopStripData::kPads] = { 10, 1, -1, -10 };
++
++    if (button < interfaceButtonMiniPlus10 || button > interfaceButtonMiniMinus10)
++    {
++        return;
++    }
++    const uint8_t pad = (uint8_t)(button - interfaceButtonMiniPlus10);
++
++    // a pad that went down as a pad always comes up as a pad
++    if (state == buttonRelease && (LS->padMask & (1 << pad)))
++    {
++        LS->padKey(pad, state);
++        return;
++    }
++
++    if (LS->buttons->isButtonPressed(interfaceButtonShift))
++    {
++        // stock: Shift + value key = master volume
++        if (state == buttonPress || state == buttonHold)
++        {
++            mtInterface.changeMasterVolume(amounts[pad]);
++        }
++        return;
++    }
++
++    if (mtMenuPopup.isPopupVisible())
++    {
++        // stock: the value keys move the menu selection
++        if (state == buttonPress || state == buttonHold)
++        {
++            LS->ip->processPotsInput(interfacePot0, amounts[pad], state);
++        }
++        else if (state == buttonRelease)
++        {
++            LS->ip->processPotsInput(interfacePot0, 0, state);
++        }
++        return;
++    }
++
++    LS->padKey(pad, state);
++}
++
++#endif // TRACKER_MINI
+diff --git a/core/interface/loops/gLoops.cpp b/core/interface/loops/gLoops.cpp
+new file mode 100644
+index 0000000..c787276
+--- /dev/null
++++ b/core/interface/loops/gLoops.cpp
+@@ -0,0 +1,427 @@
++#ifdef TRACKER_MINI
++
++#include "loops/loops.h"
++
++#include <stdio.h>
++#include <string.h>
++
++#include "mtAudioEngine.h"
++#include "mtSequencer.h"
++
++// Layout, 800 x 480 (docs: tracker-mini/docs/DESIGN.md section 3)
++static constexpr uint16_t kInfoY = 34;
++static constexpr uint16_t kInfoH = 32;
++static constexpr uint16_t kWaveY = 92;
++static constexpr uint16_t kWaveH = 280;
++static constexpr uint16_t kStripY = 378;
++static constexpr uint16_t kStripH = 40;
++
++static constexpr uint32_t kColorLoop = 0x30CB3F;
++static constexpr uint32_t kColorArmed = 0xFEF749;
++static constexpr uint32_t kColorArmedDim = 0x6E6B20;
++
++// Colour tables handed to the controls. Filled from the active theme each time the screen opens.
++static uint32_t headColors[4];
++static uint32_t stripColors[4];
++static uint32_t waveColors[2];
++static uint32_t softKeyColors[4];
++static uint32_t infoColors[4];
++static uint32_t badgeColors[4];
++
++static const char* const directionNames[loops::dirCount] = { "FORWARD", "REVERSE", "PING-PONG" };
++static const char* const softKeyNames[4] = { "Direction", "Sync", "Slices", "Track" };
++static const char* const trackNames[8] = { "1", "2", "3", "4", "5", "6", "7", "8" };
++static const char* const barsNames[loops::kBarChoices] = { "1/4 BAR", "1/2 BAR", "1 BAR", "2 BARS",
++                                                          "4 BARS",  "8 BARS",  "16 BARS" };
++
++void cLoops::initDisplayControls()
++{
++    const auto& theme = display.getTheme();
++
++    headColors[0] = theme.waveformProgressColors[0];
++    headColors[1] = theme.waveformProgressColors[1];
++    headColors[2] = kColorArmed;
++    headColors[3] = kColorLoop;
++
++    stripColors[0] = theme.activeLabelsColors[3];
++    stripColors[1] = theme.activeLabelsColors[0];
++    stripColors[2] = theme.activeLabelsColors[1];
++    stripColors[3] = theme.waveformProgressColors[1];
++
++    waveColors[0] = theme.waveformColors[0];
++    waveColors[1] = theme.waveformColors[1];
++
++    // soft keys: the value on top is bright, the name below is grey
++    softKeyColors[0] = theme.activeLabelsColors[3];
++    softKeyColors[1] = theme.activeLabelsColors[1];
++    softKeyColors[2] = theme.activeLabelsColors[2];
++    softKeyColors[3] = theme.activeLabelsColors[0];
++
++    for (int i = 0; i < 4; i++)
++    {
++        infoColors[i] = theme.activeLabelsColors[i];
++        badgeColors[i] = theme.activeLabelsColors[i];
++    }
++    infoColors[0] = theme.activeLabelsColors[3];
++
++    strControlProperties prop;
++
++    // The head is created first: the earliest-created control is drawn last, on top.
++    prop.x = 0;
++    prop.y = kWaveY;
++    prop.w = 800;
++    prop.h = kWaveH;
++    prop.style = 0;
++    prop.colors = headColors;
++    prop.data = &headData;
++    headControl = display.createControl<cLoopHead>(&prop);
++
++    prop.y = kStripY;
++    prop.h = kStripH;
++    prop.style = controlStyleFont1;
++    prop.colors = stripColors;
++    prop.data = &stripData;
++    stripControl = display.createControl<cLoopStrip>(&prop);
++
++    prop.y = kWaveY;
++    prop.h = kWaveH;
++    prop.style = controlStyleFont5;
++    prop.colors = waveColors;
++    prop.data = &waveData;
++    waveControl = display.createControl<cLoopWave>(&prop);
++
++    // info row: state, tempo, length and pitch, track
++    strControlProperties prop2;
++    for (uint8_t i = 0; i < 4; i++)
++    {
++        infoText[i][0] = 0;
++        prop2.text = infoText[i];
++        prop2.value = 0;
++        prop2.colors = (i == 0) ? badgeColors : infoColors;
++        prop2.style = (controlStyleCenterY | controlStyleFont2);
++        prop2.x = 200 * i + 12;
++        prop2.y = kInfoY;
++        prop2.w = 188;
++        prop2.h = kInfoH;
++        infoLabel[i] = display.createControl<cLabel>(&prop2);
++    }
++
++    // soft keys over Fn1..Fn4: value on top, name below
++    strControlProperties prop3;
++    for (uint8_t i = 0; i < 4; i++)
++    {
++        prop3.text = (char*)"";
++        prop3.value = 1;
++        prop3.colors = softKeyColors;
++        prop3.style = (controlStyleCenterX | controlStyleCenterY | controlStyleFont4);
++        prop3.x = 200 * i + 100;
++        prop3.y = 424;
++        prop3.w = 194;
++        prop3.h = 55;
++        keyLabel[i] = display.createControl<cLabel>(&prop3);
++        display.setControlStyle2(keyLabel[i],
++                                 (controlStyleCenterX | controlStyleCenterY | controlStyleFont5));
++        display.setControlText2(keyLabel[i], softKeyNames[i]);
++    }
++
++    strControlProperties prop4;
++    prop4.text = nullptr;
++    prop4.colors = nullptr;
++    prop4.value = (1 << 2) | (1 << 4) | (1 << 6); // dividers between the four keys
++    prop4.style = controlStyleNoTransparency | controlStyleShow;
++    prop4.x = 0;
++    prop4.w = 800;
++    prop4.y = 425;
++    prop4.h = 54;
++    bgLabel = display.createControl<cBgLabel>(&prop4);
++
++    strControlProperties prop5;
++    prop5.text = (char*)"";
++    prop5.value = 0;
++    prop5.colors = infoColors;
++    prop5.style = (controlStyleCenterX | controlStyleCenterY | controlStyleFont2);
++    prop5.x = 400;
++    prop5.y = kWaveY;
++    prop5.w = 760;
++    prop5.h = kWaveH;
++    messageLabel = display.createControl<cLabel>(&prop5);
++
++    // everything is drawn afresh by showDefaultScreen()
++    shownState = 255;
++    shownTrack = 255;
++    shownTempo10 = -1;
++}
++
++void cLoops::showDefaultScreen()
++{
++    titleBar->show(true);
++    titleBar->setTitle("Loops");
++    titleBar->showCurrentInstrumentOnRightLabel();
++
++    if (playable)
++    {
++        display.setControlHide(messageLabel);
++        display.refreshControl(messageLabel);
++
++        display.setControlShow(waveControl);
++        display.setControlShow(stripControl);
++        display.setControlShow(headControl);
++        for (uint8_t i = 0; i < 4; i++)
++        {
++            display.setControlShow(infoLabel[i]);
++            display.setControlShow(keyLabel[i]);
++        }
++
++        refreshWave();
++        refreshStrip(stripData.playing, stripData.held, true);
++        refreshSoftKeys();
++        refreshInfo(true);
++        refreshBadge(loopsEngine.status().state, true, true);
++        display.refreshControl(headControl);
++    }
++    else
++    {
++        display.setControlHide(waveControl);
++        display.setControlHide(stripControl);
++        display.setControlHide(headControl);
++        display.refreshControl(waveControl);
++        display.refreshControl(stripControl);
++        display.refreshControl(headControl);
++        for (uint8_t i = 0; i < 4; i++)
++        {
++            display.setControlHide(infoLabel[i]);
++            display.refreshControl(infoLabel[i]);
++            display.setControlHide(keyLabel[i]);
++            display.refreshControl(keyLabel[i]);
++        }
++
++        display.setControlText(messageLabel, message != nullptr ? message : "");
++        display.setControlShow(messageLabel);
++        display.refreshControl(messageLabel);
++    }
++
++    display.refreshControl(bgLabel);
++
++    display.synchronizeRefresh();
++}
++
++void cLoops::hideControlsUnderMiniMenu()
++{
++    // Called by the menu popup every time it shows. Until start() runs again, update()
++    // leaves the hidden controls alone.
++    menuOpen = true;
++
++    display.setControlHide(waveControl);
++    display.setControlHide(stripControl);
++    display.setControlHide(headControl);
++    display.setControlHide(messageLabel);
++
++    display.refreshControl(waveControl);
++    display.refreshControl(stripControl);
++    display.refreshControl(headControl);
++    display.refreshControl(messageLabel);
++}
++
++void cLoops::refreshSoftKeys()
++{
++    display.setControlText(keyLabel[0], directionNames[direction % loops::dirCount]);
++    display.setControlText(keyLabel[1], fitOn ? "FIT" : "FREE");
++    display.setControlText(keyLabel[2], slices == 16 ? "16" : "8");
++    display.setControlText(keyLabel[3], trackNames[track % 8]);
++
++    for (uint8_t i = 0; i < 4; i++)
++    {
++        display.refreshControl(keyLabel[i]);
++    }
++}
++
++void cLoops::refreshBadge(uint8_t state, bool blinkOn, bool force)
++{
++    if (!force && state == shownState && (state != loops::stArmed || blinkOn == shownBlink))
++    {
++        return;
++    }
++    shownState = state;
++    shownBlink = blinkOn;
++
++    const auto& theme = display.getTheme();
++    const char* text = "READY";
++    uint32_t color = theme.activeLabelsColors[0];
++
++    switch (state)
++    {
++        case loops::stArmed:
++            text = "ARMED";
++            color = blinkOn ? kColorArmed : kColorArmedDim;
++            break;
++        case loops::stLoop:
++            text = "LOOP";
++            color = kColorLoop;
++            break;
++        case loops::stStutter:
++            text = "STUTTER";
++            color = theme.waveformProgressColors[1];
++            break;
++        default: break;
++    }
++
++    badgeColors[0] = color;
++    strncpy(infoText[0], text, sizeof(infoText[0]) - 1);
++    infoText[0][sizeof(infoText[0]) - 1] = 0;
++
++    display.setControlText(infoLabel[0], infoText[0]);
++    display.setControlColors(infoLabel[0], badgeColors);
++    display.refreshControl(infoLabel[0]);
++}
++
++void cLoops::refreshInfo(bool force)
++{
++    // tempo
++    const int32_t tempo10 = (int32_t)(tempo * 10.0f + 0.5f);
++    if (force || tempo10 != shownTempo10)
++    {
++        shownTempo10 = tempo10;
++        snprintf(infoText[1], sizeof(infoText[1]), "%d.%d BPM", (int)(tempo10 / 10), (int)(tempo10 % 10));
++        display.setControlText(infoLabel[1], infoText[1]);
++        display.refreshControl(infoLabel[1]);
++        force = true; // the pitch shift follows the tempo
++    }
++
++    // length and pitch shift
++    if (force)
++    {
++        if (fitOn && fit.valid)
++        {
++            int32_t semis10 = (int32_t)(fit.semis * 10.0f + (fit.semis >= 0.0f ? 0.5f : -0.5f));
++            const char sign = (semis10 < 0) ? '-' : '+';
++            if (semis10 < 0)
++            {
++                semis10 = -semis10;
++            }
++            snprintf(infoText[2],
++                     sizeof(infoText[2]),
++                     "%s  %c%d.%d st",
++                     barsNames[barsIndex],
++                     sign,
++                     (int)(semis10 / 10),
++                     (int)(semis10 % 10));
++        }
++        else if (octave != 0)
++        {
++            snprintf(infoText[2], sizeof(infoText[2]), "FREE  %c%d oct", octave > 0 ? '+' : '-', octave > 0 ? octave : -octave);
++        }
++        else
++        {
++            snprintf(infoText[2], sizeof(infoText[2]), "FREE");
++        }
++        display.setControlText(infoLabel[2], infoText[2]);
++        display.refreshControl(infoLabel[2]);
++    }
++
++    // track
++    if (force || track != shownTrack)
++    {
++        shownTrack = track;
++        snprintf(infoText[3], sizeof(infoText[3]), "TRK %d", track + 1);
++        display.setControlText(infoLabel[3], infoText[3]);
++        display.refreshControl(infoLabel[3]);
++    }
++}
++
++void cLoops::refreshWave()
++{
++    waveData.regionStartPx = (uint16_t)(((uint32_t)regionA * 800) / 65536);
++    waveData.regionEndPx = (uint16_t)(((uint32_t)regionB * 800 + 65535) / 65536);
++    waveData.slices = slices;
++    waveData.rulerBeats = (fitOn && fit.valid) ? (uint8_t)loops::quarterBarsAt(barsIndex) : 0;
++
++    display.refreshControl(waveControl);
++}
++
++void cLoops::refreshStrip(int8_t playing, int8_t held, bool force)
++{
++    if (!force && playing == stripData.playing && held == stripData.held &&
++        slices == stripData.count && padBase == stripData.padBase)
++    {
++        return;
++    }
++
++    stripData.count = slices;
++    stripData.padBase = padBase;
++    stripData.playing = playing;
++    stripData.held = held;
++
++    display.refreshControl(stripControl);
++}
++
++// Runs every 16 ms while something moves. Reads the play position from the voice itself, so
++// the line cannot drift away from the sound.
++void cLoops::refreshHead(const LoopsStatus& status, uint16_t dtMs)
++{
++    if (status.fireCount != lastFireCount)
++    {
++        lastFireCount = status.fireCount;
++        head.reset(status.regionStart,
++                   status.regionEnd,
++                   slices,
++                   (direction == loops::dirReverse) ? -1 : 1);
++    }
++
++    int8_t playingSlice = -1;
++
++    if (status.sounding)
++    {
++        const uint16_t pos = instrumentPlayer[status.track].getWavePosition();
++        head.advance(pos, dtMs);
++        playingSlice = (int8_t)loops::sliceAt(pos, regionA, regionB, slices);
++    }
++    else
++    {
++        head.fade(dtMs);
++    }
++
++    const loops::HeadView& view = head.view();
++    const bool seqPlaying = sequencer.isPlay();
++
++    strLoopHeadData next;
++    next.show = status.sounding;
++    next.x16 = view.x16;
++    next.dir = view.dir;
++    next.tailPx = view.tailPx;
++    next.flashStart = (uint8_t)(((uint32_t)view.flashStartMs * 255) / loops::kFlashMs);
++    next.flashEnd = (uint8_t)(((uint32_t)view.flashEndMs * 255) / loops::kFlashMs);
++    next.regionStartPx = (uint16_t)(((uint32_t)status.regionStart * 800) / 65536);
++    next.regionEndPx = (uint16_t)(((uint32_t)status.regionEnd * 800 + 65535) / 65536);
++    next.lamps = 1;
++    next.beat = seqPlaying ? (int8_t)((sequencer.ptrPlayer->globalPos / loops::kStepsPerBeat) % 4) : -1;
++    next.countdownPx = 0;
++    if (status.state == loops::stArmed && seqPlaying)
++    {
++        next.countdownPx = loops::countdownPx(
++          sequencer.ptrPlayer->globalPos, sequencer.ptrPlayer->uStep, status.armQuant);
++        if (next.countdownPx == 0)
++        {
++            next.countdownPx = 1;
++        }
++    }
++
++    const bool changed =
++      next.show != shownHead.show || next.x16 != shownHead.x16 || next.dir != shownHead.dir ||
++      next.tailPx != shownHead.tailPx || next.flashStart != shownHead.flashStart ||
++      next.flashEnd != shownHead.flashEnd || next.regionStartPx != shownHead.regionStartPx ||
++      next.regionEndPx != shownHead.regionEndPx || next.countdownPx != shownHead.countdownPx ||
++      next.beat != shownHead.beat || next.lamps != shownHead.lamps;
++
++    if (changed)
++    {
++        shownHead = next;
++        headData = next;
++        display.refreshControl(headControl);
++    }
++
++    refreshStrip(playingSlice,
++                 (status.state == loops::stStutter) ? (int8_t)status.heldSlice : (int8_t)-1,
++                 false);
++}
++
++#endif // TRACKER_MINI
+diff --git a/core/interface/loops/loops.h b/core/interface/loops/loops.h
+new file mode 100644
+index 0000000..6ce8d6c
+--- /dev/null
++++ b/core/interface/loops/loops.h
+@@ -0,0 +1,119 @@
++#ifndef INTERFACE_LOOPS_LOOPS_H_
++#define INTERFACE_LOOPS_LOOPS_H_
++
++#ifdef TRACKER_MINI
++
++#include "core/modulesBase.h"
++
++#include "elapsedMillis.h"
++#include "loopHeadControl.h"
++#include "loopStripControl.h"
++#include "loopWaveControl.h"
++
++#include "loops/loopsEngine.h"
++#include "loops/loopsLogic.h"
++
++// Loops: a looper screen for the Tracker Mini. It shows the current instrument's sample as
++// one full-width waveform and loops it forward, reversed or ping-pong on one track voice,
++// with a playhead that follows the voice. Fn1..4 are soft keys, the four value keys are pads.
++class cLoops : public ModuleBase
++{
++  public:
++    virtual void update();
++    virtual void start(uint32_t options);
++    virtual void stop();
++
++    virtual void initDisplayControls();
++    virtual void destroyDisplayControls() {}
++    virtual void hideControlsUnderMiniMenu();
++
++    cLoops() {}
++    ~cLoops() {}
++
++    //---------------------------------- graphics (gLoops.cpp)
++    void showDefaultScreen();
++    void refreshSoftKeys();
++    void refreshInfo(bool force);
++    void refreshBadge(uint8_t state, bool blinkOn, bool force);
++    void refreshWave();
++    void refreshStrip(int8_t playing, int8_t held, bool force);
++    void refreshHead(const LoopsStatus& status, uint16_t dtMs);
++
++    //---------------------------------- logic (fLoops.cpp)
++    void setInputs();
++    void loadInstrument();
++    void computeFit();
++    LoopsConfig makeConfig();
++    void applyConfig(bool rearm);
++
++    void toggleLoop();
++    void nextDirection();
++    void toggleSync();
++    void toggleSlices();
++    void nextTrack();
++    void changeSpeed(int8_t direction);
++    void movePads(int8_t direction);
++    void padKey(uint8_t pad, uint8_t state);
++
++    //---------------------------------- controls
++    hControl headControl = -1;
++    hControl stripControl = -1;
++    hControl waveControl = -1;
++    hControl infoLabel[4] = { -1, -1, -1, -1 };
++    hControl keyLabel[4] = { -1, -1, -1, -1 };
++    hControl bgLabel = -1;
++    hControl messageLabel = -1;
++
++    strLoopHeadData headData;
++    strLoopStripData stripData;
++    strLoopWaveData waveData;
++
++    char infoText[4][28];
++    const char* message = nullptr;
++
++    //---------------------------------- settings (kept until power off, never saved)
++    uint8_t track = 7;
++    uint8_t direction = loops::dirForward;
++    bool fitOn = false;
++    int8_t barsIndex = 2;
++    int8_t octave = 0;
++    uint8_t slices = 8;
++    uint8_t padBase = 0;
++
++    //---------------------------------- the loaded instrument
++    bool playable = false;
++    uint8_t instr = 0;
++    uint16_t regionA = 0;
++    uint16_t regionB = 65535;
++    uint32_t sampleFrames = 0;
++    loops::FitResult fit = { false, 0.0f, 0, 0 };
++    float tempo = 0.0f;
++
++    //---------------------------------- keys
++    bool menuOpen = false;
++    bool fnShift[4] = { false, false, false, false };
++    uint8_t navDown = 0;
++    uint8_t padMask = 0;
++    int8_t currentPad = -1;
++
++    //---------------------------------- what is on the screen now
++    loops::HeadModel head;
++    uint16_t lastFireCount = 0;
++    elapsedMillis headTimer;
++    elapsedMillis blinkTimer;
++    bool headWasActive = false;
++    uint8_t shownState = 255;
++    bool shownBlink = false;
++    uint8_t shownTrack = 255;
++    int32_t shownTempo10 = -1;
++    strLoopHeadData shownHead;
++
++    strZoomParams zoom;
++    strTrackerSpectrum spectrum[2];
++};
++
++extern cLoops loopsScreen;
++
++#endif // TRACKER_MINI
++
++#endif /* INTERFACE_LOOPS_LOOPS_H_ */
+diff --git a/core/source/mtConfig.cpp b/core/source/mtConfig.cpp
+index cf37aaf..fcd826a 100644
+--- a/core/source/mtConfig.cpp
++++ b/core/source/mtConfig.cpp
+@@ -440,7 +440,7 @@ void checkConfig()
+ 
+     for (uint8_t i = 0; i < 8; i++)
+     {
+-        if (mtConfig.interface.functionKeysBinding[i] >= kMenuModulesCount)
++        if (mtConfig.interface.functionKeysBinding[i] >= kFnBindableModulesCount)
+         {
+             mtConfig.interface.functionKeysBinding[i] = 0;
+         }

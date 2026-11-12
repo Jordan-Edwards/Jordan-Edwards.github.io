@@ -1,0 +1,755 @@
+diff --git a/core/libs/NewDisplay/displayStructs.h b/core/libs/NewDisplay/displayStructs.h
+index 7735776..0596727 100644
+--- a/core/libs/NewDisplay/displayStructs.h
++++ b/core/libs/NewDisplay/displayStructs.h
+@@ -173,6 +173,11 @@ typedef enum enControlId
+     controlIdImgGrid,
+     controlIdSimpleBox,
+     controlIdNotesKeyboardLabel,
++#ifdef TRACKER_MINI
++    controlIdLoopWave,
++    controlIdLoopStrip,
++    controlIdLoopHead,
++#endif
+ 
+     /*
+      *
+diff --git a/core/libs/NewDisplay/loopHead.cpp b/core/libs/NewDisplay/loopHead.cpp
+new file mode 100644
+index 0000000..89dd425
+--- /dev/null
++++ b/core/libs/NewDisplay/loopHead.cpp
+@@ -0,0 +1,230 @@
++#ifdef TRACKER_MINI
++
++#include "FT812.h"
++
++#include "display.h"
++#include "loopHeadControl.h"
++
++// colors: [0] playhead line, [1] glow, tail and edge flash, [2] arm countdown, [3] beat lamps
++
++static constexpr int16_t kLampsX = 724;
++static constexpr int16_t kLampsStep = 18;
++static constexpr int16_t kLampsY = 50;
++static constexpr int kTailParts = 5;
++
++cLoopHead::cLoopHead(strControlProperties* properties)
++  : cDisplayControl(controlIdLoopHead, 1)
++{
++    colorsCount = 4;
++    colors = display.getTheme().waveformProgressColors;
++    data = nullptr;
++
++    if (properties == nullptr)
++    {
++        this->style = 0;
++        return;
++    }
++
++    colors = (properties->colors == nullptr) ? colors : properties->colors;
++
++    posX = properties->x;
++    posY = properties->y;
++    width = properties->w;
++    height = properties->h;
++
++    data = (strLoopHeadData*)properties->data;
++
++    setStyle(properties->style);
++}
++
++cLoopHead::~cLoopHead()
++{
++}
++
++//--------------------------------------------------------------------------------
++void cLoopHead::setStyle(uint32_t style)
++{
++    this->style = style;
++}
++
++void cLoopHead::setText(const char*)
++{
++}
++
++void cLoopHead::setValue(int value)
++{
++    this->value = value;
++}
++
++void cLoopHead::setColors(const uint32_t* colors)
++{
++    this->colors = colors;
++}
++
++void cLoopHead::setData(void* data)
++{
++    this->data = (strLoopHeadData*)data;
++}
++
++//--------------------------------------------------------------------------------
++// Three stacked translucent bars: wide and faint, then narrower and brighter.
++void cLoopHead::drawFlash(int16_t edgeX, uint8_t level)
++{
++    static const int16_t halfWidth[3] = { 12, 5, 1 };
++    static const uint8_t divider[3] = { 4, 2, 1 };
++
++    API_BEGIN(RECTS);
++    for (int i = 0; i < 3; i++)
++    {
++        API_COLOR_A(level / divider[i]);
++        API_VERTEX2F(edgeX - halfWidth[i], posY);
++        API_VERTEX2F(edgeX + halfWidth[i], posY + height);
++    }
++    API_END();
++}
++
++void cLoopHead::update()
++{
++    if (data == nullptr)
++    {
++        return;
++    }
++
++    API_SAVE_CONTEXT();
++
++    // beat lamps in the info row
++    if (data->lamps)
++    {
++        API_COLOR(colors[3]);
++        API_POINT_SIZE(5 * 16);
++        API_BEGIN(FTPOINTS);
++        for (int i = 0; i < 4; i++)
++        {
++            API_COLOR_A(i == data->beat ? 255 : 50);
++            API_VERTEX2F(kLampsX + kLampsStep * i, kLampsY);
++        }
++        API_END();
++        API_COLOR_A(255);
++    }
++
++    // arm countdown: a 2 px line just above the wave, filling up to the bar
++    if (data->countdownPx > 0)
++    {
++        API_COLOR(colors[2]);
++        API_LINE_WIDTH(16);
++        API_BEGIN(LINES);
++        API_VERTEX2F(posX, posY - 3);
++        API_VERTEX2F(posX + data->countdownPx, posY - 3);
++        API_END();
++    }
++
++    const int16_t headPx = (int16_t)(posX + data->x16 / 16);
++
++    // direction arrow, in the ruler band above the wave
++    if (data->show && data->dir != 0)
++    {
++        const int16_t s = data->dir;
++        const int16_t y = posY - 13;
++
++        API_COLOR(colors[0]);
++        API_LINE_WIDTH(16);
++        API_BEGIN(LINE_STRIP);
++        API_VERTEX2F(headPx + s * 3, y - 5);
++        API_VERTEX2F(headPx + s * 9, y);
++        API_VERTEX2F(headPx + s * 3, y + 5);
++        API_END();
++    }
++
++    // everything below stays inside the wave area
++    API_SCISSOR_XY(posX, posY);
++    API_SCISSOR_SIZE(width, height);
++
++    API_BLEND_FUNC(SRC_ALPHA, ONE);
++    API_COLOR(colors[1]);
++    API_LINE_WIDTH(16);
++
++    if (data->flashStart > 0)
++    {
++        drawFlash(posX + data->regionStartPx, data->flashStart);
++    }
++    if (data->flashEnd > 0)
++    {
++        drawFlash(posX + data->regionEndPx, data->flashEnd);
++    }
++
++    if (data->show)
++    {
++        // The playhead is placed in 1/16 px steps so a slow loop glides instead of stepping.
++        API_VERTEX_FORMAT(4);
++
++        const int16_t x = (int16_t)(posX * 16 + data->x16);
++        const int16_t top = (int16_t)(posY * 16);
++        const int16_t bottom = (int16_t)((posY + height) * 16);
++
++        // tail: five translucent pieces, fading away from the playhead
++        if (data->dir != 0 && data->tailPx > 0)
++        {
++            const int32_t tail16 = (int32_t)data->tailPx * 16;
++
++            API_BEGIN(RECTS);
++            for (int j = 0; j < kTailParts; j++)
++            {
++                int32_t nearX = x - data->dir * ((tail16 * j) / kTailParts);
++                int32_t farX = x - data->dir * ((tail16 * (j + 1)) / kTailParts);
++                int32_t left = (nearX < farX) ? nearX : farX;
++                int32_t right = (nearX < farX) ? farX : nearX;
++
++                // RECTS grow by the line width on every side: pull the ends in by 1 px
++                // so neighbours meet without a brighter seam.
++                left += 16;
++                right -= 16;
++                if (right <= left)
++                {
++                    continue;
++                }
++                if (left < -1600)
++                {
++                    left = -1600;
++                }
++                if (right > 14400)
++                {
++                    right = 14400;
++                }
++
++                API_COLOR_A((uint8_t)(110 - j * 22));
++                API_VERTEX2F((int16_t)left, top);
++                API_VERTEX2F((int16_t)right, bottom);
++            }
++            API_END();
++        }
++
++        // glow: a 17 px and a 9 px line behind the playhead
++        API_BEGIN(LINES);
++        API_LINE_WIDTH(136);
++        API_COLOR_A(45);
++        API_VERTEX2F(x, top);
++        API_VERTEX2F(x, bottom);
++        API_LINE_WIDTH(72);
++        API_COLOR_A(100);
++        API_VERTEX2F(x, top);
++        API_VERTEX2F(x, bottom);
++        API_END();
++
++        // the playhead itself: 3 px, opaque
++        API_BLEND_FUNC(SRC_ALPHA, ONE_MINUS_SRC_ALPHA);
++        API_COLOR(colors[0]);
++        API_COLOR_A(255);
++        API_LINE_WIDTH(24);
++        API_BEGIN(LINES);
++        API_VERTEX2F(x, top);
++        API_VERTEX2F(x, bottom);
++        API_END();
++
++        API_VERTEX_FORMAT(0);
++    }
++
++    API_BLEND_FUNC(SRC_ALPHA, ONE_MINUS_SRC_ALPHA);
++    API_RESTORE_CONTEXT();
++}
++
++#endif // TRACKER_MINI
+diff --git a/core/libs/NewDisplay/loopHeadControl.h b/core/libs/NewDisplay/loopHeadControl.h
+new file mode 100644
+index 0000000..b4cf175
+--- /dev/null
++++ b/core/libs/NewDisplay/loopHeadControl.h
+@@ -0,0 +1,48 @@
++#ifndef LIBS_NEWDISPLAY_LOOPHEADCONTROL_H_
++#define LIBS_NEWDISPLAY_LOOPHEADCONTROL_H_
++
++#ifdef TRACKER_MINI
++
++#include "displayControls.h"
++
++// Loops screen: everything that moves. The playhead with its glow and tail, the direction
++// arrow, the flash at the loop edges, the arm countdown line and the beat lamps. It is a
++// small display list of its own, so the heavy waveform is not rebuilt for every frame.
++struct strLoopHeadData
++{
++    uint8_t show = 0;      // draw the playhead
++    int32_t x16 = 0;       // playhead x in 1/16 px (0..12800)
++    int8_t dir = 0;        // +1 right, -1 left, 0 unknown (no tail, no arrow)
++    uint16_t tailPx = 16;  // tail length, on the side the playhead came from
++    uint8_t flashStart = 0; // 0..255, flash on the region start edge
++    uint8_t flashEnd = 0;   // 0..255, flash on the region end edge
++    uint16_t regionStartPx = 0;
++    uint16_t regionEndPx = 800;
++    uint16_t countdownPx = 0; // arm countdown line length, 0 = none
++    uint8_t lamps = 0;        // show the four beat lamps
++    int8_t beat = -1;         // lit lamp 0..3, -1 = none
++};
++
++class cLoopHead : public cDisplayControl
++{
++  public:
++    cLoopHead(strControlProperties* properties);
++    virtual ~cLoopHead();
++
++    virtual void update();
++
++    virtual void setStyle(uint32_t style);
++    virtual void setText(const char* text);
++    virtual void setValue(int value);
++    virtual void setColors(const uint32_t* colors);
++    virtual void setData(void* data);
++
++  private:
++    void drawFlash(int16_t edgeX, uint8_t level);
++
++    strLoopHeadData* data;
++};
++
++#endif // TRACKER_MINI
++
++#endif /* LIBS_NEWDISPLAY_LOOPHEADCONTROL_H_ */
+diff --git a/core/libs/NewDisplay/loopStrip.cpp b/core/libs/NewDisplay/loopStrip.cpp
+new file mode 100644
+index 0000000..e33e142
+--- /dev/null
++++ b/core/libs/NewDisplay/loopStrip.cpp
+@@ -0,0 +1,151 @@
++#ifdef TRACKER_MINI
++
++#include "FT812.h"
++
++#include "display.h"
++#include "loopStripControl.h"
++
++// colors: [0] pad text, [1] slice number, [2] cell background, [3] playing / held
++
++static const char* const padCaptions[strLoopStripData::kPads] = { "+10", "+1", "-1", "-10" };
++
++cLoopStrip::cLoopStrip(strControlProperties* properties)
++  : cDisplayControl(controlIdLoopStrip, 1)
++{
++    colorsCount = 4;
++    colors = display.getTheme().activeLabelsColors;
++    data = nullptr;
++    font = &fonts[0];
++
++    if (properties == nullptr)
++    {
++        this->style = 0;
++        return;
++    }
++
++    colors = (properties->colors == nullptr) ? colors : properties->colors;
++
++    posX = properties->x;
++    posY = properties->y;
++    width = properties->w;
++    height = properties->h;
++
++    data = (strLoopStripData*)properties->data;
++
++    setStyle(properties->style);
++}
++
++cLoopStrip::~cLoopStrip()
++{
++}
++
++//--------------------------------------------------------------------------------
++void cLoopStrip::setStyle(uint32_t style)
++{
++    this->style = style;
++
++    int8_t textFont = FONT_INDEX_FROM_STYLE;
++    textFont = (textFont >= 0) ? textFont : 0;
++    font = &fonts[textFont];
++}
++
++void cLoopStrip::setText(const char*)
++{
++}
++
++void cLoopStrip::setValue(int value)
++{
++    this->value = value;
++}
++
++void cLoopStrip::setColors(const uint32_t* colors)
++{
++    this->colors = colors;
++}
++
++void cLoopStrip::setData(void* data)
++{
++    this->data = (strLoopStripData*)data;
++}
++
++//--------------------------------------------------------------------------------
++void cLoopStrip::update()
++{
++    if (data == nullptr || data->count == 0)
++    {
++        return;
++    }
++
++    API_SAVE_CONTEXT();
++
++    const int count = data->count;
++    const int16_t top = posY + 2;
++    const int16_t bottom = posY + height - 3;
++    const int16_t textY = posY + height / 2;
++
++    // cell backgrounds
++    API_LINE_WIDTH(16);
++    API_BEGIN(RECTS);
++    for (int k = 0; k < count; k++)
++    {
++        const int16_t x0 = posX + (width * k) / count + 3;
++        const int16_t x1 = posX + (width * (k + 1)) / count - 4;
++        const bool pad = (k >= data->padBase && k < data->padBase + strLoopStripData::kPads);
++
++        if (k == data->playing)
++        {
++            API_COLOR(colors[3]);
++            API_COLOR_A(pad ? 255 : 150);
++        }
++        else
++        {
++            API_COLOR(colors[2]);
++            API_COLOR_A(pad ? 255 : 90);
++        }
++
++        API_VERTEX2F(x0, top);
++        API_VERTEX2F(x1, bottom);
++    }
++    API_END();
++    API_COLOR_A(255);
++
++    // frame round the held pad's slice
++    if (data->held >= 0 && data->held < count)
++    {
++        const int16_t x0 = posX + (width * data->held) / count + 2;
++        const int16_t x1 = posX + (width * (data->held + 1)) / count - 3;
++
++        API_COLOR(colors[0]);
++        API_LINE_WIDTH(24);
++        API_BEGIN(LINE_STRIP);
++        API_VERTEX2F(x0, top - 1);
++        API_VERTEX2F(x1, top - 1);
++        API_VERTEX2F(x1, bottom + 1);
++        API_VERTEX2F(x0, bottom + 1);
++        API_VERTEX2F(x0, top - 1);
++        API_END();
++        API_LINE_WIDTH(16);
++    }
++
++    // captions: key names on the four pad cells, slice numbers on the rest
++    for (int k = 0; k < count; k++)
++    {
++        const int16_t cx = posX + (width * (2 * k + 1)) / (2 * count);
++        const int pad = k - data->padBase;
++
++        if (pad >= 0 && pad < strLoopStripData::kPads)
++        {
++            API_COLOR(colors[0]);
++            API_CMD_TEXT(cx, textY, font->handle, OPT_CENTER, padCaptions[pad]);
++        }
++        else
++        {
++            API_COLOR(colors[1]);
++            API_CMD_NUMBER(cx, textY, font->handle, OPT_CENTER, k + 1);
++        }
++    }
++
++    API_RESTORE_CONTEXT();
++}
++
++#endif // TRACKER_MINI
+diff --git a/core/libs/NewDisplay/loopStripControl.h b/core/libs/NewDisplay/loopStripControl.h
+new file mode 100644
+index 0000000..26aade8
+--- /dev/null
++++ b/core/libs/NewDisplay/loopStripControl.h
+@@ -0,0 +1,40 @@
++#ifndef LIBS_NEWDISPLAY_LOOPSTRIPCONTROL_H_
++#define LIBS_NEWDISPLAY_LOOPSTRIPCONTROL_H_
++
++#ifdef TRACKER_MINI
++
++#include "displayControls.h"
++
++// Loops screen: the row of slice cells under the waveform. The four cells the value keys
++// play carry the key name; the cell under the playhead is lit; a held pad gets a frame.
++struct strLoopStripData
++{
++    static constexpr int kPads = 4;
++
++    uint8_t count = 8;   // 8 or 16 slices
++    uint8_t padBase = 0; // slice played by the first value key
++    int8_t playing = -1; // slice under the playhead, -1 = none
++    int8_t held = -1;    // slice of the held pad, -1 = none
++};
++
++class cLoopStrip : public cDisplayControl
++{
++  public:
++    cLoopStrip(strControlProperties* properties);
++    virtual ~cLoopStrip();
++
++    virtual void update();
++
++    virtual void setStyle(uint32_t style);
++    virtual void setText(const char* text);
++    virtual void setValue(int value);
++    virtual void setColors(const uint32_t* colors);
++    virtual void setData(void* data);
++
++  private:
++    strLoopStripData* data;
++};
++
++#endif // TRACKER_MINI
++
++#endif /* LIBS_NEWDISPLAY_LOOPSTRIPCONTROL_H_ */
+diff --git a/core/libs/NewDisplay/loopWave.cpp b/core/libs/NewDisplay/loopWave.cpp
+new file mode 100644
+index 0000000..94d5639
+--- /dev/null
++++ b/core/libs/NewDisplay/loopWave.cpp
+@@ -0,0 +1,187 @@
++#ifdef TRACKER_MINI
++
++#include "FT812.h"
++
++#include "display.h"
++#include "loopWaveControl.h"
++
++// colors: [0] bars, [1] ruler and slice lines
++
++cLoopWave::cLoopWave(strControlProperties* properties)
++  : cDisplayControl(controlIdLoopWave, 1)
++{
++    colorsCount = 2;
++    colors = display.getTheme().waveformColors;
++    data = nullptr;
++    font = &fonts[4];
++
++    if (properties == nullptr)
++    {
++        this->style = 0;
++        return;
++    }
++
++    colors = (properties->colors == nullptr) ? colors : properties->colors;
++
++    posX = properties->x;
++    posY = properties->y;
++    width = properties->w;
++    height = properties->h;
++
++    data = (strLoopWaveData*)properties->data;
++
++    setStyle(properties->style);
++}
++
++cLoopWave::~cLoopWave()
++{
++}
++
++//--------------------------------------------------------------------------------
++void cLoopWave::setStyle(uint32_t style)
++{
++    this->style = style;
++
++    int8_t textFont = FONT_INDEX_FROM_STYLE;
++    textFont = (textFont >= 0) ? textFont : 4;
++    font = &fonts[textFont];
++}
++
++void cLoopWave::setText(const char*)
++{
++}
++
++void cLoopWave::setValue(int value)
++{
++    this->value = value;
++}
++
++void cLoopWave::setColors(const uint32_t* colors)
++{
++    this->colors = colors;
++}
++
++void cLoopWave::setData(void* data)
++{
++    this->data = (strLoopWaveData*)data;
++}
++
++//--------------------------------------------------------------------------------
++void cLoopWave::drawRuler()
++{
++    // The ruler sits in the 20 px above the wave: ticks end 6 px above it.
++    const int16_t bottom = posY - 6;
++    const int32_t start = posX + data->regionStartPx;
++    const int32_t span = (int32_t)data->regionEndPx - (int32_t)data->regionStartPx;
++
++    if (span <= 0)
++    {
++        return;
++    }
++
++    const bool fit = data->rulerBeats > 0;
++    const int ticks = fit ? data->rulerBeats : data->slices;
++
++    if (ticks <= 0)
++    {
++        return;
++    }
++
++    // Past 8 bars only the bar ticks are drawn: beat ticks would be 12 px apart, and it
++    // keeps this control's command list about the size of a stock waveform's.
++    const bool beatTicks = !fit || ticks <= 32;
++
++    API_COLOR(colors[1]);
++    API_LINE_WIDTH(8);
++    API_BEGIN(LINES);
++    for (int k = 0; k <= ticks; k++)
++    {
++        const bool barTick = fit && (k % 4) == 0;
++        if (!barTick && !beatTicks)
++        {
++            continue;
++        }
++        int16_t x = (int16_t)(start + (span * k) / ticks);
++        if (x > 799)
++        {
++            x = 799;
++        }
++        API_VERTEX2F(x, bottom - (barTick ? 12 : 6));
++        API_VERTEX2F(x, bottom);
++    }
++    API_END();
++
++    if (fit)
++    {
++        // bar numbers, when there is room for them
++        const int bars = (data->rulerBeats + 3) / 4;
++        if (bars > 0 && span / bars >= 24)
++        {
++            for (int bar = 0; bar < bars; bar++)
++            {
++                int16_t x = (int16_t)(start + (span * bar * 4) / ticks) + 5;
++                if (x < 780)
++                {
++                    API_CMD_NUMBER(x, bottom - 15, font->handle, 0, bar + 1);
++                }
++            }
++        }
++    }
++}
++
++void cLoopWave::update()
++{
++    if (data == nullptr)
++    {
++        return;
++    }
++
++    API_SAVE_CONTEXT();
++
++    drawRuler();
++
++    const int16_t mid = posY + height / 2;
++
++    // slice lines, faint, behind the bars
++    const int32_t span = (int32_t)data->regionEndPx - (int32_t)data->regionStartPx;
++    if (data->slices > 1 && span > 0)
++    {
++        API_COLOR(colors[1]);
++        API_COLOR_A(90);
++        API_LINE_WIDTH(8);
++        API_BEGIN(LINES);
++        for (int k = 1; k < data->slices; k++)
++        {
++            int16_t x = (int16_t)(posX + data->regionStartPx + (span * k) / data->slices);
++            API_VERTEX2F(x, posY);
++            API_VERTEX2F(x, posY + height);
++        }
++        API_END();
++    }
++
++    // 200 bars, 3 px wide, mirrored about the centre line
++    API_COLOR(colors[0]);
++    API_LINE_WIDTH(24);
++    API_BEGIN(LINES);
++
++    int8_t lastInside = -1;
++    for (int i = 0; i < strLoopWaveData::kBars; i++)
++    {
++        const int16_t x = posX + i * strLoopWaveData::kBarPitch + 1;
++        const int8_t inside = (x >= posX + data->regionStartPx && x <= posX + data->regionEndPx);
++
++        if (inside != lastInside)
++        {
++            API_COLOR_A(inside ? 255 : 70);
++            lastInside = inside;
++        }
++
++        API_VERTEX2F(x, mid - data->barUp[i]);
++        API_VERTEX2F(x, mid + data->barDown[i]);
++    }
++    API_END();
++
++    API_RESTORE_CONTEXT();
++}
++
++#endif // TRACKER_MINI
+diff --git a/core/libs/NewDisplay/loopWaveControl.h b/core/libs/NewDisplay/loopWaveControl.h
+new file mode 100644
+index 0000000..3382d17
+--- /dev/null
++++ b/core/libs/NewDisplay/loopWaveControl.h
+@@ -0,0 +1,47 @@
++#ifndef LIBS_NEWDISPLAY_LOOPWAVECONTROL_H_
++#define LIBS_NEWDISPLAY_LOOPWAVECONTROL_H_
++
++#ifdef TRACKER_MINI
++
++#include "displayControls.h"
++
++// Loops screen: the full-width waveform (200 bars), the bar/beat ruler above it and the
++// slice lines. Static: rebuilt only when the instrument, region, bars or slices change.
++struct strLoopWaveData
++{
++    static constexpr int kBars = 200;
++    static constexpr int kBarPitch = 4; // 3 px bar + 1 px gap
++
++    uint8_t barUp[kBars];   // pixels above the centre line
++    uint8_t barDown[kBars]; // pixels below it
++
++    uint16_t regionStartPx = 0; // the loop region; bars outside it are dim
++    uint16_t regionEndPx = 800;
++
++    uint8_t slices = 8;     // slice lines inside the region
++    uint8_t rulerBeats = 0; // beats in the region (FIT); 0 = ticks at the slice edges (FREE)
++};
++
++class cLoopWave : public cDisplayControl
++{
++  public:
++    cLoopWave(strControlProperties* properties);
++    virtual ~cLoopWave();
++
++    virtual void update();
++
++    virtual void setStyle(uint32_t style);
++    virtual void setText(const char* text);
++    virtual void setValue(int value);
++    virtual void setColors(const uint32_t* colors);
++    virtual void setData(void* data);
++
++  private:
++    void drawRuler();
++
++    strLoopWaveData* data;
++};
++
++#endif // TRACKER_MINI
++
++#endif /* LIBS_NEWDISPLAY_LOOPWAVECONTROL_H_ */

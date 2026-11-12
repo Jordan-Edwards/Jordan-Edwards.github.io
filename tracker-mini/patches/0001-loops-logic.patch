@@ -1,0 +1,709 @@
+diff --git a/core/interface/loops/loopsLogic.cpp b/core/interface/loops/loopsLogic.cpp
+new file mode 100644
+index 0000000..4917014
+--- /dev/null
++++ b/core/interface/loops/loopsLogic.cpp
+@@ -0,0 +1,460 @@
++#include "loopsLogic.h"
++
++#if defined(TRACKER_MINI) || defined(LOOPS_HOST_TEST)
++
++#include <math.h>
++
++namespace loops
++{
++
++//------------------------------------------------------------------------------
++// Fit to bars
++//------------------------------------------------------------------------------
++static const uint16_t kQuarterBars[kBarChoices] = { 1, 2, 4, 8, 16, 32, 64 };
++
++uint16_t quarterBarsAt(int index)
++{
++    if (index < 0)
++        index = 0;
++    if (index >= kBarChoices)
++        index = kBarChoices - 1;
++    return kQuarterBars[index];
++}
++
++float regionFrames(uint32_t sampleFrames, uint16_t a, uint16_t b)
++{
++    if (b <= a)
++        return 0.0f;
++    return (float)sampleFrames * (float)(b - a) / (float)kPosMax;
++}
++
++float passSeconds(uint16_t quarterBars, float bpm)
++{
++    if (bpm <= 0.0f)
++        return 0.0f;
++    return (float)quarterBars * 60.0f / bpm;
++}
++
++FitResult fitToBars(uint32_t sampleFrames, uint16_t a, uint16_t b, float bpm, uint16_t quarterBars)
++{
++    FitResult r = { false, 0.0f, 0, 0 };
++
++    float frames = regionFrames(sampleFrames, a, b);
++    float seconds = passSeconds(quarterBars, bpm);
++    if (frames < 1.0f || seconds <= 0.0f)
++        return r;
++
++    float semis = 12.0f * log2f(frames / (kOutputRate * seconds));
++    r.semis = semis;
++    if (fabsf(semis) > kFitMaxSemis)
++        return r;
++
++    int n = (int)lroundf(semis);
++
++    // The player moves in a straight line between two semitones: 100 cents up is note n + 1,
++    // 100 cents down is note n - 1. Work out the cents on that scale, not on a log scale.
++    float q = powf(2.0f, (semis - (float)n) / 12.0f);
++    int cents;
++    if (q >= 1.0f)
++    {
++        const float up = 0.0594630944f; // 2^(1/12) - 1
++        cents = (int)lroundf(100.0f * (q - 1.0f) / up);
++    }
++    else
++    {
++        const float down = 0.0561256873f; // 1 - 2^(-1/12)
++        cents = -(int)lroundf(100.0f * (1.0f - q) / down);
++    }
++    if (cents > 100)
++        cents = 100;
++    if (cents < -100)
++        cents = -100;
++
++    r.valid = true;
++    r.semitones = (int8_t)n;
++    r.cents = (int8_t)cents;
++    return r;
++}
++
++int autoBarsIndex(uint32_t sampleFrames, uint16_t a, uint16_t b, float bpm)
++{
++    int best = -1;
++    float bestAbs = 0.0f;
++
++    for (int i = 0; i < kBarChoices; i++)
++    {
++        FitResult f = fitToBars(sampleFrames, a, b, bpm, kQuarterBars[i]);
++        if (!f.valid)
++            continue;
++        float s = fabsf(f.semis);
++        if (best < 0 || s < bestAbs)
++        {
++            best = i;
++            bestAbs = s;
++        }
++    }
++    return best;
++}
++
++uint16_t cycleSteps(uint16_t quarterBars, uint8_t direction)
++{
++    uint16_t steps = (uint16_t)(quarterBars * kStepsPerBeat);
++    if (direction == dirPingPong)
++        steps = (uint16_t)(steps * 2);
++    return steps;
++}
++
++//------------------------------------------------------------------------------
++// Slices
++//------------------------------------------------------------------------------
++Region sliceBounds(uint16_t a, uint16_t b, uint8_t k, uint8_t n)
++{
++    Region r = { a, b };
++    if (n == 0 || b <= a)
++        return r;
++    if (k >= n)
++        k = (uint8_t)(n - 1);
++
++    uint32_t span = (uint32_t)(b - a);
++    r.start = (uint16_t)(a + (span * k) / n);
++    r.end = (uint16_t)(a + (span * (uint32_t)(k + 1)) / n);
++    return r;
++}
++
++int sliceAt(uint16_t pos, uint16_t a, uint16_t b, uint8_t n)
++{
++    if (n == 0 || b <= a || pos <= a)
++        return 0;
++    if (pos >= b)
++        return n - 1;
++
++    int s = (int)(((uint32_t)(pos - a) * n) / (uint32_t)(b - a));
++    if (s >= n)
++        s = n - 1;
++    return s;
++}
++
++bool regionPlayable(uint16_t a, uint16_t b)
++{
++    return (int32_t)b - (int32_t)a >= kMinRegion;
++}
++
++//------------------------------------------------------------------------------
++// Waveform bars
++//------------------------------------------------------------------------------
++static uint8_t barPx(int value)
++{
++    if (value < 0)
++        value = -value;
++    int px = value * kBarMaxPx / kSpectrumPeak;
++    if (px < 1)
++        px = 1;
++    if (px > kBarMaxPx)
++        px = kBarMaxPx;
++    return (uint8_t)px;
++}
++
++void reduceBars(const int8_t* upperL,
++                const int8_t* lowerL,
++                const int8_t* upperR,
++                const int8_t* lowerR,
++                uint8_t* barUp,
++                uint8_t* barDown)
++{
++    const int columnsPerBar = kSpectrumColumns / kWaveBars;
++
++    for (int i = 0; i < kWaveBars; i++)
++    {
++        int up = 0;
++        int low = 0;
++
++        for (int j = 0; j < columnsPerBar; j++)
++        {
++            int c = i * columnsPerBar + j;
++
++            if (upperL != nullptr && upperL[c] > up)
++                up = upperL[c];
++            if (lowerL != nullptr && lowerL[c] < low)
++                low = lowerL[c];
++            if (upperR != nullptr && upperR[c] > up)
++                up = upperR[c];
++            if (lowerR != nullptr && lowerR[c] < low)
++                low = lowerR[c];
++        }
++
++        barUp[i] = barPx(up);
++        barDown[i] = barPx(low);
++    }
++}
++
++//------------------------------------------------------------------------------
++// State machine
++//------------------------------------------------------------------------------
++void Machine::reset()
++{
++    state = stIdle;
++    sounding = false;
++    stutterFromLoop = false;
++    wasPlaying = false;
++    armQuant = kStepsPerBar;
++    slice = 0;
++    steps = 0;
++}
++
++Step Machine::fireFull()
++{
++    state = stLoop;
++    steps = 0;
++    sounding = true;
++    return Step{ actFireFull, 0 };
++}
++
++Step Machine::fireSlice(uint8_t k)
++{
++    state = stStutter;
++    slice = k;
++    sounding = true;
++    return Step{ actFireSlice, k };
++}
++
++Step Machine::stop()
++{
++    Step s = { sounding ? actStop : actNone, 0 };
++    state = stIdle;
++    sounding = false;
++    steps = 0;
++    return s;
++}
++
++Step Machine::onCommand(Command cmd, uint8_t arg, bool seqPlaying)
++{
++    const Step none = { actNone, 0 };
++
++    switch (cmd)
++    {
++        case cmdToggle:
++            if (state == stIdle)
++            {
++                if (seqPlaying)
++                {
++                    state = stArmed;
++                    armQuant = kStepsPerBar;
++                    return none;
++                }
++                return fireFull();
++            }
++            // Armed, Loop or Stutter: off. An armed loop that still sounds is cut too.
++            return stop();
++
++        case cmdPadDown:
++            if (state != stStutter)
++            {
++                // An armed loop counts as a running one: releasing the pad goes back to it.
++                stutterFromLoop = (state == stLoop || state == stArmed);
++            }
++            return fireSlice(arg);
++
++        case cmdPadUp:
++            if (state != stStutter)
++                return none;
++            if (!stutterFromLoop)
++                return stop();
++            if (!seqPlaying)
++                return fireFull();
++            // Pattern plays: the slice keeps sounding until the next beat.
++            state = stArmed;
++            armQuant = kStepsPerBeat;
++            return none;
++
++        case cmdRearm:
++            if (state == stLoop)
++            {
++                if (seqPlaying)
++                {
++                    // Keeps sounding with the old settings until the next bar.
++                    state = stArmed;
++                    armQuant = kStepsPerBar;
++                    return none;
++                }
++                return fireFull();
++            }
++            return none;
++
++        case cmdClose: return stop();
++
++        default: break;
++    }
++
++    return none;
++}
++
++Step Machine::onBlock(bool seqPlaying, bool stepEdge, uint16_t globalPos, bool voiceLost)
++{
++    Step out = { actNone, 0 };
++
++    const bool started = seqPlaying && !wasPlaying;
++    wasPlaying = seqPlaying;
++
++    if (voiceLost && sounding)
++    {
++        // Something else took the voice: it is no longer ours to stop.
++        sounding = false;
++        state = stIdle;
++        steps = 0;
++        return out;
++    }
++
++    switch (state)
++    {
++        case stArmed:
++            if (!seqPlaying)
++            {
++                out = fireFull();
++            }
++            else if (stepEdge && armQuant > 0 && (globalPos % armQuant) == 0)
++            {
++                out = fireFull();
++            }
++            break;
++
++        case stLoop:
++            if (started)
++            {
++                // Stock Play cuts every voice and clears the step effects: start again with
++                // the pattern, on its first step.
++                out = fireFull();
++            }
++            else if (stepEdge)
++            {
++                steps++;
++                if (cycle > 0 && steps >= cycle)
++                {
++                    out = fireFull();
++                }
++            }
++            break;
++
++        default: break;
++    }
++
++    return out;
++}
++
++//------------------------------------------------------------------------------
++// Playhead
++//------------------------------------------------------------------------------
++int32_t headX16(uint16_t pos)
++{
++    return ((int32_t)pos * kScreenWidth16) / 65536;
++}
++
++uint16_t countdownPx(uint16_t globalPos, uint16_t uStep, uint8_t quant)
++{
++    if (quant == 0)
++        return 0;
++
++    if (uStep < 1)
++        uStep = 1;
++    if (uStep > kUStepsPerStep)
++        uStep = kUStepsPerStep;
++
++    uint32_t done = (uint32_t)(globalPos % quant) * kUStepsPerStep + (uint32_t)(uStep - 1);
++    uint32_t total = (uint32_t)quant * kUStepsPerStep;
++    return (uint16_t)((done * kScreenWidthPx) / total);
++}
++
++void HeadModel::reset(uint16_t regionStart, uint16_t regionEnd, uint8_t sliceCount, int8_t dirHint)
++{
++    a = regionStart;
++    b = regionEnd;
++    slices = sliceCount;
++    hasPrev = false;
++    prev = 0;
++    lastSign = 0;
++    run = 0;
++    v.dir = dirHint;
++    // speed, tail and flashes carry over: a re-fire should not make the tail jump
++}
++
++void HeadModel::fade(uint16_t dtMs)
++{
++    v.flashStartMs = (v.flashStartMs > dtMs) ? (uint16_t)(v.flashStartMs - dtMs) : 0;
++    v.flashEndMs = (v.flashEndMs > dtMs) ? (uint16_t)(v.flashEndMs - dtMs) : 0;
++}
++
++void HeadModel::advance(uint16_t pos, uint16_t dtMs)
++{
++    fade(dtMs);
++
++    v.x16 = headX16(pos);
++    v.slice = (int8_t)sliceAt(pos, a, b, slices);
++
++    if (!hasPrev)
++    {
++        hasPrev = true;
++        prev = pos;
++        return;
++    }
++
++    int32_t d = (int32_t)pos - (int32_t)prev;
++    int32_t ad = (d < 0) ? -d : d;
++    int32_t span = (int32_t)b - (int32_t)a;
++    prev = pos;
++
++    if (span > 0 && ad > span / 2)
++    {
++        // Jumped from one end of the region to the other: a loop wrap. Direction stays.
++        v.flashStartMs = kFlashMs;
++        v.flashEndMs = kFlashMs;
++        run = 0;
++        lastSign = 0;
++    }
++    else
++    {
++        if (ad >= 8)
++        {
++            int8_t s = (d > 0) ? 1 : -1;
++            if (s == lastSign)
++            {
++                if (run < 255)
++                    run++;
++            }
++            else
++            {
++                lastSign = s;
++                run = 1;
++            }
++
++            if (run >= 2 && s != v.dir)
++            {
++                bool flip = (v.dir != 0);
++                v.dir = s;
++                if (flip)
++                {
++                    // Ping-pong bounce: flash the edge it turned at.
++                    if ((int32_t)pos - (int32_t)a < (int32_t)b - (int32_t)pos)
++                        v.flashStartMs = kFlashMs;
++                    else
++                        v.flashEndMs = kFlashMs;
++                }
++            }
++        }
++
++        if (dtMs > 0)
++        {
++            float inst = (float)ad * ((float)kScreenWidthPx / 65536.0f) * 1000.0f / (float)dtMs;
++            speed += (inst - speed) * 0.25f;
++        }
++    }
++
++    float tail = speed * 0.12f;
++    if (tail < (float)kTailMinPx)
++        tail = (float)kTailMinPx;
++    if (tail > (float)kTailMaxPx)
++        tail = (float)kTailMaxPx;
++    v.tailPx = (uint16_t)tail;
++}
++
++} // namespace loops
++
++#endif // TRACKER_MINI || LOOPS_HOST_TEST
+diff --git a/core/interface/loops/loopsLogic.h b/core/interface/loops/loopsLogic.h
+new file mode 100644
+index 0000000..e34f135
+--- /dev/null
++++ b/core/interface/loops/loopsLogic.h
+@@ -0,0 +1,237 @@
++#ifndef INTERFACE_LOOPS_LOOPSLOGIC_H_
++#define INTERFACE_LOOPS_LOOPSLOGIC_H_
++
++// Loops: pure logic (state machine, fit/slice/bar/playhead maths).
++// No firmware headers here: this file is also compiled and tested on a computer.
++
++#if defined(TRACKER_MINI) || defined(LOOPS_HOST_TEST)
++
++#include <stdint.h>
++
++namespace loops
++{
++
++constexpr int32_t kPosMax = 65535;       // sample positions are 0..65535, as in strInstrument
++constexpr int kSpectrumColumns = 600;    // columns produced by the stock spectrum code
++constexpr int kWaveBars = 200;           // bars drawn on the Loops screen
++constexpr int kBarMaxPx = 136;           // tallest half bar
++constexpr int kSpectrumPeak = 109;       // 32767 / 300
++constexpr int kScreenWidthPx = 800;
++constexpr int32_t kScreenWidth16 = 12800; // 800 px in 1/16 px
++constexpr int kStepsPerBeat = 4;
++constexpr int kStepsPerBar = 16; // 4/4
++constexpr int kUStepsPerStep = 48;
++constexpr int kBarChoices = 7;
++constexpr float kOutputRate = 44100.0f;
++constexpr float kFitMaxSemis = 24.0f;
++constexpr uint16_t kFlashMs = 180;
++constexpr uint16_t kTailMinPx = 16;
++constexpr uint16_t kTailMaxPx = 200;
++constexpr int32_t kMinRegion = 2; // smallest playable region, in position units
++
++enum Direction : uint8_t
++{
++    dirForward,
++    dirReverse,
++    dirPingPong,
++    dirCount
++};
++
++//------------------------------------------------------------------------------
++// Fit to bars
++//------------------------------------------------------------------------------
++struct FitResult
++{
++    bool valid;       // false when the shift would be more than two octaves
++    float semis;      // exact shift in semitones (shown on the screen)
++    int8_t semitones; // whole semitones
++    int8_t cents;     // engine fine tune -100..100 (linear between two semitones, as the player does)
++};
++
++// Loop length in quarter bars for a choice index 0..kBarChoices-1: 1/4, 1/2, 1, 2, 4, 8, 16 bars.
++uint16_t quarterBarsAt(int index);
++
++// Frames between positions a and b of a sample that is sampleFrames long.
++float regionFrames(uint32_t sampleFrames, uint16_t a, uint16_t b);
++
++// Seconds one pass must last: 4/4, so a quarter bar is one beat.
++float passSeconds(uint16_t quarterBars, float bpm);
++
++FitResult fitToBars(uint32_t sampleFrames, uint16_t a, uint16_t b, float bpm, uint16_t quarterBars);
++
++// Index of the bar choice that needs the smallest shift; -1 when none is within range.
++int autoBarsIndex(uint32_t sampleFrames, uint16_t a, uint16_t b, float bpm);
++
++// Sequencer steps between two re-fires: one pass, or there and back for ping-pong.
++uint16_t cycleSteps(uint16_t quarterBars, uint8_t direction);
++
++//------------------------------------------------------------------------------
++// Slices
++//------------------------------------------------------------------------------
++struct Region
++{
++    uint16_t start;
++    uint16_t end;
++};
++
++// Slice k of n equal slices of a..b. The last slice ends exactly on b.
++Region sliceBounds(uint16_t a, uint16_t b, uint8_t k, uint8_t n);
++
++// Slice that holds pos (clamped to 0..n-1).
++int sliceAt(uint16_t pos, uint16_t a, uint16_t b, uint8_t n);
++
++bool regionPlayable(uint16_t a, uint16_t b);
++
++//------------------------------------------------------------------------------
++// Waveform bars
++//------------------------------------------------------------------------------
++// 600 spectrum columns per channel (max and min peaks, +-109) -> 200 bars in pixels.
++// The right channel may be nullptr. Every bar is at least 1 px each way.
++void reduceBars(const int8_t* upperL,
++                const int8_t* lowerL,
++                const int8_t* upperR,
++                const int8_t* lowerR,
++                uint8_t* barUp,
++                uint8_t* barDown);
++
++//------------------------------------------------------------------------------
++// Sequencer step edges
++//------------------------------------------------------------------------------
++class StepEdge
++{
++  public:
++    void reset() { last = -1; }
++    // True in the block where the pattern reaches a new step. Step 0 of a fresh start is an edge.
++    bool update(bool playing, uint16_t globalPos)
++    {
++        int32_t pos = playing ? (int32_t)globalPos : -1;
++        bool edge = playing && (pos != last);
++        last = pos;
++        return edge;
++    }
++
++  private:
++    int32_t last = -1;
++};
++
++//------------------------------------------------------------------------------
++// State machine. Runs in the audio callback: no allocation, no blocking.
++//------------------------------------------------------------------------------
++enum State : uint8_t
++{
++    stIdle,
++    stArmed,
++    stLoop,
++    stStutter
++};
++
++enum Command : uint8_t
++{
++    cmdNone,
++    cmdToggle,
++    cmdPadDown,
++    cmdPadUp,
++    cmdRearm,
++    cmdClose
++};
++
++enum Action : uint8_t
++{
++    actNone,
++    actFireFull,
++    actFireSlice,
++    actStop
++};
++
++struct Step
++{
++    Action action;
++    uint8_t slice;
++};
++
++class Machine
++{
++  public:
++    void reset();
++
++    // 0 = never re-fire (FREE)
++    void setCycleSteps(uint16_t steps) { cycle = steps; }
++
++    Step onCommand(Command cmd, uint8_t arg, bool seqPlaying);
++    Step onBlock(bool seqPlaying, bool stepEdge, uint16_t globalPos, bool voiceLost);
++
++    // The engine cut the voice itself (track change) or a fire failed.
++    void clearSounding() { sounding = false; }
++
++    State getState() const { return state; }
++    bool isSounding() const { return sounding; }
++    uint8_t getArmQuant() const { return armQuant; }
++    uint8_t getSlice() const { return slice; }
++    uint16_t getSteps() const { return steps; }
++    uint16_t getCycleSteps() const { return cycle; }
++
++  private:
++    Step fireFull();
++    Step fireSlice(uint8_t k);
++    Step stop();
++
++    State state = stIdle;
++    bool sounding = false;
++    bool stutterFromLoop = false;
++    bool wasPlaying = false;
++    uint8_t armQuant = kStepsPerBar;
++    uint8_t slice = 0;
++    uint16_t steps = 0;
++    uint16_t cycle = 0;
++};
++
++//------------------------------------------------------------------------------
++// Playhead
++//------------------------------------------------------------------------------
++// Position 0..65535 -> x in 1/16 px across the 800 px screen.
++int32_t headX16(uint16_t pos);
++
++// Pixels of the arm countdown line: how far the pattern is into the current bar or beat.
++uint16_t countdownPx(uint16_t globalPos, uint16_t uStep, uint8_t quant);
++
++struct HeadView
++{
++    int32_t x16;           // 0..12800
++    int8_t dir;            // +1 moving right, -1 moving left, 0 not known yet
++    uint16_t tailPx;       // 16..200, drawn on the side the playhead came from
++    uint16_t flashStartMs; // time left of the flash on the region start edge
++    uint16_t flashEndMs;   // time left of the flash on the region end edge
++    int8_t slice;          // slice under the playhead
++};
++
++class HeadModel
++{
++  public:
++    // Call when a note is fired. dirHint: +1, -1 or 0.
++    void reset(uint16_t a, uint16_t b, uint8_t slices, int8_t dirHint);
++
++    // Feed the position read from the voice. dtMs = time since the last call.
++    void advance(uint16_t pos, uint16_t dtMs);
++
++    // Let the flashes fade when there is no position to read.
++    void fade(uint16_t dtMs);
++
++    const HeadView& view() const { return v; }
++
++  private:
++    HeadView v = { 0, 0, kTailMinPx, 0, 0, 0 };
++    uint16_t a = 0;
++    uint16_t b = kPosMax;
++    uint8_t slices = 8;
++    bool hasPrev = false;
++    uint16_t prev = 0;
++    int8_t lastSign = 0;
++    uint8_t run = 0;
++    float speed = 0.0f; // smoothed px per second
++};
++
++} // namespace loops
++
++#endif // TRACKER_MINI || LOOPS_HOST_TEST
++
++#endif /* INTERFACE_LOOPS_LOOPSLOGIC_H_ */
