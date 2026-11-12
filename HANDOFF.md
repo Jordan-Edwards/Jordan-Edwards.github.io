@@ -25,7 +25,10 @@
   - Build side, round 1 done: `G:\CLEANROOM\nitro\build` has new C++, BUILD-LOG.md and README.md. The build agent read only the cleanroom folder.
   - Match at default knobs: level within 0.05 dB median (0.17 worst), 1/3-octave bands within 0.5 dB median (2.7 worst).
   - Known gaps: Feedback 0.9-1 (the low-cut peak is broader and does not self-oscillate on loud input), Follow below centre (up to 12 dB off), the drive curve below clipping, and the noise floor on sweeps.
-  - Next: round 2 on those gaps, then wrap Afterburner as an OP-XY effect machine with new art and a new name, then a provenance check (grep for Field addresses, constants and names).
+  - Rounds 2 and 3 done (330 renders after the spec side added detailed self-oscillation and drive measurements, SPEC.md sections 9-10). Worst error over all renders 12.2 dB -> 8.5 dB; default knobs within 0.11 dB median. Self-oscillation pitch, build-up and decay now match; ring level within 3.8 dB median (was 36).
+  - Beat sweep (the upgrade) works: 1/16-1/8 flutter, 1/4 beat-locked wah (about 0.7-8.6 kHz), 1-4 bar risers and falls, random steps. Bit-identical to the plain effect when off.
+  - Round 4 running on the last gaps: drum loops at Feedback 1 ring less than the reference, the narrow band at hot input is about 4 dB quiet at 1 kHz, ring pitch up to 5% low near Lows 0.4.
+  - Then: wrap Afterburner as an OP-XY effect using only the SDK's public API (not the Field runtime adapters), with its own page in the muted Field-temperature colours, and an A/B test against the old Nitro on the device. Then a provenance check (grep for Field addresses, constants and names).
 - **Rules Jordan set for every clean engine (12 November):**
   1. Not finished until it matches the original everywhere, not just at the defaults.
   2. Each gets one upgrade the original lacked, ideally something users asked for, built on what the OP-XY does and the OP-1 could not: tempo sync, sixteen tracks, per-step changes. Off by default, so the plain sound still matches. Afterburner's is **Beat sweep** (a tempo-synced filter sweep; forum users said they missed tempo-synced modulation).
