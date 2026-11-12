@@ -1,0 +1,345 @@
+<title>Mini Groovebox Handheld</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Roboto+Mono:wght@300;400;700&display=swap">
+<style>
+/* Layout: one left-aligned column. Screen tabs, then the handheld (screen on top, keys under it), then plain notes. */
+:root{color-scheme:dark;
+  --page:#0a0f1c;--ink:#0f1626;--deck:#1a2440;--line:#33426e;--dim:#55628c;--muted:#9aa6c8;--paper:#f3ead3;
+  --coral:#ff5a45;--sun:#ffc233;--mint:#35d39a;--sky:#4cc3f2;
+  --body:#27325a;--edge:#111830;--black:#000;
+  --st-note:#00e8be;--st-instr:#fef749;--st-fx1:#bb58f1;--st-fx2:#57f1ff;
+  --f-text:"Fredoka","Trebuchet MS","Segoe UI",system-ui,sans-serif;
+  --f-mono:"Roboto Mono",ui-monospace,Menlo,Consolas,monospace}
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--paper);font-family:var(--f-text);font-size:16px;line-height:1.45}
+.wrap{max-width:840px;margin-inline:auto;padding-block:22px 44px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.eye{font:700 11px/1.3 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--sun);margin:0 0 8px}
+.eye span{color:var(--muted)}
+h1{font-size:clamp(26px,7vw,40px);line-height:1.05;font-weight:600;margin:0 0 8px;text-wrap:balance}
+.lede{margin:0;color:var(--muted);max-width:58ch}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:16px 0 10px}
+.tab{font:700 12px var(--f-mono);letter-spacing:.04em;min-height:42px;padding:0 2px;border-radius:8px;border:2px solid var(--line);background:transparent;color:var(--muted);cursor:pointer;touch-action:manipulation}
+.tab[aria-current="true"]{background:var(--sun);border-color:var(--sun);color:var(--ink)}
+.dev{background:var(--body);border:2px solid var(--edge);border-radius:20px;padding:6px 6px 14px;box-shadow:0 6px 0 var(--edge)}
+.bezel{background:var(--black);border-radius:14px;padding:4px}
+canvas{display:block;width:100%;max-width:100%;height:auto;aspect-ratio:800/480;border-radius:10px;background:var(--ink)}
+.row4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 4px 0}
+.deckrow{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;margin:14px 4px 0}
+.pad{display:grid;grid-template-columns:repeat(3,44px);grid-template-rows:repeat(3,44px);gap:4px}
+.mid{display:grid;gap:6px;max-width:150px;width:100%;justify-self:center}
+.val{display:grid;grid-template-columns:repeat(2,48px);gap:6px}
+.k{font:700 12px var(--f-mono);min-height:44px;padding:0;border:0;border-radius:10px;background:var(--line);color:var(--paper);box-shadow:0 4px 0 var(--edge);cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.k:active,.k[aria-pressed="true"]{transform:translateY(3px);box-shadow:0 1px 0 var(--edge)}
+.k:focus-visible,.tab:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
+.k.fn{background:var(--paper);color:var(--ink)}
+.k.play{background:var(--mint);color:var(--ink)}
+.k.rec{background:var(--coral);color:var(--ink)}
+.k.shift{background:var(--sun);color:var(--ink)}
+.k.shift[aria-pressed="true"]{outline:3px solid var(--paper);outline-offset:1px}
+.mid .k{min-height:40px}
+.ar::before{content:"";display:block;width:11px;height:11px;margin:auto;border-top:4px solid currentColor;border-left:4px solid currentColor;border-radius:2px}
+.up::before{transform:translateY(3px) rotate(45deg)}
+.dn::before{transform:translateY(-3px) rotate(225deg)}
+.lf::before{transform:translateX(3px) rotate(-45deg)}
+.rt::before{transform:translateX(-3px) rotate(135deg)}
+#say{font:400 13px/1.4 var(--f-mono);color:var(--sun);margin:16px 0 4px;min-height:2.8em}
+#hint{margin:0;color:var(--muted);font-size:15px;max-width:62ch}
+.notes{display:grid;gap:22px;margin-top:30px}
+@media (min-width:720px){.notes{grid-template-columns:1fr 1fr}}
+.notes h2{font:700 12px/1.3 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;margin:0 0 8px;color:var(--paper)}
+.notes h2::before{content:"";display:inline-block;width:12px;height:12px;border-radius:3px;background:var(--c);margin-right:8px;vertical-align:-1px}
+.notes p{margin:0 0 8px;max-width:60ch}
+.fine{margin:26px 0 0;padding-top:14px;border-top:2px solid var(--line);color:var(--muted);font-size:15px;max-width:62ch}
+</style>
+
+<div class="wrap">
+  <header>
+    <p class="eye">Tracker Mini groovebox <span>/ direction: Handheld</span></p>
+    <h1>Every screen is a little machine</h1>
+    <p class="lede">Four screens at the real 800 x 480. Tap the keys under the screen. Menu steps through the screens. Turn the phone sideways to see it larger.</p>
+  </header>
+
+  <nav class="tabs" id="tabs" aria-label="Screens">
+    <button class="tab" id="tab-HOME" data-s="HOME">HOME</button>
+    <button class="tab" id="tab-LOOPS" data-s="LOOPS">LOOPS</button>
+    <button class="tab" id="tab-PERFORM" data-s="PERFORM">PERFORM</button>
+    <button class="tab" id="tab-CAPTURE" data-s="CAPTURE">CAPTURE</button>
+  </nav>
+
+  <section class="dev" id="dev" aria-label="Concept device: screen and keys">
+    <div class="bezel"><canvas id="scr" width="800" height="480" role="img" aria-label="The 800 by 480 screen. The line under the device says what each key press changed."></canvas></div>
+    <div class="row4">
+      <button class="k fn" id="k-fn1" data-k="f0">Fn 1</button>
+      <button class="k fn" id="k-fn2" data-k="f1">Fn 2</button>
+      <button class="k fn" id="k-fn3" data-k="f2">Fn 3</button>
+      <button class="k fn" id="k-fn4" data-k="f3">Fn 4</button>
+    </div>
+    <div class="row4">
+      <button class="k" id="k-menu" data-k="menu">Menu</button>
+      <button class="k shift" id="k-shift" data-k="shift" aria-pressed="false">Shift</button>
+      <button class="k play" id="k-play" data-k="play">Play</button>
+      <button class="k rec" id="k-rec" data-k="rec">Rec</button>
+    </div>
+    <div class="deckrow">
+      <div class="pad">
+        <span></span><button class="k ar up" id="k-up" data-k="up" aria-label="Up"></button><span></span>
+        <button class="k ar lf" id="k-left" data-k="left" aria-label="Left"></button>
+        <button class="k" id="k-mid" data-k="mid" aria-label="Middle">Mid</button>
+        <button class="k ar rt" id="k-right" data-k="right" aria-label="Right"></button>
+        <span></span><button class="k ar dn" id="k-down" data-k="down" aria-label="Down"></button><span></span>
+      </div>
+      <div class="mid">
+        <button class="k" id="k-copy" data-k="copy">Copy</button>
+        <button class="k" id="k-ins" data-k="ins">Insert</button>
+        <button class="k" id="k-del" data-k="del">Delete</button>
+      </div>
+      <div class="val">
+        <button class="k" id="k-p1" data-k="p1" aria-label="Plus 1">+1</button>
+        <button class="k" id="k-p10" data-k="p10" aria-label="Plus 10">+10</button>
+        <button class="k" id="k-m1" data-k="m1" aria-label="Minus 1">-1</button>
+        <button class="k" id="k-m10" data-k="m10" aria-label="Minus 10">-10</button>
+      </div>
+    </div>
+  </section>
+
+  <p id="say" role="status" aria-live="polite">Tap a key. Shift latches here: tap once to hold it, again to let go.</p>
+  <p id="hint"></p>
+
+  <section class="notes" aria-label="Notes on this direction">
+    <div style="--c:var(--sun)">
+      <h2>What this is going for</h2>
+      <p>The Mini is held like a console, so each mode is one object you can read at arm's length.</p>
+      <p>Loops is a tape between two reels. Perform is a string of lanterns. Capture is a jar that fills.</p>
+      <p>Every drawing is a meter or a control. The reels show where the loop is, the flame is the track level, the jar is the loop length.</p>
+      <p>Each direction has its own motion: forward fills left to right, reverse eats right to left, ping-pong is a ball between two bumpers.</p>
+    </div>
+    <div style="--c:var(--mint)">
+      <h2>Easy or hard on this screen</h2>
+      <p>Easy: everything here is rectangles, rounded boxes, circles, lines and the five stock fonts. The display chip draws those cheaply. The big digits are built from rectangles, so they need no new font.</p>
+      <p>Hard: the waveform. 600 columns would use about 4.8 KB of the 8 KB display list, so the big lane is 96 chunky bars and the small lanes are 32. The look is also the budget.</p>
+      <p>Hard: smooth motion. There is no animation engine and the playhead moves in whole pixels, so every moving part is a small control re-queued each frame.</p>
+    </div>
+  </section>
+  <p class="fine">This is a concept picture drawn in a browser. It is not firmware and nothing here has run on the device. Where the keys sit on the case was not found in the source, so the layout under the screen is a guess.</p>
+</div>
+
+<script>
+(()=>{
+const $=id=>document.getElementById(id),cv=$('scr'),g=cv.getContext('2d'),css=getComputedStyle(document.documentElement),P={};
+for(const n of['ink','deck','line','dim','muted','paper','coral','sun','mint','sky','st-note','st-instr','st-fx1','st-fx2'])P[n]=css.getPropertyValue('--'+n).trim();
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches,MF='"Roboto Mono",ui-monospace,Menlo,Consolas,monospace';
+// The firmware's five font slots: 0 Light 14, 1 Light 17, 2 Regular 14, 3 Bold 17, 4 Regular 12.
+const F=['300 14px '+MF,'300 17px '+MF,'400 14px '+MF,'700 17px '+MF,'400 12px '+MF];
+
+// Only what the display chip draws cheaply: rectangle, rounded box, circle (point), line, bitmap text.
+const R=(x,y,w,h,c,a)=>{if(w<=0||h<=0)return;g.globalAlpha=a||1;g.fillStyle=c;g.fillRect(Math.round(x),Math.round(y),Math.round(w),Math.round(h));g.globalAlpha=1};
+const RR=(x,y,w,h,r,c,lw)=>{g.beginPath();g.roundRect(x,y,w,h,r);if(lw){g.lineWidth=lw;g.strokeStyle=c;g.stroke()}else{g.fillStyle=c;g.fill()}};
+const C=(x,y,r,c)=>{g.beginPath();g.arc(x,y,Math.max(r,0),0,7);g.fillStyle=c;g.fill()};
+const L=(a,b,c,d,col,w)=>{g.beginPath();g.moveTo(a,b);g.lineTo(c,d);g.lineWidth=w||2;g.lineCap='round';g.strokeStyle=col;g.stroke()};
+const T=(s,x,y,c,f,al)=>{g.font=F[f];g.fillStyle=c;g.textAlign=al||'left';g.textBaseline='middle';g.fillText(s,x,y)};
+const DG=['111101101101111','010110010010111','111001111100111','111001111001111','101101111001001','111100111001111','111100111101111','111001001001001','111101111101111','111101111001111'];
+const BD=(s,x,y,u,c)=>{for(const ch of String(s)){const d=DG[+ch];for(let i=0;i<15;i++)if(d[i]=='1')R(x+i%3*u,y+(i/3|0)*u,u,u,c);x+=4*u}};
+
+// ---------- state: all made-up data ----------
+const S=['HOME','LOOPS','PERFORM','CAPTURE'],DN=['FORWARD','REVERSE','PING-PONG'],DC=[P.mint,P.sky,P.sun],SP=[.5,1,2],SPN=['HALF SPEED','NORMAL SPEED','DOUBLE SPEED'];
+const SRC=['LINE IN','MIC LOW GAIN','MIC HIGH GAIN','USB'],SN=['LINE IN','MIC LOW','MIC HIGH','USB'],TC=[P.coral,P.sun,P.mint,P.sky],FXN=['FILL','STUTTER','FILTER','TAPE STOP'];
+const MODES=[['LOOPS','4 tape lanes'],['PERFORM','16 lanterns'],['CAPTURE','fill the jar'],['TRACKER','stock screens']];
+const HINT={HOME:'Left and Right pick a mode, Middle opens it. The + and - keys set the tempo. Up and Down pick the pattern.',
+  LOOPS:'Up and Down pick a lane. Left and Right pick a slice. The + and - keys set the loop length in bars. Rec captures into the lane. Shift shows undo, keep, mute and clear.',
+  PERFORM:'Each screen key mutes the lantern above it, on the next bar line. Left and Right move across the 16 tracks, four at a time. Up and Down queue a pattern. Shift turns the keys into punch-in effects.',
+  CAPTURE:'Rec starts and stops. Stop early and the take runs on to the next bar line. Left and Right pick the source. The + and - keys set the length.'};
+let scr='HOME',shift=false,playing=true,bpm=130,pat=3,qpat=0,beats=RM?5.3:0,last=0,now=0,toast=null,hsel=0,lsel=0,ssel=2,bank=0,lastBar=0,click=false;
+const batt=.72,pressT=[-1e9,-1e9,-1e9,-1e9],fx=[false,false,false,false];
+const hash=n=>{const x=Math.sin(n*127.1)*43758.5;return x-Math.floor(x)},frac=x=>((x%1)+1)%1,p2=n=>String(n).padStart(2,'0'),cl=(v,a,b)=>Math.max(a,Math.min(b,v));
+function wave(kind,seed){return Array.from({length:96},(_,i)=>{const r=hash(seed*97+i),q=i%12;
+  const v=kind==0?Math.exp(-q/2.6)*(i%24<12?1:.65)+r*.12:kind==1?.3+.45*Math.abs(Math.sin(i/6.1))*(.7+r*.3):.2+.5*Math.abs(Math.sin(i/15+1))*(.55+r*.45);return cl(v,.07,1)})}
+const lanes=[{n:'DRUMS',bars:2,dir:2,sp:1,off:0,w:wave(0,7)},{n:'BASS',bars:4,dir:0,sp:1,off:0,w:wave(1,3)},{n:'KEYS',bars:8,dir:1,sp:1,off:0,w:wave(2,5)},{n:'EMPTY',bars:4,dir:0,sp:1,off:0,w:null}];
+const tr=Array.from({length:16},(_,i)=>({n:i<8?['KICK','SNARE','HATS','PERC','BASS','CHORD','LEAD','VOX'][i]:'MIDI '+(i-7),mute:i==3||i==6,q:null,lv:0,pk:0}));
+const cap={src:2,bars:2,cin:1,ph:'ready',t0:0,w:[],end:2,lane:3,mon:false,lv:0,pk:0};
+
+// ---------- loop position: the playhead is the audio position, so it moves at a constant rate ----------
+const llen=l=>l.bars*4/l.sp;
+function pos(l){if(l.dir<2){const f=frac(beats/llen(l)+l.off);return l.dir?1-f:f}const q=frac(beats/(2*llen(l))+l.off);return q<.5?q*2:2-q*2}
+const going=l=>l.dir==0?1:l.dir==1?-1:frac(beats/(2*llen(l))+l.off)<.5?1:-1;
+function jump(l,p,d){l.off=l.dir==2?(d<0?1-p/2:p/2)-beats/(2*llen(l)):(l.dir?1-p:p)-beats/llen(l)}
+function chg(l,fn){const p=pos(l),d=going(l);fn();jump(l,p,d)}
+const lit=(l,f,p,d)=>l.dir==0?f<p:l.dir==1?f>=p:(p-f)*d>=0&&(p-f)*d<.16;
+const st=l=>!l.w?'EMPTY':l.mute?'MUTED':l.od?'OVERDUB':playing?'PLAYING':'STOPPED';
+
+function step(){
+  const bar=Math.floor(beats/4);
+  if(bar!=lastBar){lastBar=bar;tr.forEach(t=>{if(t.q!=null){t.mute=t.q;t.q=null}});if(qpat){pat=qpat;qpat=0}}
+  tr.forEach((t,i)=>{const b=fx[1]?Math.floor(beats*2)/2+(beats*8%1)/8:beats,r=[1,2,4,.5,1,.25,2,.5][i%8]*(fx[0]?2:1);
+    let v=playing&&!t.mute?(.5+.5*hash(i*31+Math.floor(b*r)))*Math.exp(-(b*r%1)*2.2):0;if(fx[2])v*=.55;if(fx[3])v*=.18;
+    t.lv=v>t.lv||RM?v:t.lv+(v-t.lv)*.2;t.pk=Math.max(t.lv,t.pk-.006)});
+  lanes.forEach(l=>{if(l.od&&l.w&&playing){const k=Math.min(95,pos(l)*96|0);if(k!=l.k){l.k=k;l.w[k]=Math.min(1,l.w[k]*.5+.35+hash(now+k)*.3);l.nw[k]=1}}});
+  const c=cap,tt=now/1000;
+  c.lv=Math.min(1,[.5,.3,.9,.62][c.src]*(.5+.5*Math.abs(Math.sin(tt*5.1)*Math.sin(tt*1.7+1)))+(c.src==2?.14*Math.abs(Math.sin(tt*11)):0));c.pk=Math.max(c.lv,c.pk-.008);
+  if(c.ph=='count'&&beats-c.t0>=c.cin*4){c.ph='rec';c.t0=beats}
+  if(c.ph=='rec'){const e=beats-c.t0;while(c.w.length<Math.min(98,e/(c.bars*4)*98))c.w.push(.12+c.lv*.88*(.55+hash(c.w.length*3.7)*.45));
+    if(e>=c.end*4){c.ph='done';say('Take done: '+c.end+(c.end>1?' bars':' bar')+'. Fn 4 keeps it.')}}
+}
+
+// ---------- shared drawings ----------
+function reel(x,y,r,a,c,amt){C(x,y,r,c);C(x,y,r-(r>20?4:2),P.line);C(x,y,r*(.4+.46*amt),P.paper);   // coloured rim, tape wound on, dark spokes
+  for(let k=0;k<3;k++){const b=a+k*2.094;L(x,y,x+Math.cos(b)*r*.76,y+Math.sin(b)*r*.76,P.ink,r>20?5:3)}C(x,y,r*.3,c);C(x,y,r*.12,P.ink)}
+function dirG(dir,x,y,c){L(x,y,x+28,y,c,3);if(dir!=1){L(x+21,y-6,x+28,y,c,3);L(x+21,y+6,x+28,y,c,3)}if(dir!=0){L(x+7,y-6,x,y,c,3);L(x+7,y+6,x,y,c,3)}}
+const title=()=>scr=='LOOPS'?'LOOPS  LANE '+(lsel+1):scr=='PERFORM'?'PERFORM  '+(bank>1?'MIDI ':'SAMPLE ')+(bank*4+1)+'-'+(bank*4+4):scr;
+function topBar(){R(0,0,800,30,P.deck);T(title(),12,16,P.paper,3);
+  if(shift){RR(244,6,62,19,5,P.sun);T('SHIFT',275,16,P.ink,4,'center')}
+  for(let b=0;b<4;b++)C(332+b*16,15,5,playing&&(beats|0)%4==b?(b?P.paper:P.sun):P.line);
+  T(bpm+' BPM',410,16,P.paper,1);T('PAT '+p2(pat)+(qpat?' > '+p2(qpat):''),500,16,qpat?P.sun:P.paper,1);
+  if(playing){L(650,9,650,22,P.mint,3);L(650,9,661,15.5,P.mint,3);L(650,22,661,15.5,P.mint,3)}else R(649,9,13,13,P.muted);
+  T(playing?'PLAY':'STOP',670,16,playing?P.mint:P.muted,3);
+  RR(762,9,26,13,3,P.paper,2);R(789,13,3,5,P.paper);R(765,12,Math.round(20*batt),7,batt<.2?P.coral:P.mint)}
+function labels(){const ks=keys();for(let i=0;i<4;i++){const k=ks[i],x=i*200+4,hit=!RM&&now-pressT[i]<170;
+  RR(x,425,192,51,8,hit?P.sun:P.deck);RR(x+1,426,190,49,7,shift?P.sun:P.line,2);R(x+9,434,6,33,hit?P.ink:k.c);
+  T(k.t,x+24,442,hit?P.ink:P.paper,3);T(k.v,x+24,463,hit?P.ink:shift?P.sun:P.muted,2)}}
+
+// ---------- HOME: a metronome for tempo, a step ticket for the pattern, one object per mode ----------
+const ART=[(x,y)=>{const a=beats*1.6;reel(x-40,y,28,a,P.mint,.8);reel(x+40,y,28,a,P.mint,.3);L(x-40,y+29,x+40,y+29,P.paper,3)},
+  (x,y)=>{L(x-70,y-40,x+70,y-40,P.muted,2);for(let k=0;k<3;k++){const lx=x+(k-1)*46,h=Math.round(tr[k].lv*34);L(lx,y-40,lx,y-30,P.muted,2);RR(lx-16,y-30,32,60,10,TC[k]);R(lx-10,y-22,20,44,P.ink);R(lx-10,y+22-h,20,h,P.sun);C(lx,y+20-h,5,P.paper)}},
+  (x,y)=>{const h=30+Math.round(8*Math.sin(beats*Math.PI/2));RR(x-32,y-30,64,74,14,P.muted);R(x-18,y-42,36,16,P.muted);RR(x-25,y-23,50,60,9,P.ink);R(x-20,y+32-h,40,h,P.mint);RR(x-26,y-52,52,10,4,P.coral)},
+  (x,y)=>{const cs=['st-note','st-instr','st-fx1','st-fx2'];for(let r=0;r<5;r++)for(let c=0;c<4;c++)R(x-46+c*24,y-36+r*15,20,10,P[cs[c]],playing&&r==(beats|0)%5?1:.35)}];
+function home(){
+  RR(8,38,388,152,12,P.deck);T('TEMPO',150,56,P.muted,2);BD(bpm,150,72,13,P.paper);T('BPM',150+String(bpm).length*52+6,131,P.muted,3);T('+ and - keys, 40 to 800',150,168,P.muted,4);
+  const a=playing?Math.sin(beats*Math.PI)*.42:0;
+  L(44,178,66,66,P.line,6);L(112,178,90,66,P.line,6);L(44,178,112,178,P.line,6);L(66,66,90,66,P.line,6);
+  L(78,166,78+Math.sin(a)*92,166-Math.cos(a)*92,P.sun,4);C(78+Math.sin(a)*56,166-Math.cos(a)*56,9,P.sun);C(78,166,6,P.paper);
+  RR(404,38,388,152,12,P.deck);T('PATTERN',420,56,P.muted,2);BD(p2(pat),420,72,8,P.paper);T('32 STEPS',494,82,P.paper,3);
+  T(qpat?'NEXT '+p2(qpat):playing?'PLAYING':'STOPPED',494,104,qpat?P.sun:playing?P.mint:P.muted,2);T('BATTERY '+Math.round(batt*100)+'%',776,56,P.muted,4,'right');
+  const cs=Math.floor(beats*4)%32;for(let k=0;k<32;k++)R(420+(k%16)*22.5,130+(k>>4)*22,18,14,playing&&k==cs?P.sun:k%4?P.line:P.dim);
+  MODES.forEach((m,i)=>{const s=i==hsel,x=8+i*198,y=s?196:204;RR(x,y,190,208,14,s?P.line:P.deck);if(s)RR(x+2,y+2,186,204,12,P.sun,3);
+    ART[i](x+95,y+80);T(m[0],x+95,y+160,P.paper,3,'center');T(m[1],x+95,y+184,s?P.paper:P.muted,4,'center')});
+}
+
+// ---------- LOOPS: a tape between two reels. Each direction lights the tape and moves the head its own way ----------
+function loops(){const l=lanes[lsel],c=DC[l.dir],x0=100,w=600,y0=96,h=108,mid=y0+h/2;
+  RR(8,36,784,226,12,P.deck);RR(18,45,30,26,6,l.w?c:P.line);T(lsel+1,33,59,P.ink,3,'center');T(l.n,58,59,P.paper,3);T(st(l),150,59,l.od?P.coral:P.muted,2);
+  dirG(l.dir,300,58,c);T(DN[l.dir],340,59,c,3);T(SPN[SP.indexOf(l.sp)],470,59,P.muted,2);BD(l.bars,690,46,5,P.paper);T(l.bars>1?'BARS':'BAR',714,59,P.paper,3);
+  RR(x0-6,y0-4,w+12,h+8,6,P.ink);
+  if(!l.w){reel(48,mid,34,0,P.dim,.5);reel(752,mid,34,0,P.dim,.1);T('EMPTY LANE',400,mid-12,P.muted,3,'center');T('Press REC to capture a loop into it',400,mid+14,P.muted,2,'center')}
+  else{const p=pos(l),d=going(l),px=x0+Math.round(p*w),a=p*l.bars*6.283;
+    reel(48,mid,34,a,c,1-p);reel(752,mid,34,a,c,p);                                   // tape winds from one reel to the other
+    for(let b=1;b<l.bars;b+=2)R(x0+b*w/l.bars,y0,w/l.bars,h,P.deck,.55);
+    for(let s=0;s<8;s++){const sx=x0+s*75,cur=Math.min(7,p*8|0)==s;L(sx,y0,sx,y0+h,cur?P.paper:P.line,2);   // eight slice pegs
+      RR(sx,y0-24,24,18,5,cur?c:P.line);T(s+1,sx+12,y0-14,cur?P.ink:P.muted,4,'center');if(s==ssel)RR(sx-2,y0-26,28,22,6,P.paper,2)}
+    for(let k=0;k<96;k++){const hh=Math.max(4,Math.round(l.w[k]*h*.92));R(x0+k*6.25+1,mid-hh/2,4,hh,l.mute?P.line:l.nw&&l.nw[k]?P.coral:lit(l,k/96,p,d)?c:P.dim)}
+    for(let b=0;b<l.bars;b++){const bx=x0+b*w/l.bars;R(bx+1,y0+h+8,w/l.bars-2,5,b%2?P.line:P.dim);T(b+1,bx+3,y0+h+23,P.muted,4)}   // loop length ruler, in bars
+    const o=Math.round(p*w)%40;                                                        // chevrons march with the head along the rail
+    for(let k=0;k<15;k++){const cx=x0+k*40+o,near=(px-cx)*d;if(cx>x0+w||Math.abs(px-cx)<40)continue;const cc=near>0&&near<130?c:P.line;L(cx-6*d,241,cx,247,cc,2);L(cx-6*d,253,cx,247,cc,2)}
+    if(l.dir==2){const hl=p<.03,hr=p>.97;RR(x0-16+(hl?4:0),y0,hl?6:10,160,3,hl?P.paper:c);RR(x0+w+6,y0,hr?6:10,160,3,hr?P.paper:c)}   // bumpers squash on the bounce
+    else{const tw=l.dir?1-p:p,sx=l.dir?x0+w+10:x0-10;L(sx,y0,sx,y0+160,P.line,3);if(tw<.06)C(sx,247,Math.round((1-tw/.06)*12),P.paper)}   // spark where the loop wraps
+    const trail=(n,al)=>{const a_=d>0?Math.max(x0,px-n):px+2,b_=d>0?px-1:Math.min(x0+w,px+n);R(a_,y0,b_-a_,h,c,al)};trail(30,.14);trail(11,.28);
+    R(px-1,y0-4,3,155,P.paper);
+    if(l.dir==2){for(let k=3;k>0;k--)C(px-d*k*11,247,8-k*2,c);C(px,247,9,c);C(px,247,4,P.paper)}
+    else{L(px-22*d,247,px-2*d,247,c,4);L(px-10*d,239,px,247,c,4);L(px-10*d,255,px,247,c,4)}}
+  [0,1,2,3].filter(i=>i!=lsel).forEach((i,r)=>{const m=lanes[i],y=268+r*48,mc=DC[m.dir];RR(8,y,784,44,10,P.deck);RR(16,y+9,26,26,6,m.w?mc:P.line);T(i+1,29,y+23,P.ink,3,'center');
+    if(!m.w){T('EMPTY',56,y+23,P.muted,3);T('press REC to capture into this lane',250,y+23,P.muted,4);return}
+    const p=pos(m),d=going(m);reel(66,y+22,15,p*m.bars*6.283,mc,.5);T(m.n,92,y+15,P.paper,3);T(st(m),92,y+33,P.muted,4);
+    for(let k=0;k<32;k++){const hh=Math.max(3,Math.round((m.w[k*3]+m.w[k*3+1]+m.w[k*3+2])/3*32));R(250+k*12,y+22-hh/2,8,hh,m.mute?P.line:lit(m,k/32,p,d)?mc:P.dim)}
+    R(249+Math.round(p*384),y+4,3,36,P.paper);dirG(m.dir,654,y+22,mc);T(m.bars+(m.bars>1?' BARS':' BAR'),784,y+23,P.paper,2,'right')});
+}
+
+// ---------- PERFORM: 16 lanterns on a string. The string is the bar clock; four big lanterns sit over the four keys ----------
+function lantern(cx,i,k){const t=tr[i],c=TC[k],on=!t.mute,glow=fx[2]?P.sky:P.sun,h=Math.round(t.lv*136),top=292-h;
+  L(cx,100,cx,112,P.muted,3);R(cx-32,110,64,12,on?c:P.line);RR(cx-62,120,124,190,i>7?8:28,on?c:P.line);RR(cx-50,132,100,166,i>7?4:18,P.ink);R(cx-28,308,56,10,on?c:P.line);
+  if(on){R(cx-42,top,84,h,glow);C(cx,top-4,10+Math.round(t.lv*6),glow);C(cx,top-2,5,P.paper);R(cx-42,292-Math.round(t.pk*136),84,3,P.paper)}
+  else{R(cx-50,206,100,20,P.line);T('MUTED',cx,216,P.muted,3,'center')}
+  for(let q=1;q<4;q++)L(cx+41,132+166*q/4,cx+50,132+166*q/4,P.line,2);
+  T((i+1)+' '+t.n,cx,338,P.paper,3,'center');
+  if(t.q!=null){const s=Math.round(Math.sin(beats*Math.PI)*4);RR(cx-72+s,356,144,34,7,P.paper);C(cx-58+s,373,4,P.ink);T('NEXT: '+(t.q?'MUTE':'ON'),cx+8+s,374,P.ink,3,'center')}
+  else T(on?(i>7?'midi track':'sample track'):'unlit',cx,372,P.muted,4,'center')}
+function perform(){const sx=8+Math.round(784*(beats%4/4));L(8,42,792,42,P.line,3);L(8,42,sx,42,P.sun,3);C(sx,42,5,P.paper);
+  tr.forEach((t,i)=>{const x=22+i*47+(i>7?18:0),h=Math.round(t.lv*22);L(x+15,42,x+15,52,P.line,2);RR(x,52,30,34,i>7?3:10,t.mute?P.line:TC[i%4]);R(x+5,57,20,24,P.ink);
+    if(t.mute)R(x+5,67,20,4,P.line);else R(x+5,81-h,20,h,fx[2]?P.sky:P.sun);if(t.q!=null)C(x+15,92,3,P.paper)});
+  RR(15+bank*188+(bank>1?18:0),48,186,50,8,P.paper,2);
+  for(let k=0;k<4;k++)lantern(100+k*200,bank*4+k,k)}
+
+// ---------- CAPTURE: a jar that fills to the bar line. The stream is the input level ----------
+function srcIcon(s,x,y,c){if(s==0){C(x,y,13,c);C(x,y,6,P.deck)}
+  else if(s==3){RR(x-16,y-6,32,18,3,c);R(x-9,y-15,18,9,c);R(x-5,y-12,3,3,P.deck);R(x+2,y-12,3,3,P.deck)}
+  else{RR(x-8,y-16,16,24,8,c);L(x,y+10,x,y+17,c,3);L(x-8,y+17,x+8,y+17,c,3);for(let k=0;k<(s==1?1:3);k++)C(x+22,y+10-k*10,3,c)}}
+function capture(){const c=cap,x=44,y=126,w=170,h=268,inner=h-30,end=c.ph=='ready'?c.bars:c.end,e=c.ph=='rec'?(beats-c.t0)/4:c.ph=='done'?c.end:0;
+  const fh=Math.round(Math.min(1,e/c.bars)*inner),sy=y+h-15-fh,hot=c.lv>.93,sw=4+Math.round(c.lv*18),x0=290,W=490,y0=112,H=176,mid=y0+H/2;
+  for(let k=0;k<16;k++)R(12,y+h-14-(k+1)*16,18,12,k==(c.pk*16|0)?P.paper:c.lv*16>k?(k>13?P.coral:k>10?P.sun:P.mint):P.deck);T('IN',21,y-12,P.muted,4,'center');
+  RR(x+50,40,70,20,6,P.line);T(SRC[c.src],x+130,51,P.sky,2);
+  RR(x,y,w,h,24,P.line);R(x+34,y-20,w-68,26,P.line);RR(x+9,y+9,w-18,h-18,17,P.ink);R(x+42,y-20,w-84,32,P.ink);
+  if(c.ph=='done')RR(x+26,y-34,w-52,14,5,P.coral);else R(x+85-sw/2,60,sw,(c.ph=='rec'?sy:92)-60,hot?P.coral:P.sun);
+  R(x+15,sy,w-30,fh,P.mint);if(c.ph=='rec')R(x+15,sy,w-30,3,P.paper);
+  for(let b=1;b<=c.bars;b++){const gy=y+h-15-Math.round(inner*b/c.bars);if(b==end&&end<c.bars)R(x+15,y+15,w-30,gy-y-15,P.line,.4);
+    L(x+w-46,gy,x+w-16,gy,b==end?P.sun:P.muted,b==end?4:2);T(b,x+w+8,gy,b==end?P.sun:P.muted,b==end?3:4)}
+  T('INTO LANE '+(c.lane+1),x+85,y+h+14,P.muted,4,'center');
+  const cb=c.ph=='count'?Math.floor(beats-c.t0)%4:c.ph=='rec'?Math.floor(beats-c.t0)%4:-1;
+  for(let k=0;k<4;k++)C(x0+10+k*28,52,9,k==cb?(c.ph=='rec'?P.coral:P.sun):P.line);
+  T(c.ph=='ready'?'READY':c.ph=='count'?'COUNT-IN':c.ph=='rec'?'RECORDING  '+e.toFixed(1)+' / '+end+' BARS':'TAKE: '+c.end+(c.end>1?' BARS':' BAR'),780,52,c.ph=='rec'?P.coral:c.ph=='done'?P.mint:P.paper,3,'right');
+  RR(x0-8,y0-8,W+16,H+34,10,P.deck);R(x0,y0,W,H,P.ink);
+  for(let b=0;b<c.bars;b++){const bx=x0+b*W/c.bars;if(b%2)R(bx,y0,W/c.bars,H,P.deck,.6);T(b+1,bx+4,y0+H+13,b<end?P.paper:P.dim,4);for(let q=1;q<4;q++)L(bx+q*W/c.bars/4,y0+H-8,bx+q*W/c.bars/4,y0+H-1,P.line,2)}
+  if(end<c.bars)R(x0+W*end/c.bars,y0,W-W*end/c.bars,H,P.line,.5);
+  c.w.forEach((a,k)=>{const hh=Math.max(3,Math.round(a*H*.9));R(x0+k*5+1,mid-hh/2,3,hh,c.ph=='rec'&&k>c.w.length-4?P.paper:P.mint)});
+  const fx_=x0+Math.round(W*end/c.bars)-2;R(fx_,y0-22,3,H+22,P.sun);RR(fx_-58,y0-24,58,20,4,P.sun);T('END '+end,fx_-29,y0-13,P.ink,4,'center');   // the take ends on this bar line
+  if(c.ph=='rec'){const hx=x0+c.w.length*5;R(hx,y0-6,3,H+12,P.coral);C(hx+1,y0-8,7,P.coral)}
+  if(c.ph=='count'){T('COUNT-IN',x0+W/2,y0+18,P.sun,3,'center');BD(Math.max(1,Math.ceil(c.cin*4-(beats-c.t0))),x0+W/2-36,mid-52,24,P.sun)}
+  if(c.ph=='ready')T('Press REC. The take ends on a bar line.',x0+W/2,mid,P.muted,2,'center');
+  for(let s=0;s<4;s++){const sx=x0-8+s*127,on=s==c.src;RR(sx,322,120,84,10,P.deck);if(on)RR(sx+2,324,116,80,8,P.sun,3);srcIcon(s,sx+60,352,on?P.paper:P.muted);T(SN[s],sx+60,390,on?P.paper:P.muted,4,'center')}
+}
+
+// ---------- what the four screen keys do on each screen, with and without Shift ----------
+const K=(t,v,c,f)=>({t,v,c,f});
+function note(s){toast={s,t:performance.now()+2600};say(s)}
+function enter(i){if(i<3)go(S[i+1]);else note('Back to the stock Pattern screen (not drawn here)')}
+function recKey(){const c=cap;
+  if(c.ph=='ready'){c.w=[];c.end=c.bars;c.t0=beats;playing=true;c.ph=c.cin?'count':'rec';if(RM){for(let k=0;k<98;k++)c.w.push(.15+.8*hash(k*3.7)*Math.abs(Math.sin(k/9)));c.ph='done'}}
+  else if(c.ph=='count')c.ph='ready';
+  else if(c.ph=='rec')c.end=Math.max(1,Math.ceil((beats-c.t0)/4));                       // stop early: snap up to the next bar line
+  else{const l=lanes[c.lane],n=Math.round(98*c.end/c.bars);Object.assign(l,{w:Array.from({length:96},(_,k)=>c.w[Math.floor(k/96*n)]||.1),bars:c.end,n:'TAKE '+(c.lane+1),off:0,od:false,mute:false,prev:null,nw:{}});
+    lsel=c.lane;c.ph='ready';c.w=[];go('LOOPS')}}
+function keys(){const l=lanes[lsel],c=cap,idle=c.ph=='ready';
+  if(scr=='HOME')return shift?[K('CLICK',click?'ON':'OFF',P.sky,()=>click=!click),K('TEMPO','BACK TO 130',P.paper,()=>bpm=130),K('SAVE','PROJECT',P.mint,()=>note('Project saved')),K('STOCK MENU','ALL SCREENS',P.muted,()=>note('Opens the stock 4 x 3 menu (not drawn here)'))]
+    :MODES.map((m,i)=>K(m[0],m[1],TC[i],()=>enter(i)));
+  if(scr=='LOOPS')return shift?[K('UNDO',l.prev?'LAST LAYER':'NOTHING YET',P.paper,()=>{if(l.prev){l.w=l.prev;l.prev=null;l.nw={};l.od=false}}),
+      K('KEEP','AS INSTRUMENT',P.mint,()=>{if(l.w){l.prev=null;l.nw={};l.od=false;note('Lane '+(lsel+1)+' kept as an instrument')}}),
+      K('MUTE',l.mute?'MUTED':'SOUNDING',P.sky,()=>l.mute=!l.mute),K('CLEAR','LANE '+(lsel+1),P.coral,()=>{l.w=null;l.n='EMPTY';l.od=false;l.prev=null})]
+    :[K('DIRECTION',DN[l.dir],DC[l.dir],()=>chg(l,()=>l.dir=(l.dir+1)%3)),K('SPEED',SPN[SP.indexOf(l.sp)],P.paper,()=>chg(l,()=>l.sp=SP[(SP.indexOf(l.sp)+1)%3])),
+      K('SLICE','JUMP TO '+(ssel+1),P.paper,()=>jump(l,(ssel+(l.dir==1?1:0))/8,1)),K('OVERDUB',l.od?'ON':'OFF',P.coral,()=>{if(l.w){l.od=!l.od;if(l.od){l.prev=l.w.slice();l.nw={}}}})];
+  if(scr=='PERFORM')return shift?FXN.map((n,i)=>K(n,fx[i]?'ON':'PUNCH IN',P.sun,()=>fx[i]=!fx[i]))
+    :[0,1,2,3].map(k=>{const i=bank*4+k,t=tr[i];return K('MUTE '+(i+1),t.q!=null?'NEXT BAR: '+(t.q?'MUTE':'ON'):t.mute?'MUTED':t.n,TC[k],()=>{if(RM||!playing)t.mute=!t.mute;else t.q=t.q==null?!t.mute:null})});
+  return shift?[K('MONITOR',c.mon?'ON':'OFF',P.sky,()=>c.mon=!c.mon),K('INTO','LANE '+(c.lane+1),P.paper,()=>c.lane=(c.lane+1)%4),K('RETAKE','SAME SETTINGS',P.sun,()=>{c.ph='ready';recKey()}),K('DISCARD','EMPTY THE JAR',P.coral,()=>{c.ph='ready';c.w=[]})]
+    :[K('SOURCE',SRC[c.src],P.sky,()=>{if(idle)c.src=(c.src+1)%4}),K('LENGTH',c.bars+(c.bars>1?' BARS':' BAR'),P.paper,()=>{if(idle)c.bars=c.bars%8*2||1}),K('COUNT-IN',['OFF','1 BAR','2 BARS'][c.cin],P.sun,()=>c.cin=(c.cin+1)%3),
+      K(idle?'RECORD':c.ph=='done'?'KEEP':'STOP',idle?'REC KEY TOO':c.ph=='done'?'TO LANE '+(c.lane+1):c.ph=='count'?'CANCEL':'AT NEXT BAR',P.coral,recKey)];
+}
+function nav(k){const l=lanes[lsel],c=cap,dx=k=='right'?1:k=='left'?-1:0,dy=k=='down'?1:k=='up'?-1:0,dv={p1:1,m1:-1,p10:10,m10:-10}[k]||0;
+  if(scr=='HOME'){hsel=(hsel+dx+4)%4;pat=cl(pat-dy,1,99);bpm=cl(bpm+dv,40,800);if(k=='mid')enter(hsel);if(k=='rec')go('CAPTURE')}
+  else if(scr=='LOOPS'){lsel=(lsel+dy+4)%4;ssel=(ssel+dx+8)%8;if(dv)chg(l,()=>l.bars=cl(dv>1?l.bars*2:dv<-1?Math.ceil(l.bars/2):l.bars+dv,1,8));
+    if(k=='mid')jump(l,(ssel+(l.dir==1?1:0))/8,1);if(k=='del'){l.w=null;l.n='EMPTY';l.od=false}if(k=='rec'){c.lane=lsel;go('CAPTURE')}}
+  else if(scr=='PERFORM'){bank=(bank+dx+4)%4;bpm=cl(bpm+dv,40,800);if(dy){qpat=cl((qpat||pat)-dy,1,99);if(qpat==pat||RM||!playing){pat=qpat;qpat=0}}if(k=='mid')tr.forEach(t=>t.q=null)}
+  else{if(c.ph=='ready'){c.src=(c.src+dx+4)%4;if(dv)c.bars=cl(dv>0?c.bars*2:Math.ceil(c.bars/2),1,8)}if(k=='rec'||k=='mid')recKey();if(k=='del'){c.ph='ready';c.w=[]}}}
+const summary=()=>scr=='HOME'?'Mode '+MODES[hsel][0]+'. Tempo '+bpm+'. Pattern '+p2(pat)+'.':scr=='LOOPS'?'Lane '+(lsel+1)+' '+lanes[lsel].n+'. Slice '+(ssel+1)+'. '+lanes[lsel].bars+' bars.'
+  :scr=='PERFORM'?'Tracks '+(bank*4+1)+' to '+(bank*4+4)+(qpat?'. Pattern '+p2(qpat)+' queued.':'.'):'Source '+SRC[cap.src]+'. '+cap.bars+' bars. '+cap.ph+'.';
+
+// ---------- input, loop, page wiring ----------
+const say=s=>{$('say').textContent=s};
+function refresh(){if(RM){now=performance.now();step();draw()}}
+function go(n){n=String(n).toUpperCase();if(!S.includes(n))return;scr=n;S.forEach(s=>$('tab-'+s).setAttribute('aria-current',s==n));$('hint').textContent=HINT[n];say(n+' screen.');refresh()}
+function press(k){toast=null;const s0=scr;let m='';
+  if(k=='menu')return go(S[(S.indexOf(scr)+1)%4]);
+  if(k=='shift'){shift=!shift;if(!shift)fx.fill(false);$('k-shift').setAttribute('aria-pressed',shift);m=shift?'Shift held: the four screen keys change.':'Shift released.'}
+  else if(k=='play'){playing=!playing;m=playing?'Playing.':'Stopped.'}
+  else if(/^f\d$/.test(k)){const i=+k[1],a=keys()[i];if(!a)return;pressT[i]=performance.now();a.f();if(scr==s0&&!toast){const b=keys()[i];m='Fn '+(i+1)+': '+b.t+', '+b.v+'.'}}
+  else if(k=='copy'||k=='ins')m=(k=='copy'?'Copy':'Insert')+' is not used on this screen.';
+  else{nav(k);if(scr==s0&&!toast)m=summary()}
+  if(m)say(m);refresh()}
+function draw(){R(0,0,800,480,P.ink);({HOME:home,LOOPS:loops,PERFORM:perform,CAPTURE:capture})[scr]();topBar();labels();
+  if(toast&&(RM||now<toast.t)){const w=toast.s.length*10.3+44;RR(400-w/2,196,w,52,10,P.paper);T(toast.s,400,223,P.ink,3,'center')}}
+function tick(ts){const dt=Math.min(.05,(ts-last)/1000||0);last=now=ts;if(playing)beats+=dt*bpm/60;step();draw();requestAnimationFrame(tick)}
+$('dev').addEventListener('click',e=>{const b=e.target.closest('[data-k]');if(b)press(b.dataset.k)});
+$('tabs').addEventListener('click',e=>{const b=e.target.closest('[data-s]');if(b)go(b.dataset.s)});
+window.__mini={screens:S.slice(),go,key:i=>press('f'+i),state:()=>{const l=lanes[lsel];return{screen:scr,shift,playing,bpm,pattern:pat,queuedPattern:qpat,labels:keys().map(k=>k.t+': '+k.v),
+  home:{selected:MODES[hsel][0]},loops:{lane:lsel+1,name:l.n,direction:DN[l.dir],speed:l.sp,bars:l.bars,slice:ssel+1,overdub:!!l.od,muted:!!l.mute,empty:!l.w,position:+pos(l).toFixed(3)},
+  perform:{bank,tracks:[bank*4+1,bank*4+4],mutes:tr.map(t=>t.mute),queued:tr.map(t=>t.q),fx:FXN.filter((n,i)=>fx[i])},
+  capture:{source:SRC[cap.src],bars:cap.bars,countIn:cap.cin,phase:cap.ph,endBar:cap.end,intoLane:cap.lane+1,recorded:cap.w.length}}}};
+go('HOME');say('Tap a key. Shift latches here: tap once to hold it, again to let go.');
+if(document.fonts)F.forEach(f=>document.fonts.load(f).then(refresh,()=>{}));
+if(RM){step();draw()}else requestAnimationFrame(tick);
+})();
+</script>

@@ -1,0 +1,349 @@
+<title>Mini Groovebox Native</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;700&display=swap">
+<style>
+/* Layout: one left-aligned column. The device comes first, plain spec notes sit under it. Every colour is a stock theme colour. */
+:root{color-scheme:dark;
+  --bg:#000000;--g08:#080808;--g0a:#0A0A0A;--g12:#121212;--g17:#171717;--g22:#222222;--g32:#323132;--g33:#333333;--g44:#444344;--g57:#575757;--g77:#777777;--g90:#909090;
+  --wht:#FFFFFF;--red:#CD1818;--grn:#30CB3F;--yel:#FEF749;--yelD:#453B1B;--cyn:#57F1FF;--pur:#BB58F1;--purD:#321F3A;--note:#00E8BE;--noteD:#003933;
+  --mono:"Roboto Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--g90);font:14px/1.6 var(--mono)}
+.page{max-width:864px;margin:0 auto;padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:14px}
+.hd{display:flex;flex-direction:column;gap:4px}
+.eyebrow{margin:0;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--red)}
+h1{margin:0;font-size:20px;line-height:1.3;font-weight:700;color:var(--wht);text-wrap:balance}
+.lede,.cap{margin:0;max-width:66ch}
+.cap{font-size:12px;color:var(--g77)}
+button{font:inherit;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
+button:focus-visible{outline:2px solid var(--yel);outline-offset:2px}
+.tabs,.fn{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.tab,.k{background:var(--g22);border:1px solid var(--g33);border-radius:3px;color:var(--g90);min-height:44px;padding:4px 0;font-size:11px;text-transform:uppercase;overflow:hidden}
+.tab{font-size:12px;letter-spacing:.04em}
+.tab[aria-pressed="true"],.k.on{background:var(--g32);border-color:var(--red);color:var(--wht)}
+.k:active{background:var(--g44)}
+.dev{background:var(--g12);border:1px solid var(--g22);border-radius:10px;padding:8px;display:flex;flex-direction:column;gap:8px}
+.scr{border:1px solid var(--g33);background:var(--bg);line-height:0}
+.scr canvas{display:block;width:100%;height:auto;max-width:100%}
+.scr.full{overflow-x:auto}
+.scr.full canvas{width:800px;max-width:none}
+.fn .k{min-height:64px;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.25}
+.fn small,.fn em,.fn i{font-size:10px;font-style:normal;color:var(--g57);max-width:100%;white-space:nowrap}
+.fn small{color:var(--g77)}
+.fn em{color:var(--g90)}
+.fn b{font-weight:400;color:var(--wht);max-width:100%;white-space:nowrap}
+.fn i::before,.fn.sh b::before{content:"";display:inline-block;border:4px solid transparent;border-top-width:0;border-bottom:6px solid currentColor;margin-right:4px}
+.fn.sh i::before{display:none}
+.fn.sh b::before{border-bottom-color:var(--red)}
+.keys{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:12px;align-items:start}
+.dpad{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;max-width:168px}
+.sys{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;width:100%;max-width:330px;justify-self:end}
+#k-play.on{color:var(--grn);border-color:var(--grn)}
+#k-rec{color:var(--red)}
+.hint{margin:0;color:var(--wht);max-width:66ch;min-height:6.4em}
+.zoomrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;font-size:12px;color:var(--g77)}
+.zoomrow .k{padding:4px 12px}
+.notes{display:grid;gap:18px;border-top:1px solid var(--g22);padding-top:18px}
+.notes h2{margin:0 0 4px;font-size:12px;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:var(--red)}
+.notes p{margin:0;max-width:66ch}
+.notes p+p{margin-top:6px}
+@media(min-width:880px){.zoomrow{display:none}.hint{min-height:3.2em}}
+</style>
+
+<div class="page">
+  <header class="hd">
+    <p class="eyebrow">Tracker Mini groove pages / Native</p>
+    <h1>It looks like it shipped with the device.</h1>
+    <p class="lede">Four new pages in the stock theme. Tap the keys under the screen.</p>
+  </header>
+
+  <nav class="tabs" aria-label="Screens">
+    <button class="tab" id="tab-home" data-go="HOME">Home</button>
+    <button class="tab" id="tab-loops" data-go="LOOPS">Loops</button>
+    <button class="tab" id="tab-perform" data-go="PERFORM">Perform</button>
+    <button class="tab" id="tab-capture" data-go="CAPTURE">Capture</button>
+  </nav>
+
+  <section class="dev" aria-label="Concept device">
+    <div class="scr" id="scr"><canvas id="lcd" width="800" height="480" role="img" aria-label="The device screen, 800 by 480 pixels. The text under the device describes the current page."></canvas></div>
+    <div class="fn" id="fn">
+      <button class="k" id="k-f0" data-k="f0"><small>Fn1</small><b id="fa0"></b><em id="fv0"></em><i id="fb0"></i></button>
+      <button class="k" id="k-f1" data-k="f1"><small>Fn2</small><b id="fa1"></b><em id="fv1"></em><i id="fb1"></i></button>
+      <button class="k" id="k-f2" data-k="f2"><small>Fn3</small><b id="fa2"></b><em id="fv2"></em><i id="fb2"></i></button>
+      <button class="k" id="k-f3" data-k="f3"><small>Fn4</small><b id="fa3"></b><em id="fv3"></em><i id="fb3"></i></button>
+    </div>
+    <div class="keys">
+      <div class="dpad">
+        <span></span><button class="k" id="k-up" data-k="up" data-rep>Up</button><span></span>
+        <button class="k" id="k-left" data-k="left" data-rep>Left</button><button class="k" id="k-mid" data-k="mid">Mid</button><button class="k" id="k-right" data-k="right" data-rep>Right</button>
+        <span></span><button class="k" id="k-down" data-k="down" data-rep>Down</button><span></span>
+      </div>
+      <div class="sys">
+        <button class="k" id="k-menu" data-k="menu">Menu</button><button class="k" id="k-shift" data-k="shift" aria-pressed="false">Shift</button>
+        <button class="k" id="k-play" data-k="play">Play</button><button class="k" id="k-rec" data-k="rec">Rec</button>
+        <button class="k" id="k-copy" data-k="copy">Copy</button><button class="k" id="k-insert" data-k="insert">Insert</button>
+        <button class="k" id="k-delete" data-k="delete">Delete</button><span></span>
+        <button class="k" id="k-m10" data-k="m10" data-rep>-10</button><button class="k" id="k-m1" data-k="m1" data-rep>-1</button>
+        <button class="k" id="k-p1" data-k="p1" data-rep>+1</button><button class="k" id="k-p10" data-k="p10" data-rep>+10</button>
+      </div>
+    </div>
+  </section>
+
+  <p class="hint" id="hint" aria-live="polite"></p>
+  <p class="cap">Shift latches here. Tap it on, tap it off. Menu steps through the pages. Hold an arrow or a +/- key and it repeats, as on the device.</p>
+  <div class="zoomrow"><button class="k" id="zoom" aria-pressed="false">Screen at full size</button><span>Or turn the phone sideways.</span></div>
+
+  <section class="notes">
+    <div>
+      <h2>What this direction is going for</h2>
+      <p>It should look like it shipped with the device. Stock colours, the five stock fonts, the top bar and the label row where they already are.</p>
+      <p>The groove pages sit in the menu beside Pattern and Song. Opening one never feels like leaving the tracker.</p>
+      <p>Nothing is decoration. The waveform, the playhead and the meters are the only things that move.</p>
+      <p>Each screen key owns the two label cells above it. The left cell is a plain press. The right cell is the same key with Shift.</p>
+    </div>
+    <div>
+      <h2>Easy and hard on this screen</h2>
+      <p>Easy: frames, meters, labels, the playhead and its red trail. They are rectangles and one line, and the display chip draws those cheaply.</p>
+      <p>Hard: waveforms. A frame holds about 8 KB of drawing commands, and 600 waveform columns would use more than half. So the big lane is 192 bars and each small lane is 64, about 3 KB in all. A bitmap uploaded once per loop would be cheaper still.</p>
+      <p>There is no animation engine. Motion is a few small parts redrawn each frame in whole pixels. At 130 BPM a 4-bar sweep moves about 2 px per frame, which reads as smooth.</p>
+    </div>
+    <div>
+      <h2>What this is</h2>
+      <p>A concept picture drawn in a web page. It is not firmware and none of it has run on the device. Where the keys sit on the case is a guess. The source code does not say. The waveforms and meters are made up.</p>
+    </div>
+  </section>
+</div>
+
+<script>
+(()=>{
+const $=id=>document.getElementById(id),cv=$('lcd'),g=cv.getContext('2d'),C={},cs=getComputedStyle(document.documentElement);
+'bg g08 g0a g12 g17 g22 g32 g33 g44 g57 g77 g90 wht red grn yel yelD cyn pur purD note noteD'.split(' ').forEach(k=>C[k]=cs.getPropertyValue('--'+k).trim());
+const FF='"Roboto Mono",ui-monospace,Menlo,Consolas,monospace'; // the five stock font slots
+const F={r12:'400 12px '+FF,l14:'300 14px '+FF,r14:'400 14px '+FF,l17:'300 17px '+FF,b17:'700 17px '+FF};
+const RM=matchMedia('(prefers-reduced-motion: reduce)'),clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),pad2=n=>String(n).padStart(2,'0');
+const R=(x,y,w,h,c)=>{g.fillStyle=c;g.fillRect(x,y,w,h)},B=(x,y,w,h,c)=>{g.strokeStyle=c;g.lineWidth=1;g.strokeRect(x+.5,y+.5,w-1,h-1)};
+const T=(s,x,y,f,c,a)=>{g.font=F[f];g.fillStyle=c;g.textAlign=a||'left';g.textBaseline='middle';g.fillText(s,x,y)};
+
+const SCREENS=['HOME','LOOPS','PERFORM','CAPTURE'],TITLE={HOME:'Groove',LOOPS:'Groove Loops',PERFORM:'Groove Perform',CAPTURE:'Groove Capture'};
+const DIRN=['FORWARD','REVERSE','PING-PONG'],SRC=['Line In','Mic (low gain)','Mic (high gain)','USB'],SRCS=['LINE IN','MIC LOW','MIC HIGH','USB'],GAIN=[.8,.5,.95,.7],BARS=[1,2,4,8],N=192;
+const HINT={HOME:'Fn1 to Fn4 open the page above them. Left and Right move the red frame and Mid opens it. The four +/- keys set the tempo, 40 to 800 BPM.',
+ LOOPS:'Fn2 changes direction. Forward fills and snaps back. Reverse drains. Ping-pong fills and drains, and the end walls flash on each bounce. Up and Down pick a lane, Left and Right pick a slice, +/- set the length in bars.',
+ PERFORM:'All 16 tracks sit on top. Four are large, each over its own key. A mute waits for the next bar and shows in yellow until it lands. Tap Shift for fill and punch-in effects. Left and Right move along the tracks.',
+ CAPTURE:'A take starts by itself here so you can watch it. Fn1 stops it, and the take runs on to the end of the bar. Fn4 keeps the take and sends it to a loop lane. Up and Down pick the input.'};
+let scr='LOOPS',shift=false,playing=true,bpm=130,patt=1,tb=5.3,cb=5.3,vol=80,metro=false,swing=50,toast='',toastT=0,popup=false,hs=0,ls=1,ps=4,solo=null,fillBar=null,raf=0,last=0;
+const batt=.78,fx={st:false,fl:false},seen={};
+
+// made-up audio
+function rnd(a){return()=>{a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function gen(seed,grid,dens,dec){const r=rnd(seed),d=new Float32Array(N);let e=0;for(let i=0;i<N;i++){if(i%grid==0&&r()<dens)e=.45+.55*r();d[i]=Math.min(1,e*(.72+.28*r()));e*=dec}return d}
+function sigAt(j,s){const h=(j+Math.floor(s*7))%9;return Math.min(1,(.18+.82*Math.exp(-h*.4))*(.5+.5*Math.abs(Math.sin(j*1.3+s))))}
+const mk=(name,bars,dir,st,d,col)=>({name,bars,dir,st,d,col,spd:1,sl:2,slOn:false,rec:null,undo:null,kept:0,li:-1,rs:0});
+const lanes=[mk('DRUM BREAK',2,0,'play',gen(7,6,.75,.62),'note'),mk('BASS RIFF',4,2,'play',gen(21,12,.9,.93),'yel'),mk('VOX CHOP',1,1,'play',gen(5,8,.55,.87),'pur'),mk('',4,0,'empty',new Float32Array(N),'cyn')];
+const TN=['KICK','SNARE','HAT','PERC','BASS','CHORD','LEAD','VOX'],PT=[0x1111,0x1010,0x5555,0x2492,0x0925,0x0101,0x4A52,0x0100,0x1111,0x8888,0x0421,0x1249,0x0101,0x5050,0x2222,0x0001],LV=[86,74,58,62,80,66,70,54,60,60,50,64,45,70,52,40];
+const tracks=PT.map((p,i)=>({n:i<8?TN[i]:'MIDI '+(i-7),lv:LV[i],m:i==6||i==11||i>12,q:null,qb:0,pat:p,dec:i%3?.5:.28}));
+const cap={st:'idle',src:0,bars:4,ci:true,mon:true,to:3,d:new Float32Array(136),prog:0,li:0,end:4,len:4,b0:0,c0:0,rs:1,lv:[0,0],pk:[0,0]};
+
+// loop playhead: p is 0..1 across the wave, dr is the travel direction, since is beats since the last wrap or bounce
+function pos(L){const len=L.bars*4*(L.slOn?1/8:1)/L.spd,ph=tb/len,a=L.slOn?L.sl/8:0,w=L.slOn?1/8:1;let u=ph%1,dr=1;
+ if(L.dir==2){const v=ph%2;u=v<1?v:2-v;dr=v<1?1:-1}else if(L.dir==1){u=1-u;dr=-1}
+ return{p:a+u*w,dr,a,w,since:(ph%1)*len}}
+function meter(t,i){if(!playing||t.m||(solo!=null&&solo!=i))return 0;const sp=tb*4,lv=t.lv/100*(fx.fl?.5:1);
+ if(fx.st&&i<8)return lv*Math.exp(-(sp%1)*1.6);
+ const pat=i<4&&fillBar!=null&&Math.floor(tb/4)>=fillBar?t.pat|0xF5F5:t.pat;
+ for(let k=0;k<16;k++){const s=Math.floor(sp)-k;if(pat>>(s&15)&1)return lv*Math.exp(-(sp-s)*t.dec)}return 0}
+const inLevel=ch=>clamp((cap.mon?1:.9)*GAIN[cap.src]*(.25+.75*Math.pow(1-(cb*2%1),2))*(.8+.2*Math.sin(cb*5.1+ch*2)),0,1);
+
+function update(){const bar=Math.floor(tb/4),c=cap;
+ lanes.forEach(L=>{if(!L.rec)return;const i=Math.min(N-1,pos(L).p*N|0),far=L.li<0||Math.abs(i-L.li)>12,a=far?i:Math.min(i,L.li),b=far?i:Math.max(i,L.li);
+  for(let j=a;j<=b;j++){const v=sigAt(j,L.rs);L.d[j]=L.rec=='rec'?v:Math.max(L.d[j],v*.85)}L.li=i});
+ tracks.forEach(t=>{if(t.q!=null&&bar>=t.qb){t.m=t.q;t.q=null}});if(fillBar!=null&&bar>fillBar)fillBar=null;
+ if(c.st=='count'&&cb-c.c0>=4){c.st='rec';c.b0=cb;c.end=c.bars}
+ if(c.st=='rec'){const pb=(cb-c.b0)/4,n=c.d.length;c.prog=Math.min(pb,c.end)/c.bars;const i=Math.min(n-1,c.prog*n|0);
+  for(let j=c.li;j<=i;j++)c.d[j]=sigAt(j,c.rs)*(.4+.6*GAIN[c.src]);c.li=i;if(pb>=c.end){c.st='done';c.len=c.end}}
+ for(let ch=0;ch<2;ch++){c.lv[ch]=inLevel(ch);c.pk[ch]=Math.max(c.lv[ch],c.pk[ch]-.012)}}
+
+// drawing parts
+function wave(d,x,y,w,h,n,col){const k=d.length/n,cw=w/n,m=y+h/2;for(let i=0;i<n;i++){let a=0;for(let j=0;j<k;j++)a=Math.max(a,d[i*k+j]);if(a<.02)continue;
+ const t=Math.max(1,a*h*.5),b=t*(.7+.3*(i*37%10)/10);g.fillStyle=col(i/n);g.fillRect(x+i*cw,Math.round(m-t),Math.max(1,cw-1),Math.round(t+b))}}
+function arrow(x,y,d,dr,c){g.lineWidth=1.5;const ln=(yy,s,cc)=>{g.strokeStyle=cc;g.beginPath();g.moveTo(x,yy);g.lineTo(x+16,yy);const e=s>0?x+16:x;g.moveTo(e-4*s,yy-3);g.lineTo(e,yy);g.lineTo(e-4*s,yy+3);g.stroke()};
+ if(d==2){ln(y-4,1,dr>0?c:C.g57);ln(y+4,-1,dr<0?c:C.g57)}else ln(y,d?-1:1,c)}
+function vmeter(x,y,w,h,v){R(x,y,w,h,C.g12);const seg=(a,b,c)=>{if(v>a){const t=Math.min(v,b);R(x,Math.round(y+h-h*t),w,Math.round(h*(t-a)),c)}};seg(0,.7,C.grn);seg(.7,.9,C.yel);seg(.9,1,C.red)}
+const chip=(L,i,x,y)=>{R(x,y,18,18,C[L.col]);T(i+1,x+9,y+10,'r14',C.bg,'center')};
+const stTxt=L=>L.rec=='rec'?['REC',C.red]:L.rec=='dub'?['OVERDUB',C.red]:L.st=='empty'?['REC OR CAPTURE',C.g44]:L.st=='mute'?['MUTED',C.g77]:playing?['PLAY',C.grn]:['STOPPED',C.g77];
+const spdl=s=>s==.5?'x1/2':'x'+s,brs=b=>b+(b>1?' BARS':' BAR');
+
+function drawTop(){R(0,0,800,27,C.g08);T(TITLE[scr],9,14,'b17',C.wht);if(shift)T('SHIFT',19+g.measureText(TITLE[scr]).width,14,'r14',C.red);
+ if(toast&&(RM.matches||performance.now()<toastT))T(toast,376,14,'r14',C.yel,'center');
+ const s='P'+pad2(patt)+'  '+pad2(Math.floor(tb*4)%32+1)+'/32   '+bpm.toFixed(1)+' BPM';T(s,762,14,'r14',C.wht,'right');const px=744-g.measureText(s).width;
+ if(playing){g.fillStyle=C.grn;g.beginPath();g.moveTo(px,9);g.lineTo(px+9,14);g.lineTo(px,19);g.fill()}else R(px,10,9,9,C.g77);
+ B(767,7,25,13,C.wht);R(792,11,3,5,C.wht);R(769,9,Math.round(21*batt),9,C.wht)}
+
+function labels(){const L=lanes[ls],c=cap,b=(ps>>2)*4;
+ if(scr=='HOME')return[{n:'LOOPS'},{n:'PATTERN -'},{n:'PERFORM'},{n:'PATTERN +'},{n:'CAPTURE'},{n:'METRONOME',v:metro?'ON':'OFF',on:metro},{n:'TRACKER'},{n:'SWING',v:swing+'%'}];
+ if(scr=='LOOPS')return[{n:L.rec=='rec'?'STOP':'REC',on:L.rec=='rec'},{n:L.rec=='dub'?'STOP':'OVERDUB',on:L.rec=='dub'},{n:'DIRECTION',v:DIRN[L.dir]},{n:'SPEED',v:spdl(L.spd)},
+  {n:'SLICE',v:L.slOn?(L.sl+1)+' OF 8':'OFF',on:L.slOn},{n:L.st=='mute'?'UNMUTE':'MUTE',v:'LANE '+(ls+1)},{n:'UNDO',dis:!L.undo},{n:'KEEP',v:L.kept?'INSTR '+L.kept:'AS INSTR',dis:L.st=='empty'}];
+ if(scr=='PERFORM'){const o=[],S=[{n:'FILL',v:fillBar!=null?'QUEUED':'NEXT BAR',on:fillBar!=null},{n:'STUTTER',v:'1/16',on:fx.st},{n:'FILTER',v:'LOW PASS',on:fx.fl},{n:'SOLO',v:solo!=null?pad2(solo+1)+' '+tracks[solo].n:'OFF',on:solo!=null}];
+  for(let k=0;k<4;k++){const t=tracks[b+k];o.push({n:t.m?'UNMUTE':'MUTE',v:pad2(b+k+1)+' '+t.n,on:t.q!=null},S[k])}return o}
+ return[{n:{idle:'REC',count:'CANCEL',rec:'STOP',done:'RETAKE'}[c.st],on:c.st=='rec'||c.st=='count'},{n:'COUNT-IN',v:c.ci?'1 BAR':'OFF'},{n:'SOURCE',v:SRCS[c.src]},{n:'MONITOR',v:c.mon?'ON':'OFF'},
+  {n:'LENGTH',v:brs(c.bars)},{n:'TARGET',v:'LANE '+(c.to+1)},{n:'KEEP',v:'TO LANE '+(c.to+1),dis:c.st!='done'},{n:'DISCARD',dis:c.st=='idle'}]}
+// stock 8-cell row: each Fn key owns two cells, plain on the left and Shift on the right
+function drawLabels(){R(0,425,800,55,C.g08);labels().forEach((l,i)=>{const x=100*i+1,sh=i&1,live=!!sh==shift&&!l.dis;
+ R(x,424,94,55,l.on?C.g32:live?C.g22:C.g0a);if(l.on)B(x,424,94,55,C.red);
+ T(l.n,x+47,l.v?445:452,'r14',live||l.on?C.wht:C.g57,'center');if(l.v)T(l.v,x+47,465,'r12',live||l.on?C.g90:C.g44,'center');
+ if(sh){g.fillStyle=shift?C.red:C.g57;g.beginPath();g.moveTo(x+9,428);g.lineTo(x+14,434);g.lineTo(x+4,434);g.fill();g.fillRect(x+7,434,4,3)}});
+ for(let k=1;k<4;k++)R(200*k-3,428,1,48,C.g33)}
+
+const TILES=[['Loops','Four loop lanes,','slices, ping-pong'],['Perform','16 tracks: mutes,','fills, punch-ins'],['Capture','Record a loop,','snapped to bars'],['Tracker','Back to the stock','Pattern page']],NOTE=['C-4','D#4','G-3','A#3'];
+function drawHome(){const st=Math.floor(tb*4)%32;
+ T('TEMPO',16,46,'r12',C.g77);R(16,58,150,32,C.g0a);B(16,58,150,32,C.red);T(bpm.toFixed(1)+' BPM',91,74,'b17',C.wht,'center');T('-10  -1  +1  +10',16,104,'r12',C.g57);
+ T('PATTERN',200,46,'r12',C.g77);T(pad2(patt),200,74,'b17',C.wht);T('32 STEPS',232,74,'r14',C.g90);for(let i=0;i<32;i++)R(200+i*12,98,10,12,i==st?C.wht:i%4?C.g17:C.g33);
+ T('TRANSPORT',620,46,'r12',C.g77);T(playing?'PLAYING':'STOPPED',620,74,'b17',playing?C.grn:C.g77);T('BATTERY '+Math.round(batt*100)+'%',620,104,'r12',C.g90);
+ TILES.forEach((t,k)=>{const x=200*k+4,y=124,px=x+10,py=y+78,pw=172,ph=204;R(x,y,192,292,k==hs?C.g32:C.g22);if(k==hs)B(x,y,192,292,C.red);
+  T(t[0],x+12,y+20,'b17',C.wht);T(t[1],x+12,y+44,'r12',C.g90);T(t[2],x+12,y+60,'r12',C.g90);R(px,py,pw,ph,C.bg);
+  if(k==0)lanes.forEach((L,i)=>{const ly=py+6+i*49,P=pos(L);R(px+2,ly,3,43,C[L.col]);R(px+8,ly+21,160,1,C.g22);if(L.st=='empty')return;
+   wave(L.d,px+8,ly+2,160,39,32,f=>f<P.p?C.g90:C.g44);R(Math.round(px+8+P.p*160),ly,1,43,C.red)});
+  if(k==1)tracks.forEach((tr,i)=>{const v=meter(tr,i),mx=px+7+i*10;R(mx,py+10,7,ph-20,C.g12);if(tr.m)B(mx,py+10,7,ph-20,C.red);else R(mx,py+ph-10-(ph-20)*v,7,(ph-20)*v,C.grn)});
+  if(k==2){vmeter(px+10,py+10,16,ph-20,cap.lv[0]);vmeter(px+30,py+10,16,ph-20,cap.lv[1]);T(SRCS[cap.src],px+56,py+22,'r14',C.wht);T(brs(cap.bars),px+56,py+44,'r12',C.g77);T(cap.ci?'COUNT-IN 1 BAR':'NO COUNT-IN',px+56,py+62,'r12',C.g77)}
+  if(k==3)for(let r=0;r<10;r++){const s=((Math.floor(tb*4)-4+r)%32+32)%32,ry=py+16+r*19,h=s*7%5,on=h<2;if(r==4)R(px,ry-9,pw,18,C.g22);
+   T(pad2(s+1),px+6,ry,'r12',C.g57);T(on?NOTE[s%4]:'---',px+34,ry,'r12',on?C.note:C.noteD);T(on?'0'+(s%3+1):'--',px+70,ry,'r12',on?C.yel:C.yelD);T(h?'- --':'V 40',px+100,ry,'r12',h?C.purD:C.pur)}})}
+function drawPopup(){R(186,172,440,150,C.bg);R(180,166,440,150,C.g22);T('Pattern',200,192,'b17',C.wht);T('This key goes back to the stock Pattern page.',200,230,'r14',C.wht);
+ T('It is not drawn in this concept.',200,252,'r14',C.wht);T('Press any key',200,292,'r12',C.g77)}
+
+function row(L,i,y){const P=pos(L),e=L.st=='empty',m=L.st=='mute',s=stTxt(L);R(4,y,792,43,C.g08);chip(L,i,10,y+4);
+ T(e?'EMPTY LANE':L.name,36,y+13,'r14',e||m?C.g57:C.wht);T(s[0]+(L.kept?'  I'+L.kept:''),36,y+31,'r12',s[1]);R(200,y+21,576,1,C.g22);if(e)return;
+ arrow(158,y+13,L.dir,P.dr,C.g90);T(L.bars+'B',158,y+31,'r12',C.g77);wave(L.d,200,y+3,576,37,64,f=>m?C.g33:f<P.p?C.g90:C.g44);R(Math.round(200+P.p*576),y+1,2,41,m?C.g57:C.red)}
+function big(L,i,y){const X=16,W=768,wy=y+46,wh=166,P=pos(L),e=L.st=='empty',m=L.st=='mute',s=stTxt(L),x0=X+P.a*W,x1=x0+P.w*W,hx=Math.round(X+P.p*W),add=a=>{g.globalAlpha=a;g.globalCompositeOperation=a<1?'lighter':'source-over'};
+ R(4,y,792,255,C.g08);B(4,y,792,255,C.red);chip(L,i,12,y+6);T(e?'EMPTY LANE':L.name,38,y+15,'b17',C.wht);
+ T('LENGTH',262,y+15,'r12',C.g77);R(312,y+4,74,22,C.g0a);B(312,y+4,74,22,C.red);T(brs(L.bars),349,y+15,'r14',C.wht,'center');
+ arrow(404,y+15,L.dir,P.dr,C.wht);T(DIRN[L.dir],428,y+15,'r14',C.wht);T('SPEED',524,y+15,'r12',C.g77);T(spdl(L.spd),566,y+15,'r14',C.wht);
+ T(L.slOn?'SLICE '+(L.sl+1)+'/8':'SLICE OFF',620,y+15,'r14',L.slOn?C.yel:C.g77);T(e?'EMPTY':s[0],788,y+15,'r14',s[1],'right');
+ const cur=Math.min(7,P.p*8|0);for(let k=0;k<8;k++){const sx=X+k*96,on=k==L.sl;R(sx,wy,1,wh,on?C.yel:C.yelD);if(on)R(sx,y+30,18,14,C.yel);T(k+1,sx+9,y+38,'r12',on?C.bg:k==cur&&!e?C.wht:C.g57,'center')}
+ R(X+W,wy,1,wh,C.yelD);R(X,wy+wh/2,W,1,C.g77);
+ if(e&&!L.rec)T('NOTHING HERE YET.  Fn1 RECORDS.  CAPTURE CAN SEND A TAKE HERE.',400,wy+wh/2-22,'r14',C.g57,'center');
+ else{wave(L.d,X,wy+2,W,wh-4,N,f=>f<P.a||f>=P.a+P.w?C.g33:m?(f<P.p?C.g77:C.g44):f<P.p?C.wht:C.g77);
+  if(L.slOn){add(.16);R(x0,wy,x1-x0,wh,C.red);add(1)}
+  if(playing){for(let k=0;k<4;k++){const a=hx-P.dr*k*14,b=a-P.dr*14,l=Math.max(x0,Math.min(a,b)),r=Math.min(x1,Math.max(a,b));if(r>l){add(.3-.07*k);R(l,wy,r-l,wh,C.red)}}add(1)}
+  if(L.dir==2){const f=Math.max(0,1-P.since),wl=(x,hit)=>{R(x,wy-4,3,wh+8,C.g77);if(hit&&f>0){g.globalAlpha=f;R(x-3,wy-4,9,wh+8,C.red);g.globalAlpha=1}};wl(x0-4,P.dr>0);wl(x1+1,P.dr<0)}
+  R(hx-1,wy-4,2,wh+8,C.red);g.fillStyle=C.red;g.beginPath();g.moveTo(hx,wy-14);g.lineTo(hx+P.dr*10,wy-9);g.lineTo(hx,wy-4);g.fill()}
+ const nb=Math.max(16,L.bars*4),ry=wy+wh+8,d=L.dir==2?P.dr:L.dir?-1:1,hk=Math.min(nb-1,P.p*nb|0),by=y+238;g.lineWidth=1.5;
+ for(let k=0;k<nb;k++){const cx=X+(k+.5)*W/nb,f=(k+.5)/nb;g.strokeStyle=k==hk&&!e?C.wht:f>=P.a&&f<P.a+P.w?C.g57:C.g22;g.beginPath();g.moveTo(cx-3*d,ry);g.lineTo(cx+3*d,ry+5);g.lineTo(cx-3*d,ry+10);g.stroke()}
+ for(let b=0;b<=L.bars*4;b++){const x=Math.round(X+b*W/(L.bars*4)),br=b%4==0;R(x,by,1,br?10:4,br?C.g77:C.g44);if(br&&b<L.bars*4)T(b/4+1,x+5,by+7,'r12',C.g77)}}
+function drawLoops(){let y=30;lanes.forEach((L,i)=>{if(i==ls){big(L,i,y);y+=258}else{row(L,i,y);y+=46}})}
+
+function drawPerform(){const bk=ps>>2,bar=Math.floor(tb/4),bi=Math.floor(tb)%4,mc=fx.st?C.pur:fx.fl?C.cyn:C.grn,anyQ=fillBar!=null||tracks.some(t=>t.q!=null);
+ R(bk*200,30,200,98,C.g0a);
+ tracks.forEach((t,i)=>{const x=i*50,v=meter(t,i);T(pad2(i+1),x+25,41,'r12',i==ps?C.wht:i>>2==bk?C.g90:C.g57,'center');
+  R(x+19,52,12,60,C.g12);if(t.m)B(x+19,52,12,60,C.red);else R(x+19,112-60*v,12,60*v,mc);R(x+16,111-60*t.lv/100,18,1,C.g77);if(t.q!=null)R(x+21,117,8,6,C.yel)});
+ R(399,34,1,90,C.g33);B(bk*200,30,200,98,C.red);R(0,131,800,3,C.g12);R(0,131,800*(tb/4%1),3,anyQ?C.yel:C.g44);
+ for(let k=0;k<4;k++){const i=bk*4+k,t=tracks[i],x=k*200,v=meter(t,i),tx=x+78,my=178,mh=216;
+  R(x+3,138,194,282,i==ps?C.g12:C.g08);if(i==ps)R(x+3,138,194,2,C.red);
+  T(pad2(i+1),x+14,158,'b17',C.wht);T(t.n,x+44,158,'r14',C.g90);T(i<8?'SAMPLE':'MIDI',x+188,158,'r12',C.g57,'right');
+  R(x+14,my,48,mh,C.bg);if(t.m)B(x+14,my,48,mh,C.red);else R(x+14,my+mh-mh*v,48,mh*v,mc);R(x+10,Math.round(my+mh-mh*t.lv/100)-1,56,2,C.wht);
+  T('LEVEL',tx,188,'r12',C.g77);R(tx,198,64,28,C.g0a);B(tx,198,64,28,i==ps?C.red:C.g33);T(t.lv,tx+32,212,'b17',C.wht,'center');
+  T('STATE',tx,252,'r12',C.g77);T(t.m?'MUTED':solo!=null&&solo!=i?'SOLO OFF':'ON',tx,272,'b17',t.m?C.red:solo!=null&&solo!=i?C.g77:C.grn);T('NEXT BAR',tx,312,'r12',C.g77);
+  if(t.q!=null){T(t.q?'MUTE':'UNMUTE',tx,332,'b17',C.yel);for(let b=0;b<4;b++)R(tx+b*14,348,10,6,b<=bi?C.yel:C.yelD)}else T('NO CHANGE',tx,332,'r14',C.g44)}
+ const msg=fx.st?'STUTTER 1/16 ON THE SAMPLE TRACKS':fx.fl?'LOW-PASS FILTER ON':fillBar==null?'':bar>=fillBar?'FILL PLAYING':'FILL QUEUED FOR THE NEXT BAR';
+ if(msg){R(0,400,800,20,C.g22);T(msg,400,410,'r14',fx.st?C.pur:fx.fl?C.cyn:C.yel,'center')}}
+
+function drawCapture(){const c=cap,X=200,W=544,wy=62,wh=250,cy=wy+wh/2,rec=c.st=='rec',done=c.st=='done',pb=rec?(cb-c.b0)/4:0,early=rec&&c.end<c.bars;
+ T('SOURCE',12,44,'r12',C.g77);SRC.forEach((s,i)=>{const y=56+i*30;R(8,y,180,28,C.g0a);if(i==c.src)B(8,y,180,28,C.red);T(s,18,y+14,'r14',i==c.src?C.wht:C.g57)});
+ [['COUNT-IN',c.ci?'1 BAR':'OFF'],['MONITOR',c.mon?'ON':'OFF'],['KEEP TO','LANE '+(c.to+1)],['SNAP','WHOLE BARS']].forEach((p,i)=>{T(p[0],12,200+i*24,'r12',C.g77);T(p[1],186,200+i*24,'r14',C.wht,'right')});
+ T('LENGTH',12,308,'r12',C.g77);R(8,320,180,32,C.g0a);B(8,320,180,32,C.red);T(brs(c.bars),98,336,'b17',C.wht,'center');T((c.bars*240/bpm).toFixed(2)+' s AT '+bpm+' BPM',12,368,'r12',C.g57);
+ const S={idle:['READY.  Fn1 STARTS A TAKE.',C.g90],count:['COUNT-IN',C.red],rec:[early?'STOPPING AT THE END OF BAR '+c.end:'RECORDING',early?C.yel:C.red],done:['TAKE READY.  Fn4 KEEPS IT.',C.grn]}[c.st];T(S[0],X,44,'r14',S[1]);
+ if(rec)T('BAR '+(Math.min(c.end-1,Math.floor(pb))+1)+'.'+(Math.floor(pb*4)%4+1)+' OF '+c.end,X+W,44,'r14',C.wht,'right');else T('PEAK '+(20*Math.log10(Math.max(.01,c.pk[0]))).toFixed(1)+' dB',X+W,44,'r12',C.g77,'right');
+ R(X,wy,W,wh,C.g08);for(let b=0;b<=c.bars*4;b++){const x=Math.round(X+b*W/(c.bars*4)),br=b%4==0;R(x,br?wy:wy+wh-6,1,br?wh:6,br?C.g33:C.g22);if(br&&b<c.bars*4)T(b/4+1,x+6,wy+10,'r12',C.g57)}
+ R(X,cy,W,1,C.g77);wave(c.d,X,wy+16,W,wh-32,136,()=>C.wht);
+ const ex=Math.round(X+W*(rec?c.end:done?c.len:c.bars)/c.bars);if(ex<X+W){g.globalAlpha=.7;R(ex+1,wy,X+W-ex-1,wh,C.bg);g.globalAlpha=1}
+ R(ex-1,wy,2,wh,C.yel);T('END',ex-6,wy+wh-12,'r12',C.yel,'right');
+ if(rec){const hx=Math.round(X+c.prog*W);R(X,wy+wh-3,hx-X,3,C.red);R(hx,wy,2,wh,C.red)}
+ if(c.st=='count'){const bt=Math.floor(cb-c.c0);for(let k=0;k<4;k++){const bx=X+W/2-136+k*72;R(bx,cy-28,56,56,k==bt?C.red:k<bt?C.g32:C.g12);B(bx,cy-28,56,56,k==bt?C.red:C.g33);T(k+1,bx+28,cy,'b17',k<=bt?C.wht:C.g57,'center')}}
+ for(let ch=0;ch<2;ch++){const mx=756+ch*20;vmeter(mx,wy,16,wh,c.lv[ch]);R(mx,Math.round(wy+wh-wh*c.pk[ch]),16,2,C.wht);T('LR'[ch],mx+8,wy+wh+12,'r12',C.g77,'center')}
+ T('INPUT',774,44,'r12',C.g77,'center');T('TAKE',X,340,'r12',C.g77);T((rec?Math.min(pb,c.end).toFixed(1):done?c.len:'0.0')+' / '+brs(c.bars),X,362,'b17',C.wht);
+ T('STOP EARLY AND THE TAKE RUNS ON TO THE END OF THE BAR.',X,396,'r12',C.g57);T('A LOOP IS ALWAYS A WHOLE NUMBER OF BARS.',X,412,'r12',C.g57)}
+
+function draw(){R(0,0,800,480,C.bg);({HOME:drawHome,LOOPS:drawLoops,PERFORM:drawPerform,CAPTURE:drawCapture})[scr]();drawTop();drawLabels();if(popup)drawPopup();fnSync()}
+
+// actions
+const say=s=>{toast=s;toastT=performance.now()+2200};
+function capStart(){const c=cap;c.d.fill(0);c.prog=0;c.li=0;c.end=c.bars;c.rs=1+Math.random()*8;if(c.ci){c.st='count';c.c0=cb}else{c.st='rec';c.b0=cb}}
+function capClear(){cap.st='idle';cap.d.fill(0);cap.prog=0}
+function capLen(b){if(cap.st=='rec')return;cap.bars=b;if(cap.st=='done')capClear()}
+function keep(){const c=cap,L=lanes[c.to],n=c.d.length;L.undo=L.d;L.d=Float32Array.from({length:N},(_,i)=>c.d[Math.min(n-1,Math.floor(i/N*n*c.len/c.bars))]);
+ Object.assign(L,{name:SRCS[c.src]+' TAKE',bars:c.len,dir:0,spd:1,slOn:false,st:'play',rec:null,kept:0});ls=c.to;capClear();go('LOOPS');say('TAKE KEPT TO LANE '+(ls+1))}
+function fn(k){const s=shift,L=lanes[ls],c=cap;
+ if(scr=='HOME'){if(!s){if(k<3)go(SCREENS[k+1]);else popup=true}else if(k<2)patt=clamp(patt+(k?1:-1),1,255);else if(k==2)metro=!metro;else swing=swing>=62?50:swing+4}
+ else if(scr=='LOOPS'){
+  if(k==0){if(L.rec)L.rec=null;else{L.undo=L.d.slice();L.rec=s?'dub':'rec';L.rs=Math.random()*9;L.li=-1;if(L.st=='empty'){L.st='play';L.name='NEW LOOP'}}}
+  else if(k==1){if(s)L.spd=L.spd==1?2:L.spd==2?.5:1;else L.dir=(L.dir+1)%3}
+  else if(k==2){if(!s)L.slOn=!L.slOn;else if(L.st!='empty')L.st=L.st=='mute'?'play':'mute'}
+  else if(s){if(L.st!='empty'){L.kept=12+ls;say('LANE '+(ls+1)+' KEPT AS INSTRUMENT '+L.kept)}}
+  else if(L.undo){const u=L.d;L.d=L.undo;L.undo=u;L.rec=null;if(L.st=='empty')L.st='play';say('UNDONE.  Fn4 AGAIN TO REDO.')}}
+ else if(scr=='PERFORM'){const t=tracks[(ps>>2)*4+k],nx=Math.floor(tb/4)+1;
+  if(!s){if(!playing)t.m=!t.m;else if(t.q!=null)t.q=null;else{t.q=!t.m;t.qb=nx}}
+  else if(k==0)fillBar=fillBar==null?nx:null;else if(k==1)fx.st=!fx.st;else if(k==2)fx.fl=!fx.fl;else solo=solo==ps?null:ps}
+ else if(k==0){if(s)c.ci=!c.ci;else if(c.st=='rec')c.end=clamp(Math.ceil((cb-c.b0)/4-1e-6),1,c.bars);else if(c.st=='count')c.st='idle';else capStart()}
+ else if(k==1){if(s)c.mon=!c.mon;else c.src=(c.src+1)%4}
+ else if(k==2){if(s)c.to=(c.to+1)%4;else capLen(BARS[(BARS.indexOf(c.bars)+1)%4])}
+ else if(s){capClear();say('TAKE DISCARDED')}else if(c.st=='done')keep()}
+function nav(dx,dy){const c=cap;
+ if(scr=='HOME')hs=(hs+dx+dy+4)%4;
+ else if(scr=='LOOPS'){ls=(ls+dy+4)%4;if(dx)lanes[ls].sl=(lanes[ls].sl+dx+8)%8}
+ else if(scr=='PERFORM')ps=clamp(ps+dx+dy*4,0,15);
+ else{c.src=(c.src+dy+4)%4;c.to=(c.to+dx+4)%4}}
+function val(d){const L=lanes[ls],nb=b=>BARS[clamp(BARS.indexOf(b)+Math.sign(d)*(Math.abs(d)>1?3:1),0,3)];
+ if(shift){vol=clamp(vol+d,0,100);say('MASTER VOLUME '+vol)}
+ else if(scr=='HOME')bpm=clamp(bpm+d,40,800);else if(scr=='LOOPS')L.bars=nb(L.bars);
+ else if(scr=='PERFORM')tracks[ps].lv=clamp(tracks[ps].lv+d,0,100);else capLen(nb(cap.bars))}
+function plain(k){const s=shift;shift=false;fn(k);shift=s}
+const DIR={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]},VAL={p10:10,p1:1,m1:-1,m10:-10};
+function press(k){toast='';if(RM.matches)step(1);
+ if(popup)popup=false;
+ else if(k[0]=='f')fn(+k[1]);
+ else if(k=='shift')shift=!shift;
+ else if(k=='menu')go(SCREENS[(SCREENS.indexOf(scr)+1)%4]);
+ else if(k=='play')playing=!playing;
+ else if(k=='rec'){if(scr=='LOOPS'||scr=='CAPTURE')plain(0);else go('CAPTURE')}
+ else if(DIR[k])nav(...DIR[k]);
+ else if(k=='mid')plain(scr=='HOME'?hs:scr=='LOOPS'?2:scr=='PERFORM'?ps&3:0);
+ else if(VAL[k])val(VAL[k]);
+ else if(k=='delete'&&scr=='LOOPS'){const L=lanes[ls];L.undo=L.d;L.d=new Float32Array(N);L.st='empty';L.rec=null;say('LANE CLEARED.  Fn4 UNDOES IT.')}
+ else if(k=='delete'&&scr=='CAPTURE'){capClear();say('TAKE DISCARDED')}
+ else say(k.toUpperCase()+' IS NOT USED ON THIS PAGE');
+ sync()}
+function go(n){n=String(n).toUpperCase();if(!SCREENS.includes(n))return false;scr=n;popup=false;
+ if(n=='PERFORM'&&!seen.p){seen.p=1;tracks[5].q=true;tracks[5].qb=Math.floor(tb/4)+2}
+ if(n=='CAPTURE'&&!seen.c){seen.c=1;if(RM.matches){capStart();cap.st='rec';cap.b0=cb-10}else capStart()}
+ if(RM.matches)update();sync();return true}
+function state(){const L=lanes[ls],c=cap,b=(ps>>2)*4,o={screen:scr,shift,playing,bpm,pattern:patt,battery:Math.round(batt*100),labels:labels().map(l=>l.n)};
+ if(scr=='HOME')o.selected=TILES[hs][0].toUpperCase();
+ if(scr=='LOOPS')Object.assign(o,{lane:ls+1,direction:DIRN[L.dir],speed:L.spd,bars:L.bars,slice:L.sl+1,sliceOn:L.slOn,rec:L.rec,laneState:L.st,playhead:+pos(L).p.toFixed(3)});
+ if(scr=='PERFORM')Object.assign(o,{track:ps+1,bank:[b+1,b+4],muted:tracks.map(t=>t.m),queued:tracks.map(t=>t.q),fill:fillBar!=null,stutter:fx.st,filter:fx.fl,solo:solo==null?null:solo+1});
+ if(scr=='CAPTURE')Object.assign(o,{state:c.st,source:SRC[c.src],bars:c.bars,countIn:c.ci,progress:+c.prog.toFixed(3),target:c.to+1});
+ return o}
+
+// page chrome
+let lsig='';
+function fnSync(){const l=labels(),s=JSON.stringify(l)+shift;if(s==lsig)return;lsig=s;$('fn').classList.toggle('sh',shift);
+ for(let k=0;k<4;k++){const a=l[2*k+(shift?1:0)],b=l[2*k+(shift?0:1)];$('fa'+k).textContent=a.n;$('fv'+k).textContent=a.v||'';$('fb'+k).textContent=b.n;$('k-f'+k).classList.toggle('on',!!a.on)}}
+function sync(){SCREENS.forEach(s=>$('tab-'+s.toLowerCase()).setAttribute('aria-pressed',s==scr));$('hint').textContent=HINT[scr];
+ $('k-shift').classList.toggle('on',shift);$('k-shift').setAttribute('aria-pressed',shift);$('k-play').classList.toggle('on',playing);if(RM.matches)draw();else fnSync()}
+function step(db){cb+=db;if(playing)tb+=db;update()}
+function loop(ts){const dt=last?Math.min(.1,(ts-last)/1000):0;last=ts;step(dt*bpm/60);draw();raf=requestAnimationFrame(loop)}
+function start(){cancelAnimationFrame(raf);last=0;if(RM.matches){update();draw()}else raf=requestAnimationFrame(loop)}
+
+let rt=0,ri=0,held=false;const stop=()=>{clearTimeout(rt);clearInterval(ri)};
+document.querySelectorAll('[data-k]').forEach(b=>{b.addEventListener('click',()=>{if(held){held=false;return}press(b.dataset.k)});
+ if(!b.hasAttribute('data-rep'))return; // hold to repeat after 333 ms, then every 63 ms, as the firmware does
+ b.addEventListener('pointerdown',()=>{stop();held=false;rt=setTimeout(()=>{held=true;ri=setInterval(()=>press(b.dataset.k),63)},333)});
+ ['pointerup','pointerleave','pointercancel'].forEach(e=>b.addEventListener(e,stop))});
+document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.go)));
+$('zoom').addEventListener('click',e=>{const f=$('scr').classList.toggle('full');e.currentTarget.setAttribute('aria-pressed',f);e.currentTarget.textContent=f?'Fit screen to page':'Screen at full size'});
+const KM={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',Enter:'mid',Space:'play',KeyM:'menu',KeyR:'rec',Digit1:'f0',Digit2:'f1',Digit3:'f2',Digit4:'f3',Minus:'m1',Equal:'p1'};
+addEventListener('keydown',e=>{if(e.key=='Shift'){if(!shift){shift=true;sync()}return}if(e.target.closest&&e.target.closest('button'))return;const k=KM[e.code];if(k){e.preventDefault();press(k)}});
+addEventListener('keyup',e=>{if(e.key=='Shift'){shift=false;sync()}});
+RM.addEventListener('change',start);
+if(document.fonts&&document.fonts.load)Promise.all(Object.values(F).map(f=>document.fonts.load(f))).then(()=>{if(RM.matches)draw()}).catch(()=>{});
+window.__mini={screens:SCREENS.slice(),go,key(i){if(!(i>=0&&i<4))return false;press('f'+(i|0));return true},shift(on){shift=!!on;sync()},state};
+sync();start();
+})();
+</script>

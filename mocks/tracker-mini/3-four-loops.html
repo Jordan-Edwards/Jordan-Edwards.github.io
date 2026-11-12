@@ -1,0 +1,301 @@
+<title>Tracker Mini Looper</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@400;500;600&display=swap">
+<style>
+/* Layout: a working sheet. The device at the top, a key map beside or under it, then the reasoning.
+   The device screen is a flat instrument display: neutral greys carry the audio, amber marks
+   what you are working on, red is recording. Nothing glows. */
+:root{
+  color-scheme:dark;
+  --page:#0e0e0d; --sheet:#161614; --rule:#2b2a27; --ink:#ecebe6; --ink-2:#a9a79f; --ink-3:#6d6b65;
+  --amber:#ffb000; --red:#e5342b;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --cond:"IBM Plex Sans Condensed","Arial Narrow","Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--ink);font:15px/1.55 var(--cond)}
+.wrap{max-width:1120px;margin-inline:auto;padding-block:24px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:22px}
+header p{margin:0}
+.kicker{font:500 11px/1.3 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+h1{margin:6px 0 6px;font:600 30px/1.1 var(--cond);letter-spacing:.005em;text-wrap:balance}
+.lede{color:var(--ink-2);max-width:62ch}
+.work{display:grid;grid-template-columns:minmax(0,1fr);gap:22px;align-items:start}
+@media (min-width:980px){.work{grid-template-columns:minmax(0,1fr) 300px}}
+.device{background:#1b1b19;border:1px solid var(--rule);border-radius:14px;padding:10px;display:grid;gap:10px}
+canvas{display:block;width:100%;max-width:100%;height:auto;aspect-ratio:800/480;background:#000;border-radius:4px}
+.fn{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.keys{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-items:center}
+.dpad{display:grid;grid-template-columns:repeat(3,52px);grid-template-rows:repeat(3,52px);gap:5px}
+.side{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;align-content:center}
+.k{font:500 12px/1.15 var(--mono);color:var(--ink);background:#262624;border:1px solid #34332f;border-bottom-width:3px;border-radius:7px;min-height:48px;padding:4px;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
+.k:active{border-bottom-width:1px;margin-top:2px}
+.k:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+.k[aria-pressed="true"]{color:var(--amber);border-color:var(--amber)}
+.fn .k{min-height:40px;color:var(--ink-2)}
+#k-mid{border-radius:50%}
+#say{margin:0;min-height:2.9em;font:400 13px/1.45 var(--mono);color:var(--ink-2)}
+#say b{color:var(--ink);font-weight:500}
+aside{border-top:1px solid var(--rule);padding-top:12px}
+@media (min-width:980px){aside{border-top:0;border-left:1px solid var(--rule);padding:0 0 0 20px}}
+aside h2,.notes h2{margin:0 0 8px;font:500 11px/1.3 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th{text-align:left;font:500 12px var(--mono);color:var(--ink);padding:6px 10px 6px 0;vertical-align:top;white-space:nowrap}
+td{padding:6px 0;color:var(--ink-2);vertical-align:top;border-bottom:1px solid var(--rule)}
+th{border-bottom:1px solid var(--rule)}
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px 32px;border-top:1px solid var(--rule);padding-top:18px}
+.notes p{margin:0 0 8px;max-width:62ch}
+.notes .quiet{color:var(--ink-3)}
+</style>
+
+<div class="wrap">
+  <header>
+    <p class="kicker">Tracker Mini · looper · concept 3</p>
+    <h1>Four loops you can read at arm's length</h1>
+    <p class="lede">Up and Down pick a loop. The four keys under the screen act on it. Changes that would break the groove wait for the next bar, and the screen tells you so.</p>
+  </header>
+
+  <div class="work">
+    <section class="device" aria-label="Concept device">
+      <canvas id="scr" width="1600" height="960" role="img" aria-label="Looper screen, 800 by 480 pixels: a transport bar, four loop lanes and four soft-key labels."></canvas>
+      <div class="fn">
+        <button class="k" id="k-f1" data-k="f0">Fn1</button><button class="k" id="k-f2" data-k="f1">Fn2</button>
+        <button class="k" id="k-f3" data-k="f2">Fn3</button><button class="k" id="k-f4" data-k="f3">Fn4</button>
+      </div>
+      <div class="keys">
+        <div class="dpad">
+          <span></span><button class="k" id="k-up" data-k="up" aria-label="Up">▲</button><span></span>
+          <button class="k" id="k-left" data-k="left" aria-label="Left">◀</button>
+          <button class="k" id="k-mid" data-k="mid" aria-label="Middle: play or stop">●</button>
+          <button class="k" id="k-right" data-k="right" aria-label="Right">▶</button>
+          <span></span><button class="k" id="k-down" data-k="down" aria-label="Down">▼</button><span></span>
+        </div>
+        <div class="side">
+          <button class="k" id="k-shift" data-k="shift" aria-pressed="false">SHIFT</button>
+          <button class="k" id="k-play" data-k="mid">PLAY</button>
+        </div>
+      </div>
+      <p class="kicker" style="margin:0">On a phone, turn it sideways to read the screen.</p>
+      <p id="say" role="status" aria-live="polite">Press <b>PLAY</b> or the middle key. Sound starts with that press.</p>
+    </section>
+
+    <aside aria-label="Key map">
+      <h2>Key map</h2>
+      <table>
+        <tr><th>▲ ▼</th><td>Pick a loop. The picked loop opens up; the others stay readable.</td></tr>
+        <tr><th>Fn1</th><td>Direction: forward, reverse, back and forth. Changes at once and keeps the beat.</td></tr>
+        <tr><th>Fn2 · ◀ ▶</th><td>Speed: ½, 1, 2. Changes at once and keeps the beat.</td></tr>
+        <tr><th>Fn3</th><td>Mute. Waits for the next bar.</td></tr>
+        <tr><th>Fn4</th><td>Record one pass of the loop, starting on the next bar.</td></tr>
+        <tr><th>Shift + Fn</th><td>Restart on the bar, solo, clear, and record again.</td></tr>
+        <tr><th>● / PLAY</th><td>Start or stop everything.</td></tr>
+      </table>
+    </aside>
+  </div>
+
+  <div class="notes">
+    <section>
+      <h2>How the screen reads</h2>
+      <p>Each loop shows what it has played since it last turned round. Forward fills from the left, reverse from the right, and back and forth fills one way and then the other. You can tell the direction from across a room without reading anything.</p>
+      <p>Amber means "this is what you are working on" and nothing else. Red means recording. Grey is the audio. A muted loop drops to an outline.</p>
+      <p>The left column of every lane always says the same four things in the same place: number, state, where it is in bars, and anything waiting for the bar line.</p>
+    </section>
+    <section>
+      <h2>Decisions</h2>
+      <p>No glow, no gradients, no shadows. On a small screen in a dark room they cost contrast and the display budget, and they say nothing.</p>
+      <p>Up and Down pick lanes because lanes are stacked. The Fn keys sit under the screen, so their labels sit at the bottom of the screen right above them.</p>
+      <p>Mute and record wait for the bar because a mute on the wrong sixteenth sounds like a mistake. Direction and speed change at once because they keep the loop's phase.</p>
+    </section>
+    <section>
+      <h2>On the device</h2>
+      <p>Everything here is flat filled shapes, straight lines, one clip rectangle per lane and two typefaces' worth of glyphs: the cheapest things the Mini's display chip draws. Four stereo outlines at 96 points a side are roughly 3 KB of the 8 KB frame budget, by estimate.</p>
+      <p class="quiet">A design mock in a web page with four short loops made in code. Not firmware; nothing here has run on a Mini. The key positions are a sketch.</p>
+    </section>
+  </div>
+</div>
+
+<script>
+(()=>{
+'use strict';
+const $=id=>document.getElementById(id), cv=$('scr'), g=cv.getContext('2d'); g.scale(2,2);
+const RM=matchMedia('(prefers-reduced-motion: reduce)');
+const SR=44100, BPM=120, BEAT=60/BPM, BAR=4*BEAT, D=2*BAR, N=Math.round(D*SR), PTS=96;
+/* ---------- four original loops, made here: drums, bass, keys, glass ---------- */
+function makeLoops(){
+  let seed=11;const rnd=()=>(seed=(seed*1664525+1013904223)>>>0)/2147483648-1;
+  const L=[0,1,2,3].map(()=>[new Float32Array(N),new Float32Array(N)]);
+  const at=s=>Math.round(s*BEAT/4*SR);                       // s in 16ths
+  const add=(l,i,v,pan)=>{i%=N;L[l][0][i]+=v*(1-pan)*1.4;L[l][1][i]+=v*(1+pan)*1.4};
+  const f=m=>440*Math.pow(2,(m-69)/12);
+  // drums
+  [0,6,10,16,22,26].forEach(s=>{let ph=0;for(let i=0;i<SR*.32;i++){const t=i/SR;ph+=2*Math.PI*(46+120*Math.exp(-t*34))/SR;add(0,at(s)+i,.9*Math.sin(ph)*Math.exp(-t*9),0)}});
+  [4,12,20,28,15,31].forEach((s,k)=>{let lp=0;const a=k>3?.35:1;for(let i=0;i<SR*.2;i++){const t=i/SR,n=rnd();lp+=.3*(n-lp);add(0,at(s)+i,a*.6*((n-lp)*Math.exp(-t*20)+.5*Math.sin(2*Math.PI*185*t)*Math.exp(-t*28)),.1)}});
+  for(let s=0;s<32;s+=1){let p=0;const a=s%4===2?.35:s%2?.12:.2,pan=s%2?.5:-.5;for(let i=0;i<SR*.05;i++){const n=rnd();add(0,at(s)+i,a*(n-p)*Math.exp(-i/SR*80),pan);p=n}}
+  // bass
+  [[0,6,33],[6,4,36],[10,6,31],[16,6,33],[22,4,38],[26,6,28]].forEach(([s,len,m])=>{const n=at(len),fr=f(m);let lp=0;for(let i=0;i<n;i++){const t=i/SR,env=Math.min(1,i/300)*Math.min(1,(n-i)/900)*(.25+.75*Math.exp(-t*3.5)),x=2*((fr*t)%1)-1;lp+=(.04+.12*Math.exp(-t*6))*(x-lp);add(1,at(s)+i,.55*env*(Math.tanh(lp*2)+.5*Math.sin(2*Math.PI*fr*t)),0)}});
+  // keys: two soft chords, each held a bar
+  [[0,[57,60,64,67]],[16,[53,57,60,64]]].forEach(([s,ch])=>{const n=at(16);ch.forEach((m,k)=>{const fr=f(m),pan=(k-1.5)*.35;for(let i=0;i<n;i++){const t=i/SR,env=Math.min(1,t/.08)*Math.exp(-t*.9)*Math.min(1,(n-i)/2000);add(2,at(s)+i,.16*env*(Math.sin(2*Math.PI*fr*t)+.3*Math.sin(4*Math.PI*fr*t)+.12*Math.sin(2*Math.PI*fr*1.003*t)),pan)}})});
+  // bells: a slow bell arpeggio drifting left and right
+  [81,76,72,79,84,76,74,79].forEach((m,k)=>{const s=k*4,fr=f(m),pan=Math.sin(k*1.3)*.8;for(let i=0;i<SR*1.2;i++){const t=i/SR;add(3,at(s)+i,.22*Math.exp(-t*3.2)*(Math.sin(2*Math.PI*fr*t)+.4*Math.sin(2*Math.PI*fr*2.76*t)*Math.exp(-t*6)),pan)}});
+  L.forEach(([a,b])=>{let pk=0;for(let i=0;i<N;i++){a[i]=Math.tanh(a[i]);b[i]=Math.tanh(b[i]);pk=Math.max(pk,Math.abs(a[i]),Math.abs(b[i]))}for(let i=0;i<N;i++){a[i]*=.85/pk;b[i]*=.85/pk}});
+  return L;
+}
+const PCM=makeLoops();
+const env=ch=>{const o=new Float32Array(PTS);for(let p=0;p<PTS;p++){let m=0;for(let i=Math.floor(p*N/PTS),e=Math.floor((p+1)*N/PTS);i<e;i+=4)m=Math.max(m,Math.abs(ch[i]));o[p]=Math.pow(m,1.6)}
+  const s=new Float32Array(PTS);for(let p=0;p<PTS;p++)s[p]=(o[(p+PTS-1)%PTS]+2*o[p]+o[(p+1)%PTS])/4;return s};   // light smoothing so the outline flows
+const ENV=PCM.map(([a,b])=>[env(a),env(b)]);
+
+/* ---------- lanes and clock ---------- */
+const NAMES=['DRUMS','BASS','KEYS','BELLS'], DIRS=['FWD','REV','PING'], SPEEDS=[.5,1,2];
+const lanes=[0,1,2,3].map(i=>({i,name:NAMES[i],dir:[0,2,1,2][i],speed:[1,.5,1,1][i],mute:false,solo:false,empty:false,
+  t0:0,p0:0,d0:1,h:0,pend:[],rec:null,src:null,gain:null,wall:[0,0],lastD:1}));
+let sel=0, playing=false, shift=false, T0=0, ac=null, master=null, bufs=null;
+const now=()=>ac?ac.currentTime:performance.now()/1000;
+const nextBar=t=>T0+Math.ceil((t-T0)/BAR-1e-6)*BAR;
+function posAt(L,t){const u=Math.max(0,t-L.t0)*L.speed;
+  if(L.dir===2){const s=((L.d0>0?L.p0:2*D-L.p0)+u)%(2*D);return s<D?{p:s,d:1}:{p:2*D-s,d:-1}}
+  if(L.dir===0)return{p:(L.p0+u)%D,d:1};
+  return{p:D-((D-L.p0+u)%D),d:-1}}
+const audible=L=>!L.empty&&!L.mute&&(!lanes.some(M=>M.solo)||L.solo);
+
+/* ---------- sound: one looping source per lane (fwd, rev, or fwd+rev buffer) ---------- */
+function audio(){
+  if(ac){if(ac.state!=='running')ac.resume();return}
+  const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;
+  try{ac=new AC();const comp=ac.createDynamicsCompressor();comp.threshold.value=-12;comp.ratio.value=4;master=ac.createGain();master.gain.value=.8;master.connect(comp);comp.connect(ac.destination);
+    bufs=PCM.map(([a,b])=>{const mk=(fa,fb,len)=>{const B=ac.createBuffer(2,len,SR);B.getChannelData(0).set(fa);B.getChannelData(1).set(fb);return B};
+      const ra=Float32Array.from(a).reverse(),rb=Float32Array.from(b).reverse(),pa=new Float32Array(2*N),pb=new Float32Array(2*N);pa.set(a);pa.set(ra,N);pb.set(b);pb.set(rb,N);
+      return[mk(a,b,N),mk(ra,rb,N),mk(pa,pb,2*N)]});
+    lanes.forEach(L=>{L.gain=ac.createGain();L.gain.gain.value=audible(L)?1:0;L.gain.connect(master)});
+  }catch(e){ac=null}
+}
+function stopSrc(L,t){if(L.src){try{L.src.stop(Math.max(t||0,ac.currentTime))}catch(e){}L.src=null}}
+function startSrc(L,t){
+  if(!ac)return;stopSrc(L,t);
+  const c=posAt(L,t),s=ac.createBufferSource();s.buffer=bufs[L.i][L.dir];s.loop=true;s.playbackRate.value=L.speed;s.connect(L.gain);
+  const off=L.dir===0?c.p:L.dir===1?D-c.p:(c.d>0?c.p:2*D-c.p);
+  s.start(Math.max(t,ac.currentTime),Math.min(off,s.buffer.duration-1e-4));L.src=s}
+function gains(t){lanes.forEach(L=>{if(L.gain)L.gain.gain.setTargetAtTime(audible(L)?1:0,Math.max(t,ac.currentTime),.004)})}
+function retime(L,change){const t=now()+.01,c=posAt(L,t);change();L.t0=t;L.p0=c.p;L.d0=c.d;if(playing)startSrc(L,t)}
+function restartAll(t){T0=t;lanes.forEach(L=>{L.t0=t;L.p0=L.dir===1?D:0;L.d0=L.dir===1?-1:1;startSrc(L,t)})}
+
+/* ---------- actions; mute, solo, record and restart wait for the bar line ---------- */
+function queue(L,label,run){
+  if(!playing){run(now());return 'now'}
+  const at=nextBar(now()+.02);L.pend=L.pend.filter(p=>p.label!==label);L.pend.push({label,at,run});return 'bar'}
+const say=h=>{$('say').innerHTML=h};
+function keyDefs(){const L=lanes[sel];
+  return shift?[
+    ['RESTART','ON BAR',()=>{const r=queue(L,'RESTART',t=>{L.t0=t;L.p0=L.dir===1?D:0;L.d0=L.dir===1?-1:1;if(playing)startSrc(L,t)});say(`<b>${L.name}</b> restarts ${r==='bar'?'on the next bar':'now'}.`)}],
+    ['SOLO',L.solo?'ON':'OFF',()=>{const v=!L.solo,r=queue(L,v?'SOLO':'UNSOLO',t=>{L.solo=v;gains(t)});say(`<b>${L.name}</b> ${v?'solo':'solo off'} ${r==='bar'?'on the next bar':'now'}.`)}],
+    ['CLEAR','LOOP',()=>{L.empty=true;L.rec=null;L.pend=[];if(ac)gains(now());say(`<b>${L.name}</b> cleared. Fn4 records it again.`)}],
+    ['RE-REC','1 PASS',()=>rec(L)]]
+  :[
+    ['DIRECTION',DIRS[L.dir],()=>{retime(L,()=>{L.dir=(L.dir+1)%3});say(`<b>${L.name}</b> ${['forward','reverse','back and forth'][L.dir]}. The beat holds.`)}],
+    ['SPEED',spd(L.speed),()=>setSpeed(L,SPEEDS[(SPEEDS.indexOf(L.speed)+1)%3])],
+    ['MUTE',L.mute?'ON':'OFF',()=>{const v=!L.mute,r=queue(L,v?'MUTE':'UNMUTE',t=>{L.mute=v;gains(t)});say(`<b>${L.name}</b> ${v?'mutes':'comes back'} ${r==='bar'?'on the next bar':'now'}.`)}],
+    ['RECORD',L.rec?(L.rec.state==='on'?'RECORDING':'ARMED'):L.empty?'EMPTY':'1 PASS',()=>rec(L)]]}
+const spd=v=>v<1?'½×':v+'×';
+function setSpeed(L,v){if(v===L.speed){say('Speed is already '+spd(v)+'.');return}retime(L,()=>{L.speed=v});say(`<b>${L.name}</b> at ${spd(v)}. The beat holds.`)}
+function rec(L){
+  if(L.rec){L.rec=null;L.pend=L.pend.filter(p=>p.label!=='REC');say(`<b>${L.name}</b> recording cancelled.`);return}
+  if(!playing)press('mid');
+  L.rec={state:'armed'};
+  queue(L,'REC',t=>{L.rec={state:'on',t,len:D/L.speed};L.empty=false;gains(t);L.t0=t;L.p0=L.dir===1?D:0;L.d0=L.dir===1?-1:1;if(playing)startSrc(L,t)});
+  say(`<b>${L.name}</b> records one pass from the next bar.`)}
+function press(k){
+  audio();const L=lanes[sel];
+  if(k[0]==='f'){keyDefs()[+k[1]][2]()}
+  else if(k==='up'||k==='down'){sel=(sel+(k==='down'?1:3))%4;say(`<b>${lanes[sel].name}</b> picked.`)}
+  else if(k==='left'||k==='right'){const i=SPEEDS.indexOf(L.speed)+(k==='right'?1:-1);if(i<0||i>2)say('Speed range is ½× to 2×.');else setSpeed(L,SPEEDS[i])}
+  else if(k==='mid'){if(playing){playing=false;lanes.forEach(M=>{stopSrc(M);M.pend=[];if(M.rec)M.rec=null});say('Stopped.')}
+    else{playing=true;restartAll(now()+.04);gains(now());say('Playing. Four loops from bar 1.')}}
+  else if(k==='shift'){shift=!shift;say(shift?'Shift on. The four keys show their second jobs.':'Shift off.')}
+  sync()}
+function sync(){
+  keyDefs().forEach((d,i)=>{$('k-f'+(i+1)).textContent='Fn'+(i+1)+' · '+d[0]});
+  $('k-shift').setAttribute('aria-pressed',shift);$('k-play').textContent=playing?'STOP':'PLAY';$('k-play').setAttribute('aria-pressed',playing)}
+document.querySelectorAll('[data-k]').forEach(b=>b.addEventListener('click',()=>press(b.dataset.k)));
+addEventListener('keydown',e=>{const m={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',Enter:'mid',' ':'mid',Shift:'shift','1':'f0','2':'f1','3':'f2','4':'f3'}[e.key];
+  if(m&&!(e.target.closest&&e.target.closest('button'))){e.preventDefault();if(!e.repeat)press(m)}});
+
+/* ---------- screen ---------- */
+const C={bg:'#000000',rule:'#262624',grid:'#1a1a19',ink:'#ecebe6',ink2:'#a9a79f',ink3:'#5f5d58',wave:'#57554f',hot:'#d9d7cf',amber:'#ffb000',red:'#e5342b',black:'#000000'};
+const MONO='"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace', COND='"IBM Plex Sans Condensed","Arial Narrow",Arial,sans-serif';
+const font=(w,s,f)=>{g.font=w+' '+s+'px '+(f||MONO)};
+const text=(s,x,y,c,al)=>{g.fillStyle=c;g.textAlign=al||'left';g.textBaseline='middle';g.fillText(s,x,y)};
+const GX=112, WX0=GX+8, WX1=792, WW=WX1-WX0;
+function shape(e0,e1,cy,amp){const X=p=>WX0+p/(PTS-1)*WW;g.beginPath();g.moveTo(X(0),cy-e0[0]*amp);
+  for(let p=1;p<PTS;p++){const xp=X(p-1),yp=cy-e0[p-1]*amp,x=X(p),y=cy-e0[p]*amp;g.quadraticCurveTo(xp,yp,(xp+x)/2,(yp+y)/2)}
+  g.lineTo(X(PTS-1),cy+e1[PTS-1]*amp);
+  for(let p=PTS-2;p>=0;p--){const xp=X(p+1),yp=cy+e1[p+1]*amp,x=X(p),y=cy+e1[p]*amp;g.quadraticCurveTo(xp,yp,(xp+x)/2,(yp+y)/2)}
+  g.closePath()}
+function transport(t){
+  const run=playing&&t>=T0,beats=run?(t-T0)/BEAT:0,bar=Math.floor(beats/4)+1,beat=Math.floor(beats%4)+1;
+  font(600,22);text(run?String(bar).padStart(3,' ')+'.'+beat:'  —.—',12,20,C.ink);
+  font(400,13);text('BAR',92,21,C.ink3);
+  font(500,15);text('120.0',150,20,C.ink);font(400,13);text('BPM',200,21,C.ink3);
+  for(let i=0;i<4;i++){const on=run&&i===beat-1;g.fillStyle=on?(i?C.ink:C.amber):C.rule;g.fillRect(262+i*20,13,14,14)}
+  font(400,13);text('Q',360,21,C.ink3);font(500,15);text('1 BAR',376,20,C.ink);font(400,13);text('4 LOOPS',470,21,C.ink3);
+  font(600,15);text(playing?'PLAY':'STOP',788,20,playing?C.ink:C.ink3,'right');
+  if(playing){g.fillStyle=C.ink;g.beginPath();g.moveTo(732,13);g.lineTo(742,20);g.lineTo(732,27);g.fill()}else{g.fillStyle=C.ink3;g.fillRect(732,14,11,11)}
+  g.fillStyle=C.rule;g.fillRect(0,40,800,1)}
+function lane(L,y,h,t){
+  const isSel=L.i===sel,cy=y+h/2,amp=h/2-(h>100?16:9),on=audible(L);
+  const c=playing&&t>=L.t0?posAt(L,t):{p:L.dir===1?D:0,d:L.dir===1?-1:1},u=c.p/D,hx=WX0+u*WW;
+  // gutter: number, state, position, what is waiting
+  if(isSel){g.fillStyle=C.amber;g.fillRect(0,y+1,GX-4,h-2)}
+  font(600,h>100?34:22);text(String(L.i+1),12,y+(h>100?28:21),isSel?C.black:C.ink);
+  font(500,12,COND);text(L.name,h>100?44:38,y+(h>100?24:15),isSel?C.black:C.ink2);
+  const recOn=L.rec&&L.rec.state==='on',state=recOn?'REC':L.empty?'EMPTY':L.solo?'SOLO':L.mute?'MUTE':playing?'PLAY':'STOP';
+  if(h>54){font(500,12);text(state,h>100?44:38,y+(h>100?40:31),isSel?C.black:recOn?C.red:L.mute||L.empty?C.ink3:C.ink2)}
+  const loopBars=2/L.speed,posBars=playing&&!L.empty?(L.dir===1||(L.dir===2&&c.d<0)?(1-u):u)*loopBars:0;
+  if(h>100){font(600,18);text(posBars.toFixed(1),12,y+68,C.black);font(500,13);text('/ '+(loopBars<1?'½':loopBars),58,y+69,C.black);
+    font(500,12);text(DIRS[L.dir]+'  '+spd(L.speed),12,y+90,C.black)}
+  // waiting actions, with the time left to the bar line
+  const pend=L.pend[0];
+  if(pend&&h>54){const left=Math.max(0,pend.at-t),fr=1-left/BAR,yy=y+h-(h>100?22:13);
+    font(600,11);text(pend.label+' ▸ BAR',12,yy-1,isSel?C.black:C.amber);
+    g.fillStyle=isSel?'rgba(0,0,0,.25)':C.rule;g.fillRect(12,yy+7,GX-28,3);g.fillStyle=isSel?C.black:C.amber;g.fillRect(12,yy+7,(GX-28)*fr,3)}
+  // grid: bar lines and beat ticks for the loop's own length
+  const bars=Math.max(1,Math.round(2/L.speed)),beatsN=bars*4;
+  for(let b=0;b<=beatsN;b++){const x=Math.round(WX0+b/beatsN*WW),isBar=b%4===0;g.fillStyle=isBar?C.rule:C.grid;g.fillRect(x,isBar?y+3:y+3,1,isBar?h-6:6)}
+  g.fillStyle=C.grid;g.fillRect(WX0,cy,WW,1);
+  if(L.empty&&!recOn){font(400,13,COND);text('Empty. Fn4 records one pass here.',WX0+WW/2,cy,C.ink3,'center');g.fillStyle=C.rule;g.fillRect(0,y+h-1,800,1);return}
+  // the audio: grey, then what has played since the last turn shown bright (left to right, right to left)
+  const fillTo=recOn?Math.min(1,(t-L.rec.t)/L.rec.len):1;
+  g.save();g.beginPath();if(L.dir===1)g.rect(WX1-WW*fillTo,y,WW*fillTo,h);else g.rect(WX0,y,WW*fillTo,h);g.clip();
+  shape(ENV[L.i][0],ENV[L.i][1],cy,amp);
+  if(on){g.fillStyle=C.wave;g.fill()}else{g.strokeStyle=C.wave;g.lineWidth=1;g.stroke()}
+  if(playing&&on){g.save();g.beginPath();const a=c.d>0?WX0:hx,b=c.d>0?hx:WX1;g.rect(a,y,b-a,h);g.clip();shape(ENV[L.i][0],ENV[L.i][1],cy,amp);g.fillStyle=recOn?C.red:isSel?C.hot:'#bdbab1';g.fill();g.restore()}
+  g.restore();
+  // ping-pong walls: a plain bracket that thickens for a moment on the bounce
+  if(L.dir===2){if(playing&&c.d!==L.lastD){L.wall[c.d>0?0:1]=t}L.lastD=c.d;
+    [0,1].forEach(e=>{const x=e?WX1-2:WX0,age=t-L.wall[e],k=playing&&age<.18?1:0;g.fillStyle=k?C.ink:C.ink3;g.fillRect(e?x-(k?2:0):x,y+5,k?4:2,h-10);g.fillRect(e?x-6:x,y+5,8,2);g.fillRect(e?x-6:x,y+h-7,8,2)})}
+  // playhead: a solid line with a notch that points the way it travels
+  if(playing&&!L.empty){g.fillStyle=recOn?C.red:C.ink;g.fillRect(Math.round(hx)-1,y+3,2,h-6);
+    g.beginPath();g.moveTo(hx,y+3);g.lineTo(hx+c.d*7,y+3);g.lineTo(hx,y+10);g.closePath();g.fill()}
+  if(!isSel&&h>40){font(500,11);text(DIRS[L.dir]+(L.speed!==1?' '+spd(L.speed):''),WX1-4,y+11,C.ink3,'right')}
+  g.fillStyle=C.rule;g.fillRect(0,y+h-1,800,1)}
+function softkeys(){
+  const d=keyDefs();g.fillStyle=C.bg;g.fillRect(0,428,800,52);
+  d.forEach(([a,b],i)=>{const x=i*200;g.fillStyle=shift?'#2a2410':'#141413';g.fillRect(x+3,432,194,44);
+    if(shift){g.fillStyle=C.amber;g.fillRect(x+3,432,194,2)}
+    font(600,13,COND);text(a,x+14,446,C.ink);font(500,13);text(b,x+14,464,b==='ARMED'||b==='RECORDING'?C.red:shift?C.amber:C.ink2);
+    font(400,11);text('Fn'+(i+1),x+186,446,C.ink3,'right')})}
+let last=0;
+function frame(ts){
+  const dt=Math.min(.05,(ts-last)/1000||0);last=ts;const t=now();
+  lanes.forEach(L=>{L.pend=L.pend.filter(p=>{if(t>=p.at-.005){p.run(p.at);if(p.label==='REC'){}return false}return true});
+    if(L.rec&&L.rec.state==='on'&&t>=L.rec.t+L.rec.len){L.rec=null;say(`<b>${L.name}</b> recorded. It loops from here.`);sync()}});
+  g.fillStyle=C.bg;g.fillRect(0,0,800,480);transport(t);
+  const H=384,tgt=lanes.map(L=>L.i===sel?156:76),k=RM.matches?1:1-Math.exp(-dt*16);
+  let y=44;lanes.forEach((L,i)=>{L.h+=(tgt[i]-L.h)*k;lane(L,y,L.h,t);y+=L.h});
+  softkeys();
+  if(ts&&Math.floor(ts/250)!==Math.floor((ts-dt*1000)/250))sync();
+  requestAnimationFrame(frame)}
+lanes.forEach(L=>{L.h=L.i===sel?156:76});
+if(document.fonts&&document.fonts.load)['600 22px "IBM Plex Mono"','600 13px "IBM Plex Sans Condensed"'].forEach(f=>document.fonts.load(f).catch(()=>{}));
+sync();requestAnimationFrame(frame);
+window.__loop={press,state:()=>({sel,playing,shift,lanes:lanes.map(L=>({name:L.name,dir:DIRS[L.dir],speed:L.speed,mute:L.mute,solo:L.solo,empty:L.empty,rec:L.rec&&L.rec.state,pend:L.pend.map(p=>p.label)}))})};
+})();
+</script>

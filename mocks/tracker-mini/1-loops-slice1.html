@@ -1,0 +1,404 @@
+<title>Tracker Mini Loops</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;700&display=swap">
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#09090a; --plate:#141415; --edge:#2b2b2d; --key:#222224; --key-top:#323132; --key-dn:#47464a;
+  --ink:#f3f3f3; --mute:#9b9b9b; --dim:#5d5d60; --screen:#000000;
+  --red:#CD1818; --yel:#FEF749; --grn:#30CB3F;
+  --mono:"Roboto Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--mono);font-size:13px;line-height:1.45;-webkit-text-size-adjust:100%}
+.wrap{max-width:860px;margin:0 auto;padding-block:18px 36px;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+.hd{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin:0 0 10px}
+.hd h1{font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin:0}
+.hd h1 span{color:var(--red)}
+.hd p{margin:0;color:var(--dim);font-size:11px;white-space:nowrap}
+.unit{background:var(--plate);border:1px solid var(--edge);border-radius:6px;overflow:hidden}
+canvas{display:block;width:100%;height:auto;background:var(--screen)}
+.sec{padding:10px}
+.fn{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;padding:2px 0 0}
+.honest{margin:0;padding:8px 10px 0;color:var(--mute);font-size:11.5px}
+.pads{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.lower{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start;padding-top:4px}
+.dpad{display:grid;grid-template-columns:repeat(3,48px);grid-template-rows:repeat(3,48px);gap:5px}
+.sys{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
+.off{grid-column:1/-1;display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:6px}
+button{font:inherit;color:var(--ink);background:var(--key);border:1px solid var(--edge);border-top-color:var(--key-top);
+  border-radius:4px;padding:0;margin:0;min-height:48px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+  touch-action:manipulation;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent;cursor:pointer}
+button b{font-weight:700;font-size:14px}
+button i{font-style:normal;font-size:10px;color:var(--mute);letter-spacing:.02em}
+button.dn{background:var(--key-dn);transform:translateY(1px)}
+button:focus-visible{outline:2px solid var(--yel);outline-offset:2px}
+.fn button{border-radius:0;border-width:0;background:var(--key-top);min-height:44px}
+.fn button.dn{background:var(--key-dn)}
+.pads button{min-height:66px;background:var(--key-top)}
+.pads button b{font-size:19px}
+.pads button.dn{background:var(--red)}
+.pads button.dn i{color:var(--ink)}
+#mid{border-radius:50%;background:var(--key-top)}
+#mid.on{box-shadow:inset 0 0 0 2px var(--grn)}
+#shift[aria-pressed="true"]{box-shadow:inset 0 0 0 2px var(--yel)}
+#play[aria-pressed="true"]{box-shadow:inset 0 0 0 2px var(--grn)}
+.dpad svg{width:14px;height:14px;fill:var(--ink)}
+.off button{min-height:36px;background:transparent;border-style:dashed;color:var(--dim)}
+.off button b{font-size:11px;font-weight:400}
+#say{margin:12px 0 0;min-height:2.9em;color:var(--ink);border-left:2px solid var(--red);padding-left:10px}
+details{margin-top:10px;color:var(--mute)}
+summary{cursor:pointer;color:var(--ink);padding:6px 0}
+summary:focus-visible{outline:2px solid var(--yel);outline-offset:2px}
+dl{display:grid;grid-template-columns:auto 1fr;gap:3px 12px;margin:4px 0 0}
+dt{color:var(--ink);white-space:nowrap} dd{margin:0}
+@media (min-width:620px){.dpad{grid-template-columns:repeat(3,60px);grid-template-rows:repeat(3,60px)}.sec{padding:14px}}
+@media (prefers-reduced-motion:reduce){button.dn{transform:none}}
+</style>
+
+<div class="wrap">
+  <div class="hd"><h1>Tracker Mini <span>/ Loops</span></h1><p>screen mock, 800 x 480</p></div>
+  <div class="unit">
+    <canvas id="scr" width="800" height="480" role="img" aria-label="Mock of the Loops screen: a waveform with a playhead that sweeps forward, in reverse or in ping-pong."></canvas>
+    <div class="fn">
+      <button id="fn1" type="button"><i>Fn1</i></button><button id="fn2" type="button"><i>Fn2</i></button>
+      <button id="fn3" type="button"><i>Fn3</i></button><button id="fn4" type="button"><i>Fn4</i></button>
+    </div>
+    <p class="honest">A picture of the plan. This is not the firmware.</p>
+    <div class="sec">
+      <div class="pads">
+        <button id="v10" type="button"><b>+10</b><i id="v10s">slice 1</i></button>
+        <button id="v1" type="button"><b>+1</b><i id="v1s">slice 2</i></button>
+        <button id="vm1" type="button"><b>-1</b><i id="vm1s">slice 3</i></button>
+        <button id="vm10" type="button"><b>-10</b><i id="vm10s">slice 4</i></button>
+      </div>
+    </div>
+    <div class="sec lower">
+      <div class="dpad">
+        <span></span>
+        <button id="up" type="button" aria-label="Up: double speed"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M5 1.5 9 8H1z"/></svg><i>x2</i></button>
+        <span></span>
+        <button id="left" type="button" aria-label="Left: pad page back"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1.5 5 8 1v8z"/></svg><i>page</i></button>
+        <button id="mid" type="button" aria-label="Middle: start or stop the loop"><b id="midb">START</b></button>
+        <button id="right" type="button" aria-label="Right: pad page forward"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M8.5 5 2 1v8z"/></svg><i>page</i></button>
+        <span></span>
+        <button id="down" type="button" aria-label="Down: half speed"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M5 8.5 9 2H1z"/></svg><i>/2</i></button>
+        <span></span>
+      </div>
+      <div class="sys">
+        <button id="menu" type="button"><b>Menu</b><i>hold</i></button>
+        <button id="shift" type="button" aria-pressed="false"><b>Shift</b><i>latch</i></button>
+        <button id="play" type="button" aria-pressed="false"><b>Play</b><i>pattern</i></button>
+        <div class="off">
+          <button id="rec" type="button" aria-disabled="true"><b>Rec</b></button><button id="copy" type="button" aria-disabled="true"><b>Copy</b></button>
+          <button id="ins" type="button" aria-disabled="true"><b>Ins</b></button><button id="del" type="button" aria-disabled="true"><b>Del</b></button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p id="say" aria-live="polite">Press the round Middle key to start the loop. Sound comes on with your first tap.</p>
+  <details id="keys"><summary>What each key does</summary>
+    <dl>
+      <dt>Middle</dt><dd>Start or stop the loop. If the pattern plays, it waits armed for the next bar.</dd>
+      <dt>Fn1</dt><dd>Forward, Reverse, Ping-pong.</dd>
+      <dt>Fn2</dt><dd>FIT locks the loop to two bars. FREE plays it at its own speed.</dd>
+      <dt>Fn3 / Fn4</dt><dd>8 or 16 slices. Track 1 to 8.</dd>
+      <dt>Up / Down</dt><dd>Double or half speed.</dd>
+      <dt>Left / Right</dt><dd>Move the four pads along the slices.</dd>
+      <dt>+10 +1 -1 -10</dt><dd>Hold to stutter that slice. Let go and the loop returns on the next beat.</dd>
+      <dt>Play</dt><dd>Start or stop the pattern. Here it is a click. The loop restarts with it.</dd>
+      <dt>Shift</dt><dd>Fn and value keys keep their stock roles. Held on the device, latched here.</dd>
+    </dl>
+  </details>
+</div>
+
+<script>
+(() => {
+'use strict';
+const $ = id => document.getElementById(id);
+const SR = 44100, BPM = 130, BEAT = 60 / BPM, BAR = 4 * BEAT;
+const FITR = Math.pow(2, 0.7 / 12), D = 2 * BAR * FITR, N = Math.round(D * SR);
+const C = {w:'#ffffff', g:'#777777', k:'#323132', r:'#CD1818', y:'#FEF749', gr:'#30CB3F', b:'#000000'};
+const FF = '"Roboto Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace';
+const FL = '300 17px ' + FF, FB = '700 17px ' + FF, FR = '400 12px ' + FF;
+const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+try { document.fonts.load(FL); document.fonts.load(FB); document.fonts.load(FR); } catch (e) {}
+
+/* ---- the loop: two bars of drums and bass, made here from sines and noise ---- */
+const pcm = (() => {
+  const o = new Float32Array(N), st = N / 32; let seed = 7;
+  const rnd = () => (seed = (seed * 1664525 + 1013904223) >>> 0) / 2147483648 - 1;
+  const add = (i, v) => { o[i % N] += v; };
+  const at = s => Math.round(s * st);
+  const kick = (s, a) => { let ph = 0; for (let i = 0, i0 = at(s); i < SR * .3; i++) { const t = i / SR;
+    ph += 2 * Math.PI * (48 + 135 * Math.exp(-t * 38)) / SR;
+    add(i0 + i, a * (Math.sin(ph) * Math.exp(-t * 11) + (i < 90 ? .5 * (1 - i / 90) * rnd() : 0))); } };
+  const snare = (s, a) => { let lp = 0; for (let i = 0, i0 = at(s); i < SR * .22; i++) { const t = i / SR, n = rnd(); lp += .25 * (n - lp);
+    add(i0 + i, a * .8 * ((n - lp) * .8 * Math.exp(-t * 22) + Math.sin(2 * Math.PI * 196 * t) * .6 * Math.exp(-t * 30))); } };
+  const hat = (s, a, dec) => { let p = 0; for (let i = 0, i0 = at(s); i < SR * 5 / dec; i++) { const n = rnd(), h = n - p; p = n;
+    add(i0 + i, a * .3 * h * Math.exp(-i / SR * dec)); } };
+  const saw = x => 2 * (x - Math.floor(x + .5));
+  const bass = (s, len, midi) => { const n = at(len), f = 440 * Math.pow(2, (midi - 69) / 12); let lp = 0;
+    for (let i = 0, i0 = at(s); i < n; i++) { const t = i / SR, env = Math.min(1, i / 200) * Math.min(1, (n - i) / 700);
+      lp += (.03 + .11 * Math.exp(-t * 7)) * (saw(f * t) + saw(f * 1.012 * t) - lp);
+      add(i0 + i, .5 * env * (Math.tanh(lp * 1.6) * .6 + Math.sin(2 * Math.PI * f * t) * .5)); } };
+  [[0,1],[10,.9],[16,1],[19,.6],[26,.9]].forEach(k => kick(k[0], k[1]));
+  [[4,1],[12,1],[20,1],[28,1],[7,.3],[15,.25],[23,.3],[30,.45],[31,.6]].forEach(k => snare(k[0], k[1]));
+  for (let s = 0; s < 32; s++) hat(s, s % 4 === 2 ? .9 : s % 2 === 0 ? .55 : .3, s === 6 || s === 22 ? 16 : 90);
+  [[0,5,40],[6,3,43],[10,4,40],[14,2,38],[16,6,40],[22,4,45],[26,3,43],[29,3,35]].forEach(b => bass(b[0], b[1], b[2]));
+  let pk = 0; for (let i = 0; i < N; i++) { o[i] = Math.tanh(o[i] * 1.4); pk = Math.max(pk, Math.abs(o[i])); }
+  for (let i = 0; i < N; i++) o[i] *= .9 / pk;
+  return o;
+})();
+const hs = Array.from({length: 200}, (_, b) => { let m = 0;
+  for (let i = Math.floor(b * N / 200), e = Math.floor((b + 1) * N / 200); i < e; i++) m = Math.max(m, Math.abs(pcm[i]));
+  return 1 + m / .9 * 135; });
+
+/* ---- state ---- */
+const S = {on:false, mode:2, fit:true, slices:16, track:8, speed:1, page:0, pat:false, clk0:0, shift:false, menu:false, vol:80};
+let M = {t0:0, p0:0, d0:1};          // main loop anchor: at time t0 the playhead was at p0 going d0
+let st = null;                        // stutter: {idx,a,b,t0,end}
+let ac = null, master, fwdBuf, revBuf, srcs = [], ticks = [], tickK = 0, schedT = 0, fade = true, tOff = 0;
+const rate = () => (S.fit ? FITR : 1) * S.speed;
+const startP = () => S.mode === 1 ? D : 0;
+const startD = () => S.mode === 1 ? -1 : 1;
+const say = s => { $('say').textContent = s; };
+
+/* ---- clock: audio time when there is audio, else the page clock ---- */
+function audio() {
+  if (ac) { if (ac.state !== 'running') ac.resume(); return; }
+  const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return;
+  try {
+    ac = new AC(); master = ac.createGain(); master.gain.value = S.vol / 100; master.connect(ac.destination);
+    fwdBuf = ac.createBuffer(1, N, SR); fwdBuf.getChannelData(0).set(pcm);
+    revBuf = ac.createBuffer(1, N, SR); revBuf.getChannelData(0).set(Float32Array.from(pcm).reverse());
+    tOff = ac.currentTime - performance.now() / 1000; ac.resume();
+  } catch (e) { ac = null; }
+}
+function clock() {
+  const pn = performance.now() / 1000; if (!ac) return pn;
+  const d = ac.currentTime - pn;
+  if (ac.state !== 'running') { tOff = d; return ac.currentTime; }
+  tOff = Math.abs(d - tOff) > .08 ? d : tOff + (d - tOff) * .05;
+  return pn + tOff;
+}
+const now = () => (ac ? ac.currentTime : performance.now() / 1000) + .012;
+const lat = () => ac ? Math.min(.3, ac.outputLatency || ac.baseLatency || 0) : 0;
+
+/* ---- position maths: the same sums place the playhead and schedule the sound ---- */
+function mainAt(t) {
+  const u0 = Math.max(0, t - M.t0) * rate();
+  if (S.mode === 2) { const u = ((M.d0 > 0 ? M.p0 : 2 * D - M.p0) + u0) % (2 * D); return u < D ? {p:u, d:1} : {p:2 * D - u, d:-1}; }
+  return S.mode === 0 ? {p:(M.p0 + u0) % D, d:1} : {p:D - (D - M.p0 + u0) % D, d:-1};
+}
+function cut(t) {
+  for (const s of srcs) { try { s.g.gain.cancelScheduledValues(t); s.g.gain.setTargetAtTime(0, t, .003); s.n.stop(t + .03); } catch (e) {} }
+  srcs = []; schedT = t; fade = true;
+}
+function voice(t, p, d, dur) {
+  if (!ac || dur <= 0) return;
+  const n = ac.createBufferSource(), g = ac.createGain(), rec = {n, g};
+  n.buffer = d > 0 ? fwdBuf : revBuf; n.playbackRate.value = rate(); n.connect(g); g.connect(master);
+  if (fade) { g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(1, t + .003); }
+  n.start(Math.max(t, ac.currentTime), d > 0 ? p : D - p, dur);
+  n.onended = () => { srcs = srcs.filter(x => x !== rec); };
+  srcs.push(rec); fade = false;
+}
+function pump() {
+  const lim = now() + .3;
+  if (S.on) for (let guard = 0; schedT < lim && guard < 64; guard++) {
+    const t = schedT, r = rate(), inSt = st && t >= st.t0 - 1e-6 && (st.end == null || t < st.end - 1e-6);
+    if (!inSt && t < M.t0) { schedT = M.t0; continue; }
+    let p, d, edge;
+    if (inSt) { p = st.a + ((t - st.t0) * r) % (st.b - st.a); d = 1; edge = st.b; }
+    else { const c = mainAt(t); p = c.p; d = c.d; edge = d > 0 ? D : 0; }
+    const seg = Math.abs(edge - p) / r;
+    if (seg < .002) { schedT = t + seg + 1e-5; continue; }
+    const t1 = inSt && st.end != null ? Math.min(t + seg, st.end) : t + seg;
+    voice(t, p, d, (t1 - t) * r); schedT = t1;
+  }
+  if (S.pat && ac) {
+    for (; S.clk0 + tickK * BEAT < lim; tickK++) { const t = S.clk0 + tickK * BEAT; if (t < ac.currentTime) continue;
+      const o = ac.createOscillator(), e = ac.createGain(); o.frequency.value = tickK % 4 ? 1100 : 1650;
+      e.gain.setValueAtTime(.13, t); e.gain.exponentialRampToValueAtTime(.001, t + .04);
+      o.connect(e); e.connect(master); o.start(t); o.stop(t + .05); ticks.push(o); }
+    if (ticks.length > 16) ticks.splice(0, 8);
+  }
+}
+function resched(t) { cut(t); pump(); }
+function retime(change) {             // change direction, sync or speed without a jump
+  const t = now();
+  if (S.on && t >= M.t0) { const c = mainAt(t); change(); M = {t0:t, p0:c.p, d0:c.d}; }
+  else { change(); M.p0 = startP(); M.d0 = startD(); }
+  if (st) st.t0 = t;
+  if (S.on) resched(t);
+}
+
+/* ---- what the keys do ---- */
+const MODES = ['FORWARD', 'REVERSE', 'PING-PONG'];
+function toggleLoop() {
+  const t = now();
+  if (S.on) { S.on = false; st = null; cut(t); say('Loop stopped.'); return; }
+  let t0 = t;
+  if (S.pat) t0 = S.clk0 + Math.ceil((t - S.clk0) / BAR - 1e-6) * BAR; else S.clk0 = t;
+  S.on = true; st = null; M = {t0, p0:startP(), d0:startD()}; cut(t); pump();
+  say(S.pat ? 'Armed. The loop starts on the next bar.' : 'Loop running, ' + MODES[S.mode].toLowerCase() + '.');
+}
+function togglePat() {
+  const t = now();
+  if (S.pat) { S.pat = false; ticks.forEach(o => { try { o.stop(); } catch (e) {} }); ticks = []; say('Pattern stopped. The loop keeps going.'); return; }
+  S.pat = true; S.clk0 = t + .03; tickK = 0;
+  if (S.on) { st = null; M = {t0:S.clk0, p0:startP(), d0:startD()}; cut(t); }
+  pump(); say(S.on ? 'Pattern playing. The loop restarted with it.' : 'Pattern playing. The click stands in for it.');
+}
+function fn(i) {
+  if (S.shift) { say('Shift + Fn' + (i + 1) + ' keeps its stock role: a module shortcut.'); return; }
+  if (i === 0) { retime(() => { S.mode = (S.mode + 1) % 3; }); say('Direction: ' + MODES[S.mode].toLowerCase() + '.'); }
+  if (i === 1) { retime(() => { S.fit = !S.fit; }); say(S.fit ? 'FIT: the loop is stretched to two bars at 130 BPM.' : 'FREE: the loop plays at its own speed.'); }
+  if (i === 2) { S.slices = S.slices === 16 ? 8 : 16; S.page = S.slices === 8 ? Math.floor(S.page / 8) * 4 : S.page * 2;
+    if (st) { st = null; if (S.on) resched(now()); } say(S.slices + ' slices.'); }
+  if (i === 3) { S.track = S.track % 8 + 1; say('The loop plays on track ' + S.track + '.'); }
+}
+function value(i, down) {
+  if (S.shift) { if (!down) return; S.vol = Math.max(0, Math.min(100, S.vol + [10, 1, -1, -10][i]));
+    if (master) master.gain.value = S.vol / 100; say('Shift + value keeps its stock role. Master volume ' + S.vol + '.'); return; }
+  const t = now(), idx = S.page + i;
+  if (down) {
+    if (!S.on || t < M.t0) { say('Start the loop first. Then hold a pad to stutter its slice.'); return; }
+    const a = idx * D / S.slices; st = {idx, a, b:a + D / S.slices, t0:t, end:null}; resched(t);
+    say('Stutter on slice ' + (idx + 1) + '. Let go to return on the next beat.');
+  } else if (st && st.idx === idx && st.end == null) {
+    let e = S.clk0 + Math.ceil((t - S.clk0) / BEAT) * BEAT; if (e - t < .02) e += BEAT;
+    st.end = e; resched(t); say('Back to the loop on the beat.');
+  }
+}
+function speed(m) { const v = Math.max(.25, Math.min(4, S.speed * m));
+  if (v === S.speed) { say('Speed limit reached.'); return; } retime(() => { S.speed = v; }); say('Speed x' + v + '.'); }
+function page(dn) { S.page = Math.max(0, Math.min(S.slices - 4, S.page + dn * 4)); say('Pads play slices ' + (S.page + 1) + ' to ' + (S.page + 4) + '.'); }
+
+let navHeld = null;                   // D-pad and Middle: first one down locks out the rest
+const NAV = {up:() => speed(2), down:() => speed(.5), left:() => page(-1), right:() => page(1), mid:toggleLoop};
+const KEYS = {
+  fn1:[() => fn(0)], fn2:[() => fn(1)], fn3:[() => fn(2)], fn4:[() => fn(3)],
+  v10:[() => value(0, 1), () => value(0, 0)], v1:[() => value(1, 1), () => value(1, 0)],
+  vm1:[() => value(2, 1), () => value(2, 0)], vm10:[() => value(3, 1), () => value(3, 0)],
+  play:[togglePat], shift:[() => { S.shift = !S.shift; say(S.shift ? 'Shift on. Fn and value keys now do their stock jobs.' : 'Shift off.'); }],
+  menu:[() => { S.menu = true; say('Stock module menu. Loops sits in cell 12.'); }, () => { S.menu = false; }]
+};
+['rec', 'copy', 'ins', 'del'].forEach(id => { KEYS[id] = [() => say($(id).textContent + ' is inactive on this screen.')]; });
+Object.keys(NAV).forEach(id => { KEYS[id] = [() => { if (navHeld) return; navHeld = id; NAV[id](); }, () => { if (navHeld === id) navHeld = null; }]; });
+function sync() {
+  ['v10', 'v1', 'vm1', 'vm10'].forEach((id, i) => { $(id + 's').textContent = 'slice ' + (S.page + i + 1); });
+  $('shift').setAttribute('aria-pressed', S.shift); $('play').setAttribute('aria-pressed', S.pat);
+  $('midb').textContent = S.on ? 'STOP' : 'START'; $('mid').classList.toggle('on', S.on);
+}
+Object.keys(KEYS).forEach(id => {
+  const el = $(id), k = KEYS[id]; let held = false;
+  const dn = () => { if (held) return; held = true; audio(); el.classList.add('dn'); if (!S.menu || id === 'menu') k[0](); sync(); };
+  const up = () => { if (!held) return; held = false; el.classList.remove('dn'); if (k[1]) k[1](); sync(); };
+  el.addEventListener('pointerdown', e => { if (e.button) return; try { el.setPointerCapture(e.pointerId); } catch (x) {} dn(); });
+  ['pointerup', 'pointercancel', 'lostpointercapture', 'blur'].forEach(ev => el.addEventListener(ev, up));
+  el.addEventListener('keydown', e => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); if (!e.repeat) dn(); } });
+  el.addEventListener('keyup', e => { if (e.key === ' ' || e.key === 'Enter') up(); });
+  el.addEventListener('contextmenu', e => e.preventDefault());
+});
+setInterval(pump, 100);
+
+/* ---- the screen, drawn as the firmware would draw it ---- */
+const g = $('scr').getContext('2d');
+const txt = (s, x, y, f, c, al) => { g.font = f; g.fillStyle = c; g.textAlign = al || 'left'; g.fillText(s, x, y); };
+const MENU = ['Pattern', 'Song', 'Instrument', 'Sample|Loader', 'Sample|Playback', 'Sample|Editor', 'Sample|Recorder', 'Performance', 'Master', 'Config', 'File', 'Loops'];
+function frame() {
+  requestAnimationFrame(frame);
+  const vt = clock() - lat(), rm = reduce.matches, r = rate(); pump();
+  if (st && st.end != null && vt >= st.end && schedT >= st.end) st = null;
+  const stA = S.on && st && vt >= st.t0 && (st.end == null || vt < st.end);
+  const state = !S.on ? 0 : vt < M.t0 ? 1 : stA ? 3 : 2;
+  let p = startP(), d = startD(), ts = 9, since = 0;
+  if (state === 2) { const c = mainAt(vt); p = c.p; d = c.d; since = vt - M.t0; ts = (d > 0 ? p : D - p) / r; }
+  if (state === 3) { p = st.a + ((vt - st.t0) * r) % (st.b - st.a); d = 1; since = vt - st.t0; ts = (p - st.a) / r; }
+  const flash = !rm && ts < .18 && since > ts + .004 ? 1 - ts / .18 : 0;
+  const ra = stA ? st.a / D * 800 : 0, rb = stA ? st.b / D * 800 : 800, x = p / D * 800;
+  g.globalAlpha = 1; g.fillStyle = C.b; g.fillRect(0, 0, 800, 480); g.textBaseline = 'alphabetic';
+
+  // title
+  txt('Loops', 9, 20, FL, C.w); txt('03 DNB BREAK 2BAR', 762, 20, FL, C.w, 'right');
+  g.strokeStyle = C.w; g.lineWidth = 1; g.strokeRect(767.5, 7, 24, 12); g.fillStyle = C.w; g.fillRect(792, 10.5, 3, 5); g.fillRect(769.5, 9, 14, 8);
+  // info
+  const name = ['STOPPED', 'ARMED', 'LOOP', 'STUTTER'][state];
+  if (state !== 1 || rm || Math.floor(vt * 8) % 2 === 0) { g.font = FB; const w = g.measureText(name).width + 14;
+    g.fillStyle = [C.g, C.y, C.gr, C.r][state]; g.fillRect(12, 39, w, 22); txt(name, 19, 56, FB, state === 3 ? C.w : C.b); }
+  txt('130.0', 212, 56, FB, C.w); txt(' BPM', 212 + g.measureText('130.0').width, 56, FL, C.w);
+  const bars = 2 / S.speed, semi = .7 + 12 * Math.log2(S.speed);
+  const fitTxt = (bars < 1 ? '1/' + 1 / bars : bars) + (bars > 1 ? ' BARS' : ' BAR');
+  if (S.fit) { txt(fitTxt, 412, 56, FB, C.w); txt(' ' + (semi >= 0 ? '+' : '') + semi.toFixed(1) + ' st', 412 + g.measureText(fitTxt).width, 56, FL, C.w); }
+  else txt('FREE' + (S.speed === 1 ? '' : S.speed > 1 ? ' x' + S.speed : ' x1/' + 1 / S.speed), 412, 56, FB, C.w);
+  txt('TRK ', 612, 56, FL, C.w); txt('' + S.track, 612 + g.measureText('TRK ').width, 56, FB, C.w);
+  const run = state >= 2 || (S.pat && vt >= S.clk0), bt = (vt - S.clk0) / BEAT, bi = ((Math.floor(bt) % 4) + 4) % 4;
+  for (let i = 0; i < 4; i++) { g.fillStyle = C.k; g.fillRect(724 + i * 18, 45, 10, 10);
+    if (run && i === bi) { g.globalAlpha = rm ? 1 : 1 - .65 * (bt - Math.floor(bt)); g.fillStyle = i ? C.w : C.r; g.fillRect(724 + i * 18, 45, 10, 10); g.globalAlpha = 1; } }
+  // ruler, countdown
+  for (let i = 0; i < 8; i++) { const big = i % 4 === 0; g.fillStyle = big ? C.w : C.g; g.fillRect(i * 100, big ? 74 : 80, 1, big ? 12 : 6);
+    if (big) txt('' + (i / 4 + 1), i * 100 + 5, 84, FR, C.w); }
+  if (state === 1) { g.fillStyle = C.y; g.fillRect(0, 88, 800 * Math.max(0, Math.min(1, 1 - (M.t0 - vt) / BAR)), 2); }
+
+  // tail: five fading red blocks behind the playhead, longer when faster
+  if (state >= 2 && !rm) {
+    const v = r * 800 / D, W = rb - ra, T = Math.min(Math.max(v * .25, 16), 200, since * v, W * .9);
+    const wrap = state === 3 || S.mode !== 2, al = [.42, .3, .2, .12, .06]; g.fillStyle = C.r;
+    for (let k = 0; k < 5; k++) { const x1 = x - d * (k + 1) * T / 5, w = T / 5; let lo = Math.min(x - d * k * T / 5, x1); g.globalAlpha = al[k];
+      if (wrap) { lo = ra + (((lo - ra) % W) + W) % W; const over = lo + w - rb;
+        if (over > 0) { g.fillRect(lo, 92, w - over, 280); g.fillRect(ra, 92, over, 280); } else g.fillRect(lo, 92, w, 280); }
+      else { const a = Math.max(lo, ra), b = Math.min(lo + w, rb); if (b > a) g.fillRect(a, 92, b - a, 280); } }
+    g.globalAlpha = 1;
+  }
+  // wave
+  g.fillStyle = C.w;
+  for (let i = 0; i < 200; i++) { const bx = i * 4; g.globalAlpha = !stA || (bx + 1.5 >= ra && bx + 1.5 < rb) ? 1 : .3; g.fillRect(bx, 232 - hs[i], 3, hs[i] * 2); }
+  g.globalAlpha = 1;
+  if (stA) { g.strokeStyle = C.r; g.lineWidth = 2; g.strokeRect(ra + 1, 93, rb - ra - 2, 278); }
+  // edge flash, 180 ms
+  if (flash > 0) {
+    const fl = (ex, dir) => { const gr = g.createLinearGradient(ex, 0, ex + dir * 40, 0);
+      gr.addColorStop(0, 'rgba(255,255,255,' + flash + ')'); gr.addColorStop(.12, 'rgba(205,24,24,' + flash * .85 + ')'); gr.addColorStop(1, 'rgba(205,24,24,0)');
+      g.fillStyle = gr; g.fillRect(dir > 0 ? ex : ex - 40, 92, 40, 280); };
+    if (state === 3 || S.mode !== 2 || d > 0) fl(ra, 1);
+    if (state === 3 || S.mode !== 2 || d < 0) fl(rb, -1);
+  }
+  // playhead
+  const hx = Math.min(Math.max(x - 1.5, 0), 797);
+  g.save(); g.beginPath(); g.rect(0, 92, 800, 280); g.clip();
+  if (state >= 2) { g.fillStyle = C.r; g.globalAlpha = .22; g.fillRect(hx - 7, 92, 17, 280); g.globalAlpha = .5; g.fillRect(hx - 3, 92, 9, 280); }
+  g.globalAlpha = state >= 2 ? 1 : .55; g.fillStyle = C.w; g.fillRect(hx, 92, 3, 280);
+  if (state >= 2) { const ax = hx + 1.5 + d * 5; g.beginPath(); g.moveTo(ax, 94); g.lineTo(ax, 108); g.lineTo(ax + d * 11, 101); g.closePath(); g.fill(); }
+  g.restore(); g.globalAlpha = 1;
+
+  // slices
+  const n = S.slices, cw = 800 / n, cur = state >= 2 ? Math.min(n - 1, Math.floor(p / D * n)) : -1;
+  for (let i = 0; i < n; i++) { const cx = i * cw, pad = i >= S.page && i < S.page + 4, lit = i === cur;
+    if (lit) { g.fillStyle = state === 3 ? C.r : C.w; g.fillRect(cx + 1, 379, cw - 2, 38); }
+    else if (pad) { g.fillStyle = C.k; g.fillRect(cx + 1, 379, cw - 2, 38); }
+    else { g.strokeStyle = C.k; g.lineWidth = 1; g.strokeRect(cx + 1.5, 379.5, cw - 3, 37); }
+    const ink = lit ? (state === 3 ? C.w : C.b) : pad ? C.w : C.g;
+    txt('' + (i + 1), cx + 5, 392, FR, ink);
+    if (pad) txt(['+10', '+1', '-1', '-10'][i - S.page], cx + cw / 2, 412, FB, ink, 'center'); }
+  // soft keys
+  [[MODES[S.mode], 'Direction'], [S.fit ? 'FIT' : 'FREE', 'Sync'], ['' + S.slices, 'Slices'], ['' + S.track, 'Track']].forEach((k, i) => {
+    g.fillStyle = C.k; g.fillRect(i * 200 + 1, 424, 198, 56);
+    txt(k[0], i * 200 + 100, 449, FB, C.w, 'center'); txt(k[1], i * 200 + 100, 468, FR, C.g, 'center'); });
+
+  // stock module menu while Menu is held
+  if (S.menu) {
+    g.fillStyle = 'rgba(0,0,0,.7)'; g.fillRect(0, 28, 800, 452); g.fillStyle = C.b; g.fillRect(180, 75, 440, 330);
+    g.strokeStyle = C.g; g.lineWidth = 1; g.strokeRect(180.5, 75.5, 439, 329);
+    MENU.forEach((m, i) => { const mx = 180 + (i % 4) * 110, my = 75 + Math.floor(i / 4) * 110, sel = i === 11, ln = m.split('|');
+      g.fillStyle = sel ? C.r : C.k; g.fillRect(mx + 6, my + 6, 98, 98);
+      if (sel) { g.strokeStyle = C.w; g.lineWidth = 2; g.strokeRect(mx + 4, my + 4, 102, 102); }
+      txt('' + (i + 1), mx + 12, my + 22, FR, sel ? C.w : C.g);
+      ln.forEach((s, j) => txt(s, mx + 55, my + 62 + j * 16 - (ln.length - 1) * 8, sel ? FB : FR, C.w, 'center')); });
+  }
+}
+sync(); requestAnimationFrame(frame);
+})();
+</script>

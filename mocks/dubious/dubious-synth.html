@@ -1,0 +1,442 @@
+<title>Dubious</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap">
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#090b11; --lamp:#181b27; --body:#1a1d27; --body-hi:#262a37; --pad-hi:#30364a; --line:#353a4a;
+  --ink:#dedacb; --dim:#9296a8; --ember:#f08c3c; --leaf:#a8c56c; --screen:#000; --glow:#3e78ae45; --shadow:#000000cc;
+  --k1:#5b606e; --k2:#878b99; --k3:#b9bbc2; --k4:#efedde;
+  --pix:"Silkscreen",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg) radial-gradient(110% 460px at 24% -60px,var(--lamp),var(--bg) 72%) no-repeat;color:var(--ink);font:15px/1.45 var(--sans);-webkit-text-size-adjust:100%}
+.wrap{max-width:560px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:22px 44px}
+h1{font:700 30px/1 var(--pix);letter-spacing:.05em;margin:0 0 10px}
+.lede{margin:0 0 18px;color:var(--dim);max-width:40ch}
+.device{background:var(--body);border:1px solid var(--line);border-radius:10px;padding:8px 8px 12px;box-shadow:0 22px 44px -20px var(--shadow)}
+.bezel{background:var(--screen);border-radius:4px;overflow:hidden;box-shadow:0 0 0 1px var(--line),0 0 30px -4px var(--glow)}
+canvas{display:block;width:100%;height:auto;aspect-ratio:480/220;image-rendering:crisp-edges;image-rendering:pixelated;background:var(--screen)}
+.tech{font:11px/1.4 var(--mono);color:var(--dim);margin:8px 4px 10px}
+.khead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 4px 6px}
+.khead span{font:400 11px/1.3 var(--pix);color:var(--dim)}
+button{font:inherit;color:inherit;cursor:pointer}
+#page-switch{flex:none;font:400 12px/1 var(--pix);background:var(--body-hi);border:1px solid var(--line);border-radius:999px;padding:0 14px;min-height:38px}
+#page-switch:active{background:var(--pad-hi)}
+.knob{display:grid;grid-template-columns:58px 1fr;column-gap:10px;align-items:center;padding:7px 4px 8px;border-top:1px solid var(--line)}
+.knob[hidden]{display:none}
+.knob label{display:contents}
+.kn{grid-area:1/1;font:700 14px/1 var(--pix)}
+.kd{grid-area:2/1/3/3;font-size:12.5px;line-height:1.35;color:var(--dim)}
+input[type=range]{grid-area:1/2;-webkit-appearance:none;appearance:none;width:100%;height:34px;margin:0;background:none;touch-action:pan-y}
+input[type=range]::-webkit-slider-runnable-track{height:4px;border-radius:2px;background:var(--line)}
+input[type=range]::-moz-range-track{height:4px;border-radius:2px;background:var(--line)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;margin-top:-10px;border-radius:50%;background:var(--kc);border:2px solid var(--body)}
+input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--kc);border:2px solid var(--body)}
+.e0{--kc:var(--k1)}.e1{--kc:var(--k2)}.e2{--kc:var(--k3)}.e3{--kc:var(--k4)}
+.pads{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-top:8px;padding-top:12px;border-top:1px solid var(--line);touch-action:none;-webkit-user-select:none;user-select:none}
+.pad{height:58px;border-radius:6px;border:1px solid var(--line);background:var(--body-hi);color:var(--dim);font:400 10px/1 var(--pix);display:flex;align-items:flex-end;padding:6px;touch-action:none;-webkit-tap-highlight-color:transparent}
+.pad.hi{background:var(--pad-hi)}
+.pad.on{background:var(--ember);border-color:var(--ember);color:var(--bg)}
+.hint{font-size:12.5px;color:var(--dim);margin:8px 4px 0}
+.self{display:flex;align-items:center;gap:12px;margin:12px 4px 0}
+.self input{-webkit-appearance:none;appearance:none;flex:none;width:48px;height:28px;border-radius:14px;background:var(--line);position:relative;margin:0;cursor:pointer}
+.self input::after{content:"";position:absolute;left:3px;top:3px;width:22px;height:22px;border-radius:50%;background:var(--k3);transition:transform .15s ease-out}
+.self input:checked{background:var(--leaf)}
+.self input:checked::after{transform:translateX(20px);background:var(--bg)}
+.self b{font:700 13px/1.2 var(--pix);display:block}
+.self small{font-size:12.5px;color:var(--dim)}
+details{margin-top:22px;border-top:1px solid var(--line);padding-top:12px}
+summary{font:400 12px/1.4 var(--pix);color:var(--ink);cursor:pointer;padding:6px 0}
+details ul{margin:8px 0 0;padding-left:18px;color:var(--dim);font-size:13.5px}
+details li{margin-bottom:7px}
+:focus-visible{outline:2px solid var(--ember);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Dubious</h1>
+    <p class="lede">A pocket synth for the small hours. Tap a pad, then turn a knob. Each knob pulls one layer of the world apart.</p>
+  </header>
+
+  <section class="device" aria-label="The synth">
+    <div class="bezel"><canvas id="screen" width="480" height="220" role="img" aria-label="A square block of world cut into five layers: forest, dirt, ore, water and an underworld."></canvas></div>
+    <p class="tech" id="tech">Counting shapes.</p>
+
+    <div class="khead"><span id="page-name">Page 1 of 2</span><button type="button" id="page-switch">Other page</button></div>
+    <div id="knobs"></div>
+
+    <div class="pads" id="pads" aria-label="Note pads"></div>
+    <p class="hint">Hold several pads at once. On a keyboard, play A S D F G H and Q W E R T Y.</p>
+
+    <label class="self" for="self-play"><input type="checkbox" id="self-play" role="switch"><span><b>Plays itself</b><small>Slow random notes from a five-note scale. No written tune.</small></span></label>
+  </section>
+
+  <details id="limits">
+    <summary>What is real about this mock</summary>
+    <ul>
+      <li>The screen is drawn at the device size, 480 by 220, from a fixed list of shapes in 16 colours. Shapes only move, hide, grow or swap colour. The device can do all of that.</li>
+      <li>The device makes no sound unless a note is sounding. The wind and drone live under your notes and their fade-outs, so here they also stop when the last note has died away.</li>
+      <li>The device cannot tell the synth when you let go of a key. Rift's sinking pitch therefore runs on a clock from the start of the note.</li>
+      <li>The room echo stands in for the device's own reverb send.</li>
+      <li>Dig here only cuts the number of loudness steps. The device will also cut the sample rate.</li>
+    </ul>
+  </details>
+</div>
+
+<script>
+(()=>{'use strict';
+const $=id=>document.getElementById(id);
+// ---------- palette: 16 fixed entries, the whole colour budget of the device ----------
+const PAL=[['grass','#6c9a55'],['leaf','#a8c56c'],['pine','#3c6746'],['teal','#1e4a5a'],['night','#1b1e42'],['dirt','#8b6349'],['bark','#54392f'],['stone','#8e9099'],
+  ['slate','#5a5d70'],['water','#3e78ae'],['ice','#9edfe4'],['tan','#d8b389'],['ember','#f08c3c'],['violet','#7a4ec2'],['lilac','#c8a4f0'],['white','#f2eee1']];
+const [GRASS,LEAF,PINE,TEAL,NIGHT,DIRT,BARK,STONE,SLATE,WATER,ICE,TAN,EMBER,VIOLET,LILAC,WHITE]=PAL.map((_,i)=>i);
+const G=3,LX=47,REL=1.1;            // 3 px cell, block left edge (cells), amp release time constant (s)
+const K=[.25,0,.3,.25,.3,0,.5,.3];  // time dig glint deep | tide rift air wear
+let seed=11;const R=()=>{seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};
+const ri=n=>R()*n|0;
+
+// ---------- scene as data: every node is one closed outline in one palette entry ----------
+const nodes=[],used=new Set();
+function trace(rects){ // union of cell rects -> closed outline(s), collinear points removed
+  let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;
+  for(const[x,y,w,h]of rects){x0=Math.min(x0,x);y0=Math.min(y0,y);x1=Math.max(x1,x+w);y1=Math.max(y1,y+h);}
+  const W=x1-x0+2,g=new Uint8Array(W*(y1-y0+2)),at=(x,y)=>g[(y+1)*W+x+1];
+  for(const[x,y,w,h]of rects)for(let j=0;j<h;j++)for(let i=0;i<w;i++)g[(y-y0+j+1)*W+x-x0+i+1]=1;
+  const E=new Map(),add=(a,b,c,d)=>{const k=a+','+b;if(!E.has(k))E.set(k,[]);E.get(k).push([c,d]);};
+  for(let y=0;y<y1-y0;y++)for(let x=0;x<x1-x0;x++)if(at(x,y)){
+    if(!at(x,y-1))add(x,y,x+1,y);if(!at(x+1,y))add(x+1,y,x+1,y+1);
+    if(!at(x,y+1))add(x+1,y+1,x,y+1);if(!at(x-1,y))add(x,y+1,x,y);}
+  const loops=[];
+  for(const[k,arr]of E)while(arr.length){
+    const s=k.split(',').map(Number),pts=[s];let c=arr.pop();
+    while(c[0]!==s[0]||c[1]!==s[1]){pts.push(c);c=E.get(c[0]+','+c[1]).pop();}
+    const out=[],n=pts.length;
+    for(let i=0;i<n;i++){const a=pts[(i+n-1)%n],b=pts[i],d=pts[(i+1)%n];if((b[0]-a[0])*(d[1]-b[1])!==(b[1]-a[1])*(d[0]-b[0]))out.push([b[0]+x0,b[1]+y0]);}
+    loops.push(out);}
+  return loops;
+}
+function N(L,p,rects,o){const n=Object.assign({L,p,p0:p,x:0,y:0,s:1,hid:false,k:'?'},o);n.loops=trace(rects);nodes.push(n);used.add(p);if(n.pn!=null)used.add(n.pn);if(n.pd!=null)used.add(n.pd);return n;}
+const dot=(L,p,x,y,o)=>N(L,p,[[0,0,1,1]],Object.assign({x,y},o));
+// block geometry: 22 columns of 3 cells; column j is hc(j) cells tall above and below the centre line
+const hc=j=>j<11?j+1:22-j;
+const top=(a,b)=>{const r=[];for(let j=a;j<b;j++)r.push([3*j,-hc(j),3,2*hc(j)]);return r;};
+const side=(a,b,r0,r1,ex)=>{const r=[];for(let j=a;j<b;j++)r.push([3*j,hc(j)+r0,3,r1-r0+(ex?ex[j]:0)]);return r;};
+const bmp=rows=>{const r=[];rows.forEach((s,y)=>{for(let x=0;x<s.length;x++)if(s[x]==='#')r.push([x,y,1,1]);});return r;};
+const sp=(f,i,n,t)=>{const j=f*11+Math.min(10,(i+R())/n*11|0);return[3*j+ri(2),hc(j)+ri(t)];};   // a spot on a side face
+const tp=(i,n,d)=>{const j=3+Math.min(15,(i+R())/n*16|0);return[3*j+ri(2),hc(j)-2-ri(d)];};      // a spot on the front band of a top face
+const cy=[24,26,30,34,39];
+
+// sky, behind everything
+const stars=[];for(let i=0;i<14;i++)stars.push(dot(-1,WHITE,i%2?2+ri(40):120+ri(38),2+ri(54),{th:.42+i*.04,hid:true}));
+
+// 5 underworld: dark rock, lava on top, a ring that opens with Rift
+const EX=[0,1,2,1,0,2,1,0,1,2,0,0,2,1,0,1,2,0,1,2,1,0];
+N(4,NIGHT,side(0,11,0,4,EX));N(4,NIGHT,side(11,22,0,4,EX));
+for(let i=0;i<10;i++){const L=i<6,[x,y]=sp(L?0:1,L?i:i-6,L?6:4,4);dot(4,i%3===2?SLATE:VIOLET,x,y);}
+[2,6,9,13,18].forEach(j=>N(4,EMBER,[[0,0,1,2+ri(2)]],{x:3*j+ri(3),y:hc(j)}));
+N(4,EMBER,top(0,11));N(4,EMBER,top(11,22));
+for(let i=0;i<6;i++){const[x,y]=tp(i,6,5);N(4,NIGHT,[[0,0,2,1]],{x,y});}
+const hot=[];for(let i=0;i<4;i++){const[x,y]=tp(i,4,4);hot.push(dot(4,i%2?WHITE:TAN,x,y));}
+const portal=[N(4,VIOLET,[[-2,-10,4,1],[-3,-9,6,1],[-4,-8,8,1],[-5,-7,10,4],[-4,-3,8,1],[-3,-2,6,1],[-2,-1,4,1]],{x:33,y:10,hid:true}),
+  N(4,NIGHT,[[-1,-8,2,1],[-2,-7,4,1],[-3,-6,6,2],[-2,-4,4,1],[-1,-3,2,1]],{x:33,y:10,hid:true}),
+  N(4,LILAC,[[-2,-10,2,1],[-3,-9,2,1],[-4,-8,2,1]],{x:33,y:10,hid:true})];
+const glis=[0,1,2,3].map(()=>dot(4,LILAC,33,5,{hid:true}));
+const embs=[0,1,2,3].map(()=>dot(4,EMBER,0,0,{hid:true,life:0}));
+
+// 4 water: a tank you can see into, turtles on the glass
+N(3,ICE,side(0,11,0,1));const wrows=[1,2,3,4].map(r=>N(3,WATER,side(0,11,r,r+1)));
+N(3,WATER,side(11,22,0,1));N(3,TEAL,side(11,22,1,5));
+for(let i=0;i<6;i++){const[x,y]=sp(i<3?0:1,i%3,3,3);dot(3,i<3?ICE:WATER,x,y+2);}
+const chop=[];for(let i=0;i<8;i++){const L=i%2===0,[x,y]=sp(L?0:1,i>>1,4,1);chop.push(dot(3,L?ICE:WATER,x,y+1,{bx:x,hid:true}));}
+const turtles=[2,13].map(j=>({j,leg:0,y:0,A:N(3,TAN,bmp(['######','#...#.'])),B:N(3,TAN,bmp(['######','.#.#..']),{hid:true}),S:N(3,LEAF,bmp(['.###.','#####'])),P:dot(3,PINE,0,0)}));
+const bubs=[0,1,2,3].map(()=>dot(3,ICE,0,0,{hid:true,life:0}));
+N(3,WATER,top(0,11));N(3,WATER,top(11,22));
+const rips=[];for(let i=0;i<6;i++){const[x,y]=tp(i,6,4),bx=x-x%3;rips.push(N(3,ICE,[[0,0,2+i%2,1]],{x:bx,bx,y}));}
+
+// 3 ore: stone with diamond, iron and emerald
+N(2,SLATE,side(0,11,0,1));N(2,STONE,side(0,11,1,4));N(2,NIGHT,side(11,22,0,1));N(2,SLATE,side(11,22,1,4));
+for(let i=0;i<10;i++){const L=i<6,[x,y]=sp(L?0:1,L?i:i-6,L?6:4,3);N(2,L?SLATE:i%2?STONE:NIGHT,[[0,0,1+ri(2),1]],{x,y:y+1});}
+N(2,STONE,top(0,11));N(2,STONE,top(11,22));
+const ores=[];for(let i=0;i<15;i++){const sh=[[[0,0,2,1]],[[0,0,1,2]],[[0,0,2,1],[1,1,1,1]]][ri(3)];
+  const[x,y]=i<6?sp(0,i,6,2):i<11?sp(1,i-6,5,2):tp(i-11,4,4);ores.push(N(2,[ICE,TAN,LEAF][i%3],sh,{x,y:i<11?y+1:y}));}
+const steady=[0,3,7].map(i=>dot(2,WHITE,ores[i].x,ores[i].y,{hid:true}));
+const flashes=[0,1,2].map(()=>N(2,WHITE,bmp(['.#.','###','.#.']),{hid:true,life:0}));
+
+// 2 grass and dirt
+N(1,PINE,side(0,11,0,1));N(1,DIRT,side(0,11,1,4));N(1,PINE,side(11,22,0,1));N(1,BARK,side(11,22,1,4));
+for(let i=0;i<17;i++){const L=i<10,[x,y]=sp(L?0:1,L?i:i-10,L?10:7,3);N(1,L?[BARK,BARK,TAN,BARK,STONE][i%5]:i%3?DIRT:TAN,[[0,0,1+(i%4===0),1]],{x,y:y+1});}
+N(1,DIRT,top(0,11));N(1,DIRT,top(11,22));
+for(let i=0;i<5;i++){const[x,y]=tp(i,5,5);dot(1,i%2?TAN:LEAF,x,y);}
+const pits=[];for(let i=0;i<6;i++){const[x,y]=tp(i*5%6,6,4);pits.push(N(1,BARK,[[0,0,2,1],[ri(2),1,1,1]],{x,y:y-1,hid:true}));}
+const crumbs=[0,1,2,3,4,5].map(i=>dot(1,i%2?DIRT:TAN,0,0,{hid:true,life:0}));
+
+// 1 forest: 22 ground strips so shade can creep across, then trees, an explorer and a wolf
+const sweep=[],SW=n=>(sweep.push(n),n);
+for(let j=0;j<22;j++)SW(N(0,GRASS,[[3*j,-hc(j),3,2*hc(j)]],{sx:3*j+1,pn:TEAL,pd:PINE}));
+SW(N(0,PINE,side(0,11,0,1),{sx:14,pn:NIGHT}));N(0,DIRT,side(0,11,1,2));SW(N(0,PINE,side(11,22,0,1),{sx:50,pn:NIGHT}));N(0,BARK,side(11,22,1,2));
+for(let i=0;i<34;i++){const j=ri(22),h=hc(j),x=3*j+ri(3),lt=i%2;SW(dot(0,lt?LEAF:PINE,x,-h+ri(2*h),{sx:x,pn:lt?PINE:NIGHT}));}
+[[8,2],[27,8],[52,3]].forEach(([x,y],i)=>SW(dot(0,i%2?WHITE:TAN,x,y,{sx:x,pn:SLATE})));
+const tree=(k,x,y)=>{N(0,BARK,[[0,0,1,2-k]],{x,y:y-1+k});
+  SW(N(0,PINE,bmp(k?['..#..','.###.','.###.','#####','#####']:['.###.','#####','#####','.###.']),{x:x-2,y:y-5,sx:x,pn:NIGHT}));
+  SW(N(0,LEAF,k?[[-1,1,1,2],[-2,3,2,1]]:[[1,0,2,1],[0,1,2,1]],{x:k?x:x-2,y:y-5,sx:x,pn:TEAL}));};
+[[1,36,-6],[1,22,-5],[0,47,-2],[0,12,-1],[1,56,0],[0,29,3]].forEach(t=>tree(...t));
+const eyes=[[11,-4],[13,-4],[46,-5],[48,-5]].map(([x,y])=>dot(0,LILAC,x,y,{hid:true}));
+const ex={x:16,d:1,leg:0},EY=4;
+const legA=N(0,BARK,[[0,0,2,1]],{y:EY,dx:0}),legB=N(0,BARK,[[0,0,2,1]],{y:EY,dx:1,hid:true}),lamp=dot(0,WHITE,0,EY-2,{dx:3,hid:true});
+const exP=[N(0,BARK,bmp(['.#.','###']),{y:EY-5,dx:0}),dot(0,TAN,0,EY-3,{dx:1}),N(0,EMBER,[[0,0,3,2]],{y:EY-2,dx:0}),legA,legB,lamp];
+const WX=38,WY=6;
+N(0,STONE,bmp(['......#.','#....###','########','.#####..','.#...#..']),{x:WX,y:WY-4});dot(0,WHITE,WX+7,WY-2);
+const weye=dot(0,NIGHT,WX+6,WY-3),wear2=dot(0,STONE,WX+5,WY-4,{hid:true});
+const FS=[[18,-2],[33,0],[24,2],[52,-3],[42,-6],[8,0],[58,3],[31,-9],[14,-7],[50,6]];
+const flies=[0,1,2,3,4].map(i=>dot(0,EMBER,FS[i][0],FS[i][1],{hid:true}));
+
+// in front: bats, wind, dust, page pips
+const bats=[[22,12],[136,20],[30,36]].map(([bx,by])=>({bx,by,A:N(-1,VIOLET,bmp(['#.....#','##.#.##','.#####.','...#...']),{hid:true}),B:N(-1,VIOLET,bmp(['.......','.##.##.','#######','#..#..#']),{hid:true})}));
+const wind=[[6,9],[124,15],[10,28],[128,34],[4,46],[122,52]].map(([bx,y])=>N(-1,SLATE,bmp(['.#######','##......']),{x:bx,bx,y,hid:true}));
+const dust=[];for(let i=0;i<10;i++)dust.push(dot(-1,i%3?TAN:WHITE,ri(160),ri(73),{hid:true}));
+const scratch=N(-1,SLATE,[[0,0,1,9]],{x:70,y:30,hid:true});
+const pips=[dot(-1,WHITE,152,69),dot(-1,SLATE,155,69)];
+const NODES=nodes.reduce((a,n)=>a+n.loops.length,0),MAXP=Math.max(...nodes.map(n=>Math.max(...n.loops.map(l=>l.length))));
+
+// ---------- picture state ----------
+const gaps=[0,0,0,0],voices=[];
+let F=0,page=0,alive=0,bloom=0,serial=0,earT=0,blinkT=0,spiral=0,batPh=0,reduced=false;
+function visNote(){ // a note started: small things answer in the layer that is working
+  serial++;ex.x+=ex.d;if(ex.x>=23||ex.x<=14)ex.d=-ex.d;ex.leg^=1;earT=5;blinkT=4;
+  if(K[0]>.55){const f=flies[ri(5)],s=FS[ri(FS.length)];f.x=s[0];f.y=s[1];}
+  if(K[1]>.02)for(let i=0,c=Math.ceil(K[1]*6);i<c;i++){const n=crumbs[i],p=sp(ri(2),ri(6),6,3);n.x=p[0];n.y=p[1]+1;n.life=7+ri(4);}
+  if(K[2]>.02)for(let i=0,c=Math.ceil(K[2]*3);i<c;i++){const n=flashes[i],o=ores[ri(gaps[1]>2?15:11)];n.x=o.x-1;n.y=o.y-1;n.life=5+i*3;}
+  turtles.forEach(t=>{t.j=(t.j+1)%21;t.leg^=1;});
+  if(K[3]>.02||K[4]>.02){const b=bubs[serial&3],t=turtles[serial&1];b.x=3*t.j+5;b.y=Math.max(hc(t.j),hc(t.j+1))+2;b.life=6;}
+  if(K[5]>.02){spiral=15;const e=embs[serial&3],p=tp(ri(4),4,3);e.x=p[0];e.y=p[1];e.life=10;}
+  const h=hot[serial&3],q=tp(ri(4),4,4);h.x=q[0];h.y=q[1];
+  if(K[0]>.6)batPh++;
+  const dn=Math.round(K[7]*10);if(dn){const n=dust[ri(dn)];n.x=ri(160);n.y=ri(73);}
+  scratch.x=4+ri(152);scratch.y=4+ri(56);
+}
+function tick(){ // 30 times a second
+  F++;const now=performance.now()/1000;let al=0,st=0;
+  for(let i=voices.length;i--;){const v=voices[i],a=v.held?1:Math.exp(-(now-v.off)/REL);if(a<.004){voices.splice(i,1);continue;}al=Math.max(al,a);st=Math.max(st,a*Math.exp(-(now-v.on)/.6));}
+  alive=al;bloom=al*(1-.85*st);const live=alive>.05&&!reduced;
+  if(ac&&F%3===0){const t=ac.currentTime;A.bed.gain.setTargetAtTime(K[6]*.7*bloom,t,.15);A.crack.gain.setTargetAtTime(K[7]*.3*alive,t,.1);}
+  // layers pull apart in whole cells, one cell per frame
+  const want=[K[1]*7,K[2]*7,K[3]*7,K[5]*12].map(Math.round),sum=want[0]+want[1]+want[2]+want[3];let sg=0;
+  for(let i=0;i<4;i++){const w=sum>24?want[i]*24/sum|0:want[i];gaps[i]+=Math.sign(w-gaps[i]);sg+=gaps[i];}
+  cy[0]=Math.max(4,Math.min(13,30-sg))+11;cy[1]=cy[0]+2+gaps[0];cy[2]=cy[1]+4+gaps[1];cy[3]=cy[2]+4+gaps[2];cy[4]=cy[3]+5+gaps[3];
+  // 1 forest: shade creeps left to right with Time
+  const xT=-8+K[0]*82;
+  for(const n of sweep){const d=xT-n.sx;n.p=d>3?n.pn:d>0&&n.pd!=null?n.pd:n.p0;}
+  stars.forEach(n=>n.hid=K[0]<n.th);
+  const nf=K[0]>.55?Math.min(5,Math.ceil((K[0]-.55)*12)):0;flies.forEach((n,i)=>n.hid=i>=nf||(live&&((F>>3)+i)%4===0));
+  if(blinkT)blinkT--;eyes.forEach((n,i)=>n.hid=K[0]<(i<2?.7:.85)||blinkT>0);
+  if(earT)earT--;wear2.hid=!earT;weye.p=WX+6<xT-3?EMBER:NIGHT;
+  exP.forEach(n=>n.x=ex.x+n.dx);legA.hid=!!ex.leg;legB.hid=!ex.leg;lamp.hid=!(ex.x+1<xT-3);
+  const nb=K[0]>.9?3:K[0]>.75?2:K[0]>.6?1:0;if(live&&F%4===0)batPh++;
+  bats.forEach((b,i)=>{const a=batPh*.3+i*2.1,x=b.bx+Math.round(Math.cos(a)*7),y=b.by+Math.round(Math.sin(a*1.3)*4),up=(batPh+i)&1;
+    b.A.x=b.B.x=x;b.A.y=b.B.y=y;b.A.hid=i>=nb||!up;b.B.hid=i>=nb||!!up;});
+  // 2 dirt
+  const np=Math.round(K[1]*6);pits.forEach((n,i)=>n.hid=i>=np);
+  crumbs.forEach(n=>{if(n.life>0){n.life--;if(n.life&1)n.y++;n.hid=false;}else n.hid=true;});
+  // 3 ore
+  const ng=Math.round(K[2]*3);steady.forEach((n,i)=>n.hid=i>=ng);
+  flashes.forEach(n=>{n.hid=!(n.life>0&&n.life<=5);if(n.life>0)n.life--;});
+  // 4 water
+  const dk=Math.round(K[3]*3);wrows.forEach((n,i)=>n.p=i>=4-dk?TEAL:WATER);
+  const per=Math.round(24-16*K[4]),ph=F/per|0,nc=Math.round(K[4]*8),sway=live&&K[4]>.02;
+  chop.forEach((n,i)=>{n.hid=i>=nc;n.x=n.bx+(sway?(ph+i)&1:0);});
+  turtles.forEach((t,i)=>{if(sway&&(F+i*7)%per===0){t.j=(t.j+1)%21;t.leg^=1;}
+    t.y=Math.max(hc(t.j),hc(t.j+1))+1;t.A.x=t.B.x=t.S.x=3*t.j;t.S.y=t.P.y=t.y;t.P.x=3*t.j+2;t.A.y=t.B.y=t.y+1;t.A.hid=!!t.leg;t.B.hid=!t.leg;});
+  bubs.forEach(n=>{if(n.life>0){n.life--;if(n.life%3===0)n.y--;n.hid=false;}else n.hid=true;});
+  rips.forEach((n,i)=>n.x=n.bx+(sway?(ph+i)&1:0));
+  // 5 underworld
+  const g=gaps[3],ps=g>=11?1:g>=7?2/3:g>=4?1/3:0;if(spiral)spiral--;
+  portal.forEach(n=>{n.hid=!ps;n.s=ps||1;});
+  glis.forEach((n,i)=>{const r=spiral?4*spiral/15:4,a=i*1.571+serial*.4+(spiral?(15-spiral)*.45:0);n.hid=!ps;n.s=ps||1;
+    n.x=33+Math.round((Math.cos(a)*r-.5)*ps*3)/3;n.y=10+Math.round((Math.sin(a)*r-5.5)*ps*3)/3;n.p=(i+serial)&1?WHITE:LILAC;});
+  embs.forEach(n=>{if(n.life>0){n.life--;if(n.life&1)n.y--;n.x+=Math.sign(33-n.x);n.hid=false;}else n.hid=true;});
+  // air, wear, page
+  const wn=Math.max(alive<.05?Math.ceil(K[6]*3):0,Math.round(K[6]*6*bloom));
+  wind.forEach((n,i)=>{n.hid=i>=wn;n.x=n.bx+(bloom>.1&&!reduced?((F>>2)+i*5)%12:0);});
+  const dn=Math.round(K[7]*10);if(live&&dn&&F%5===0){const n=dust[ri(dn)];n.x=ri(160);n.y=ri(73);}
+  dust.forEach((n,i)=>n.hid=i>=dn);scratch.hid=K[7]<.6;
+  pips[0].p=page?SLATE:WHITE;pips[1].p=page?WHITE:SLATE;
+}
+const cv=$('screen'),ctx=cv.getContext('2d');
+function draw(){ // counts nodes whose position, size, colour or visibility changed, then repaints
+  let ch=0;
+  for(const n of nodes){n.X=n.L<0?n.x:LX+n.x;n.Y=n.L<0?n.y:cy[n.L]+n.y;const k=n.hid?'':n.X+'|'+n.Y+'|'+n.s+'|'+n.p;if(k!==n.k){n.k=k;ch++;}}
+  if(!ch)return 0;
+  ctx.fillStyle='#000';ctx.fillRect(0,0,480,220);
+  for(const n of nodes){if(n.hid)continue;const s=n.s*G,ox=Math.round(n.X*G),oy=Math.round(n.Y*G);
+    ctx.fillStyle=PAL[n.p][1];ctx.beginPath();
+    for(const lp of n.loops){ctx.moveTo(ox+lp[0][0]*s,oy+lp[0][1]*s);for(let i=1;i<lp.length;i++)ctx.lineTo(ox+lp[i][0]*s,oy+lp[i][1]*s);ctx.closePath();}
+    ctx.fill();}
+  return ch;
+}
+const stat={n:0,sum:0,peak:0};let win={n:0,sum:0},lastT=0;const tech=$('tech');
+function frame(ts){requestAnimationFrame(frame);if(ts-lastT<31)return;lastT=ts;tick();const ch=draw();
+  if(F>2){stat.n++;stat.sum+=ch;stat.peak=Math.max(stat.peak,ch);win.n++;win.sum+=ch;}
+  if(F%15===0){tech.textContent=NODES+' shapes · '+used.size+' colours · '+(win.n?win.sum/win.n:0).toFixed(1)+' redrawn a frame';win={n:0,sum:0};}}
+
+// ---------- sound ----------
+let ac=null,A=null;
+const gn=(v,d)=>{const n=ac.createGain();n.gain.value=v;if(d)n.connect(d);return n;};
+const bq=(type,f,q,d)=>{const n=ac.createBiquadFilter();n.type=type;n.frequency.value=f;n.Q.value=q;if(d)n.connect(d);return n;};
+function ensureAudio(){
+  if(ac){if(ac.state==='suspended')ac.resume();return;}
+  try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return;ac=new C();buildAudio();applyKnobs();}catch(e){ac=null;}
+}
+function buildAudio(){
+  const sr=ac.sampleRate;
+  const buf=(sec,fn,chs)=>{const b=ac.createBuffer(chs||1,sec*sr|0,sr);for(let c=0;c<b.numberOfChannels;c++)fn(b.getChannelData(c));return b;};
+  const loop=(b,d)=>{const s=ac.createBufferSource();s.buffer=b;s.loop=true;s.connect(d);s.start();return s;};
+  const lfo=(f,amt,dest)=>{const o=ac.createOscillator(),a=gn(amt,dest);o.frequency.value=f;o.connect(a);o.start();return{o,a};};
+  A={};
+  // output: compressor, then a soft clip that cannot pass 0.95 (0.76 after the last gain), then the meter
+  A.an=ac.createAnalyser();A.an.fftSize=1024;A.an.connect(ac.destination);A.buf=new Float32Array(1024);
+  const clip=ac.createWaveShaper(),cvv=new Float32Array(1025);for(let i=0;i<1025;i++)cvv[i]=Math.tanh((i/512-1)*1.5)/Math.tanh(1.5)*.95;
+  clip.curve=cvv;clip.connect(gn(.8,A.an));
+  const comp=ac.createDynamicsCompressor();comp.threshold.value=-16;comp.knee.value=10;comp.ratio.value=8;comp.attack.value=.004;comp.release.value=.22;comp.connect(clip);
+  const mix=gn(1,comp);
+  // room: stands in for the device's reverb send
+  const rev=ac.createConvolver();rev.buffer=buf(2.8,d=>{let y=0;for(let i=0;i<d.length;i++){const t=i/sr;y+=((Math.random()*2-1)-y)*(.5*Math.exp(-t*1.4)+.06);d[i]=t<.012?0:y*Math.exp(-t/.6);}},2);
+  rev.connect(gn(.9,mix));const send=gn(.3,rev);
+  // voice bus -> Dig crusher -> Deep filter -> Wear tape tone -> out
+  A.tape=bq('lowpass',18000,.5,mix);A.tape.connect(send);
+  A.deep=bq('lowpass',15000,.5,A.tape);
+  const post=gn(1,A.deep);A.bus=gn(1);A.dry=gn(1,post);A.bus.connect(A.dry);
+  const sh=ac.createWaveShaper(),sc=new Float32Array(2049);for(let i=0;i<2049;i++)sc[i]=Math.round((i/1024-1)*8)/8;sh.curve=sc;
+  A.pre=gn(3,sh);A.bus.connect(A.pre);A.wet=gn(0,post);sh.connect(bq('lowpass',6500,.5,A.wet));
+  A.noise=buf(2,d=>{for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;});
+  A.crunch=buf(.25,d=>{let h=0;for(let i=0;i<d.length;i++){if(i%14===0)h=Math.round((Math.random()*2-1)*4)/4;d[i]=h;}});
+  // Wear: dust
+  A.crack=gn(0,mix);
+  loop(buf(4,d=>{for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*.012;for(let k=0;k<70;k++){const p=Math.random()*(d.length-60)|0,a=(Math.random()*.8+.2)*(Math.random()<.5?-1:1);for(let i=0;i<50;i++)d[p+i]+=a*Math.exp(-i/6)*(i%2?-.6:1);}}),bq('highpass',900,.5,A.crack));
+  // Air: wind and a two-note drone
+  A.bed=gn(0,post);
+  const wbp=bq('bandpass',620,.6,gn(.8,A.bed));loop(A.noise,wbp);lfo(.07,260,wbp.frequency);
+  const dlp=bq('lowpass',700,.5,gn(.13,A.bed));
+  A.dr=[196,293.66].map(f=>{const o=ac.createOscillator();o.type='triangle';o.frequency.value=f;o.connect(dlp);o.start();return o;});
+  // Tide: slow sway of the Deep filter, plus a kick on every note (the turtle stroke)
+  A.tide=lfo(.2,0,A.deep.detune);
+  const one=ac.createConstantSource();one.start();A.stroke=gn(0,A.deep.detune);one.connect(A.stroke);
+  // Wear: wow and flutter reach every oscillator's pitch
+  A.wowBus=gn(1);A.wow=lfo(.43,0,A.wowBus);A.flut=lfo(6.1,0,A.wowBus);
+  A.felt=ac.createPeriodicWave(new Float32Array(9),new Float32Array([0,1,.42,.2,.09,.05,.025,.012,.006]));
+}
+function applyKnobs(){
+  if(!ac)return;
+  const t=ac.currentTime,[time,dig,glint,deep,tide,rift,,wear]=K,S=(p,v,c)=>p.setTargetAtTime(v,t,c||.04);
+  const drive=3-2.2*dig;S(A.dry.gain,1-.75*dig);S(A.pre.gain,drive);S(A.wet.gain,dig*.9/drive);
+  const fc=15000*Math.pow(2,-5.6*deep),D=tide*900*Math.log2(fc/250);
+  S(A.deep.frequency,fc);S(A.deep.Q,.5+9*deep);S(A.deep.detune,-D/2);S(A.tide.a.gain,D/2);S(A.tide.o.frequency,.1+.45*tide);
+  S(A.wow.a.gain,wear*16);S(A.flut.a.gain,wear*5);S(A.tape.frequency,18000*Math.pow(2,-2*wear));
+  for(const v of voices)if(v.mix){S(v.mix[0].gain,1-.85*rift);S(v.mix[1].gain,time*.11);S(v.mix[2].gain,glint*.1);S(v.mix[3].gain,rift*.4);}
+}
+function kill(v){if(!v.amp)return;const t=ac.currentTime;v.amp.gain.setTargetAtTime(0,t,.015);v.src.forEach(o=>{try{o.stop(t+.15);}catch(e){}});}
+function noteOn(m){
+  ensureAudio();const v={m,on:performance.now()/1000,off:0,held:true};voices.push(v);
+  while(voices.length>6)kill(voices.shift());
+  visNote();light(m,true);
+  if(!ac)return;
+  const t=ac.currentTime+.006,f=440*Math.pow(2,(m-69)/12),[time,dig,glint,,tide,rift]=K,src=[];
+  const osc=(type,fr,det,dest)=>{const o=ac.createOscillator();if(type)o.type=type;else o.setPeriodicWave(A.felt);o.frequency.value=fr;o.detune.value=det;A.wowBus.connect(o.detune);o.connect(dest);o.start(t);src.push(o);return o;};
+  const amp=gn(0,A.bus);amp.gain.setValueAtTime(0,t);amp.gain.linearRampToValueAtTime(1,t+.004);
+  // core: soft struck tone, two detuned readers of one felt wave, darker and slower with Time
+  const br=1-.8*time,att=.004+.14*time*time,tau=1.1*Math.pow(2,(60-m)/24),lp=bq('lowpass',1000,.2),se=gn(0),sm=gn(1-.85*rift,amp);
+  lp.frequency.setValueAtTime(Math.min(15000,f*(2+11*br)),t);lp.frequency.setTargetAtTime(Math.min(12000,f*(1.3+3*br)),t,.3);
+  se.gain.setValueAtTime(0,t);se.gain.linearRampToValueAtTime(.13,t+att);se.gain.setTargetAtTime(.014,t+att,tau);
+  lp.connect(se);se.connect(sm);osc(0,f,-3,lp);osc(0,f,4,lp);
+  const th=ac.createBufferSource(),tg=gn(0,amp);th.buffer=A.noise;th.connect(bq('lowpass',600+400*br,.5,tg));
+  tg.gain.setValueAtTime(.1*(1-rift)*(1-.6*time),t);tg.gain.setTargetAtTime(0,t,.02);th.start(t,Math.random());th.stop(t+.25);
+  // Time: slow detuned pad under the note
+  const pe=gn(0),pm=gn(time*.11,amp),pl=bq('lowpass',Math.min(2600,f*2.5),.7,pe);pe.connect(pm);
+  pe.gain.setValueAtTime(0,t);pe.gain.setTargetAtTime(1,t,.4);osc('sawtooth',f,-9,pl);osc('sawtooth',f,8,pl);
+  // Glint: two bell partials, then two late twinkles
+  const gm=gn(glint*.1,amp);
+  [[4,.3,1],[5.404,.12,.35]].forEach(([r,d,l])=>{if(f*r>11000)return;const e=gn(0,gm);e.gain.setValueAtTime(l,t);e.gain.setTargetAtTime(0,t,d);osc('sine',f*r,0,e);});
+  for(let k=0;k<2;k++){const r=k?8:6;if(f*r>11000)continue;const tt=t+.12+Math.random()*.5,e=gn(0,gm);
+    e.gain.setValueAtTime(0,tt);e.gain.linearRampToValueAtTime(.6/(k+1),tt+.004);e.gain.setTargetAtTime(0,tt+.004,.1);osc('sine',f*r,0,e);}
+  // Rift: the note swells in backwards, with a shadow an octave down; each swell ends by sinking in pitch
+  const we=gn(0),wm=gn(rift*.4,amp),wl=bq('lowpass',Math.min(9000,f*4),.5,we),wo=[osc(0,f,0,wl),osc('sine',f/2,0,wl)],P=.62;we.connect(wm);
+  for(let k=0;k<9;k++){const a=t+k*P;
+    we.gain.setValueAtTime(.003,a);we.gain.exponentialRampToValueAtTime(.5*Math.pow(.82,k),a+P*.9);we.gain.linearRampToValueAtTime(.003,a+P-.002);
+    wo.forEach(o=>{o.detune.setValueAtTime(0,a+P*.8);o.detune.linearRampToValueAtTime(-260*rift,a+P-.002);o.detune.setValueAtTime(0,a+P-.001);});}
+  // Dig: a gritty burst at the start of the note
+  if(dig>.02){const b=ac.createBufferSource(),bg=gn(0,amp);b.buffer=A.crunch;b.playbackRate.value=.5+Math.random()*.7;b.connect(bg);
+    bg.gain.setValueAtTime(dig*.16,t);bg.gain.setTargetAtTime(0,t,.045);b.start(t);b.stop(t+.3);}
+  A.stroke.gain.cancelScheduledValues(t);A.stroke.gain.setValueAtTime(tide*700,t);A.stroke.gain.setTargetAtTime(0,t,.28);
+  const df=440*Math.pow(2,(55+((m-55)%12+12)%12-69)/12);A.dr[0].frequency.setTargetAtTime(df,t,1.2);A.dr[1].frequency.setTargetAtTime(df*1.4983,t,1.6);
+  v.amp=amp;v.src=src;v.t0=t;v.mix=[sm,pm,gm,wm];
+}
+function noteOff(m){
+  light(m,false);
+  for(const v of voices)if(v.m===m&&v.held){v.held=false;v.off=performance.now()/1000;
+    if(v.amp){const t=Math.max(ac.currentTime,v.t0+.01);v.amp.gain.setTargetAtTime(0,t,REL);v.src.forEach(o=>{try{o.stop(t+REL*5.5);}catch(e){}});}}
+}
+
+// ---------- page controls ----------
+const KN=[['time','time','Day to night. Shade crosses the forest. Notes get darker and slower to speak.'],
+  ['dig','dig','Lifts the turf. Notes break into blocky grit, like digging.'],
+  ['glint','glint','Uncovers the ore. Small bells ring above each note.'],
+  ['deep','deep','Sinks the sound under water. Higher is more muffled.'],
+  ['tide','tide','How far the water sways. The turtles swim to it.'],
+  ['rift','rift','Opens the underworld. Notes swell in backwards and sink.'],
+  ['air','air','Wind and a low drone. They rise as your notes fade.'],
+  ['wear','wear','Tape wobble and dust.']];
+const knobsEl=$('knobs'),sliders=[];
+KN.forEach(([id,name,desc],i)=>{const d=document.createElement('div');d.className='knob';d.hidden=i>3;
+  d.innerHTML='<label for="knob-'+id+'"><span class="kn">'+name+'</span><span class="kd">'+desc+'</span></label><input type="range" id="knob-'+id+'" class="e'+i%4+'" min="0" max="100" step="1" value="'+Math.round(K[i]*100)+'">';
+  knobsEl.appendChild(d);const s=d.querySelector('input');sliders.push(s);s.addEventListener('input',()=>{K[i]=s.value/100;ensureAudio();applyKnobs();});});
+function setPage(p){page=p;[...knobsEl.children].forEach((d,i)=>d.hidden=(i>>2)!==p);$('page-name').textContent='Page '+(p+1)+' of 2';}
+$('page-switch').addEventListener('click',()=>setPage(page^1));setPage(0);
+
+const SCALE=[57,60,62,64,67,69,72,74,76,79,81,84],KEYS='asdfghqwerty',NN=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+const padsEl=$('pads'),padEl={},ptr=new Map();
+[6,7,8,9,10,11,0,1,2,3,4,5].forEach(i=>{const m=SCALE[i],b=document.createElement('button');b.type='button';b.className='pad'+(i>5?' hi':'');b.id='pad-'+m;b.dataset.m=m;
+  b.textContent=NN[m%12]+(Math.floor(m/12)-1);b.setAttribute('aria-label','Note '+b.textContent);padsEl.appendChild(b);padEl[m]=b;});
+function light(m,on){if(padEl[m])padEl[m].classList.toggle('on',on);}
+const padAt=e=>{const el=document.elementFromPoint(e.clientX,e.clientY);return el&&el.closest?el.closest('.pad'):null;};
+padsEl.addEventListener('pointerdown',e=>{const b=padAt(e);if(!b)return;e.preventDefault();try{padsEl.setPointerCapture(e.pointerId);}catch(_){}
+  const m=+b.dataset.m;ptr.set(e.pointerId,m);noteOn(m);});
+padsEl.addEventListener('pointermove',e=>{if(!ptr.has(e.pointerId))return;const b=padAt(e),m=b?+b.dataset.m:0;
+  if(m&&m!==ptr.get(e.pointerId)){noteOff(ptr.get(e.pointerId));ptr.set(e.pointerId,m);noteOn(m);}});
+const padUp=e=>{if(ptr.has(e.pointerId)){noteOff(ptr.get(e.pointerId));ptr.delete(e.pointerId);}};
+['pointerup','pointercancel','lostpointercapture'].forEach(t=>padsEl.addEventListener(t,padUp));
+padsEl.addEventListener('click',e=>{const b=e.detail===0&&e.target.closest('.pad');if(b){const m=+b.dataset.m;noteOn(m);setTimeout(()=>noteOff(m),500);}});
+padsEl.addEventListener('contextmenu',e=>e.preventDefault());
+['pointerup','touchend','click'].forEach(t=>addEventListener(t,()=>{if(ac&&ac.state==='suspended')ac.resume();},{passive:true}));
+const down=new Set();
+addEventListener('keydown',e=>{if(e.repeat||e.metaKey||e.ctrlKey||e.altKey||e.key.length!==1)return;const i=KEYS.indexOf(e.key.toLowerCase());if(i<0||down.has(i))return;down.add(i);noteOn(SCALE[i]);});
+addEventListener('keyup',e=>{if(e.key.length!==1)return;const i=KEYS.indexOf(e.key.toLowerCase());if(down.delete(i))noteOff(SCALE[i]);});
+addEventListener('blur',()=>{down.forEach(i=>noteOff(SCALE[i]));down.clear();});
+
+// plays itself: a slow random walk on a five-note scale, sometimes two notes, sometimes a low one
+let autoOn=false,autoT=0,walk=5;const autoHeld=new Set();
+function autoNote(m,dur,delay){setTimeout(()=>{if(!autoOn)return;noteOn(m);autoHeld.add(m);setTimeout(()=>{if(autoHeld.delete(m))noteOff(m);},dur);},delay);}
+function autoStep(){if(!autoOn)return;
+  walk=Math.max(0,Math.min(11,walk+[-3,-2,-1,-1,1,1,2,3][Math.random()*8|0]));
+  autoNote(SCALE[walk],500+Math.random()*1800,0);
+  if(Math.random()<.3)autoNote(SCALE[Math.min(11,walk+2+(Math.random()*2|0))],700+Math.random()*1200,120+Math.random()*260);
+  if(Math.random()<.14)autoNote(SCALE[walk%5]-12,2200,0);
+  autoT=setTimeout(autoStep,1000+Math.random()*2400+(Math.random()<.15?2500:0));}
+$('self-play').addEventListener('change',e=>{autoOn=e.target.checked;clearTimeout(autoT);if(autoOn){ensureAudio();autoStep();}else{autoHeld.forEach(noteOff);autoHeld.clear();}});
+
+const mq=matchMedia('(prefers-reduced-motion: reduce)');reduced=mq.matches;if(mq.addEventListener)mq.addEventListener('change',e=>reduced=e.matches);
+
+// ---------- hooks for an automated check ----------
+window.__dubious={
+  nodeCount:()=>NODES,colorCount:()=>used.size,maxPoints:()=>MAXP,
+  peak(){if(!ac)return 0;A.an.getFloatTimeDomainData(A.buf);let m=0;for(let i=0;i<A.buf.length;i++)m=Math.max(m,Math.abs(A.buf[i]));return m;},
+  noteOn,noteOff,
+  setKnob(i,v){if(!(i>=0&&i<8))return;K[i]=Math.max(0,Math.min(1,+v||0));sliders[i].value=Math.round(K[i]*100);applyKnobs();},
+  stats(reset){const r={frames:stat.n,mean:stat.n?stat.sum/stat.n:0,peak:stat.peak};if(reset){stat.n=stat.sum=stat.peak=0;}return r;},
+  budget(){const b={};for(const n of nodes){const k=n.L<0?'sky and overlays':'layer '+(n.L+1);b[k]=(b[k]||0)+n.loops.length;}return b;}
+};
+requestAnimationFrame(frame);
+})();
+</script>
