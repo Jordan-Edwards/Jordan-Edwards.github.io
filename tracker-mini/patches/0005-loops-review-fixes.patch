@@ -1,5 +1,5 @@
 diff --git a/core/interface/loops/fLoops.cpp b/core/interface/loops/fLoops.cpp
-index 862a1f5..8df818a 100644
+index 862a1f5..43e35ed 100644
 --- a/core/interface/loops/fLoops.cpp
 +++ b/core/interface/loops/fLoops.cpp
 @@ -19,6 +19,7 @@ static cLoops* LS = &loopsScreen;
@@ -61,11 +61,41 @@ index 862a1f5..8df818a 100644
      return config;
  }
  
+@@ -330,7 +345,8 @@ void cLoops::toggleSync()
+         const int best = loops::autoBarsIndex(sampleFrames, regionA, regionB, tempo);
+         if (best < 0)
+         {
+-            return; // no bar count is within two octaves: stay FREE
++            showNoFit(); // no bar count is within two octaves: stay FREE, and say so
++            return;
+         }
+         barsIndex = (int8_t)best;
+         fitOn = true;
 diff --git a/core/interface/loops/gLoops.cpp b/core/interface/loops/gLoops.cpp
-index c787276..ba55a2f 100644
+index c787276..3ea72c3 100644
 --- a/core/interface/loops/gLoops.cpp
 +++ b/core/interface/loops/gLoops.cpp
-@@ -369,7 +369,8 @@ void cLoops::refreshHead(const LoopsStatus& status, uint16_t dtMs)
+@@ -328,6 +328,19 @@ void cLoops::refreshInfo(bool force)
+     }
+ }
+ 
++// Fn2 was pressed and no whole bar count is within reach of this sample at this tempo.
++// The text stays until the next change redraws the info row.
++void cLoops::showNoFit()
++{
++    if (!playable)
++    {
++        return;
++    }
++    snprintf(infoText[2], sizeof(infoText[2]), "FREE  no fit");
++    display.setControlText(infoLabel[2], infoText[2]);
++    display.refreshControl(infoLabel[2]);
++}
++
+ void cLoops::refreshWave()
+ {
+     waveData.regionStartPx = (uint16_t)(((uint32_t)regionA * 800) / 65536);
+@@ -369,7 +382,8 @@ void cLoops::refreshHead(const LoopsStatus& status, uint16_t dtMs)
  
      int8_t playingSlice = -1;
  
@@ -76,10 +106,18 @@ index c787276..ba55a2f 100644
          const uint16_t pos = instrumentPlayer[status.track].getWavePosition();
          head.advance(pos, dtMs);
 diff --git a/core/interface/loops/loops.h b/core/interface/loops/loops.h
-index 6ce8d6c..efb3e58 100644
+index 6ce8d6c..bcaa2f7 100644
 --- a/core/interface/loops/loops.h
 +++ b/core/interface/loops/loops.h
-@@ -101,6 +101,7 @@ class cLoops : public ModuleBase
+@@ -34,6 +34,7 @@ class cLoops : public ModuleBase
+     void showDefaultScreen();
+     void refreshSoftKeys();
+     void refreshInfo(bool force);
++    void showNoFit();
+     void refreshBadge(uint8_t state, bool blinkOn, bool force);
+     void refreshWave();
+     void refreshStrip(int8_t playing, int8_t held, bool force);
+@@ -101,6 +102,7 @@ class cLoops : public ModuleBase
      uint16_t lastFireCount = 0;
      elapsedMillis headTimer;
      elapsedMillis blinkTimer;
@@ -88,10 +126,18 @@ index 6ce8d6c..efb3e58 100644
      uint8_t shownState = 255;
      bool shownBlink = false;
 diff --git a/core/interface/loops/loopsEngine.cpp b/core/interface/loops/loopsEngine.cpp
-index 116c63d..9036caf 100644
+index 116c63d..4288429 100644
 --- a/core/interface/loops/loopsEngine.cpp
 +++ b/core/interface/loops/loopsEngine.cpp
-@@ -29,6 +29,8 @@ void LoopsEngine::open(const LoopsConfig& config)
+@@ -11,6 +11,7 @@ LoopsEngine loopsEngine;
+ static constexpr int8_t kLoopNote = 60; // C5: the sample at its stored speed
+ static constexpr int8_t kNoVelocity = -1;
+ static constexpr uint32_t kMinLoopFrames = 16;
++static constexpr uint32_t kSnapZoneUnits = 128; // the stock player's snap zone, in position units
+ 
+ //==================================================================================================
+ // main loop side
+@@ -29,6 +30,8 @@ void LoopsEngine::open(const LoopsConfig& config)
      queueHead = 0;
      queueTail = 0;
      reverseOnVoice = false;
@@ -100,7 +146,7 @@ index 116c63d..9036caf 100644
      publish();
      opened = true;
      AudioInterrupts();
-@@ -124,7 +126,17 @@ AUDIO_CORE_RAM void LoopsEngine::audioTick()
+@@ -124,7 +127,17 @@ AUDIO_CORE_RAM void LoopsEngine::audioTick()
          switch (q.command)
          {
              case ecToggle: perform(machine.onCommand(loops::cmdToggle, 0, playing)); break;
@@ -119,7 +165,7 @@ index 116c63d..9036caf 100644
              case ecPadUp: perform(machine.onCommand(loops::cmdPadUp, 0, playing)); break;
              case ecRearm: perform(machine.onCommand(loops::cmdRearm, 0, playing)); break;
              case ecTrack:
-@@ -145,9 +157,49 @@ AUDIO_CORE_RAM void LoopsEngine::audioTick()
+@@ -145,9 +158,49 @@ AUDIO_CORE_RAM void LoopsEngine::audioTick()
      }
  
      const bool edge = stepEdge.update(playing, globalPos);
@@ -171,7 +217,7 @@ index 116c63d..9036caf 100644
  
      publish();
  }
-@@ -159,7 +211,8 @@ AUDIO_CORE_FLASH void LoopsEngine::perform(const loops::Step& step)
+@@ -159,7 +212,8 @@ AUDIO_CORE_FLASH void LoopsEngine::perform(const loops::Step& step)
          case loops::actFireFull:
              if (!fire(true, 0))
              {
@@ -181,7 +227,7 @@ index 116c63d..9036caf 100644
                  cutVoice();
                  machine.reset();
              }
-@@ -176,26 +229,22 @@ AUDIO_CORE_FLASH void LoopsEngine::perform(const loops::Step& step)
+@@ -176,26 +230,22 @@ AUDIO_CORE_FLASH void LoopsEngine::perform(const loops::Step& step)
      }
  }
  
@@ -213,10 +259,16 @@ index 116c63d..9036caf 100644
      if (!full)
      {
          const loops::Region r = loops::sliceBounds(a, b, slice, cfg.slices);
-@@ -211,6 +260,24 @@ AUDIO_CORE_FLASH bool LoopsEngine::fire(bool full, uint8_t slice)
+@@ -211,6 +261,30 @@ AUDIO_CORE_FLASH bool LoopsEngine::fire(bool full, uint8_t slice)
      {
          return false;
      }
++    // With the project's Snap to zero on, the player moves each point by up to half its snap
++    // zone. A region no wider than the zone could end up with its end on or before its start.
++    if (mtProject.values.isSnapToZeroEnabled && (uint32_t)(b - a) <= kSnapZoneUnits)
++    {
++        return false;
++    }
 +    return true;
 +}
 +
@@ -238,7 +290,7 @@ index 116c63d..9036caf 100644
  
      const uint8_t savedPlayMode = ins.playMode;
      const uint16_t savedStart = ins.startPoint;
-@@ -219,12 +286,14 @@ AUDIO_CORE_FLASH bool LoopsEngine::fire(bool full, uint8_t slice)
+@@ -219,12 +293,14 @@ AUDIO_CORE_FLASH bool LoopsEngine::fire(bool full, uint8_t slice)
      const uint16_t savedEnd = ins.endPoint;
      const int8_t savedTune = ins.tune;
      const int8_t savedFineTune = ins.fineTune;
@@ -253,7 +305,7 @@ index 116c63d..9036caf 100644
  
      if (cfg.fit)
      {
-@@ -257,6 +326,7 @@ AUDIO_CORE_FLASH bool LoopsEngine::fire(bool full, uint8_t slice)
+@@ -257,6 +333,7 @@ AUDIO_CORE_FLASH bool LoopsEngine::fire(bool full, uint8_t slice)
      }
  
      playerEngine& player = instrumentPlayer[cfg.track];
@@ -261,7 +313,7 @@ index 116c63d..9036caf 100644
      player.noteOff(Sequencer::STEP_NOTE_OFF_CUT);
      const uint8_t started = player.noteOn(cfg.instr, kLoopNote, kNoVelocity, fxId, fxVal, 0, 0);
  
-@@ -267,6 +337,7 @@ AUDIO_CORE_FLASH bool LoopsEngine::fire(bool full, uint8_t slice)
+@@ -267,6 +344,7 @@ AUDIO_CORE_FLASH bool LoopsEngine::fire(bool full, uint8_t slice)
      ins.endPoint = savedEnd;
      ins.tune = savedTune;
      ins.fineTune = savedFineTune;
@@ -269,7 +321,7 @@ index 116c63d..9036caf 100644
  
      reverseOnVoice = (fxId != 0);
  
-@@ -288,12 +359,15 @@ AUDIO_CORE_FLASH bool LoopsEngine::fire(bool full, uint8_t slice)
+@@ -288,12 +366,15 @@ AUDIO_CORE_FLASH bool LoopsEngine::fire(bool full, uint8_t slice)
      return true;
  }
  

@@ -119,9 +119,13 @@ Loops key -> request -> audio callback (one hook after sequencer.tick) -> instru
   the stock "reverse playback" step effect.
 - **Tempo.** There is no time-stretch in this firmware. FIT changes the pitch so the loop lasts
   exactly N bars (a 2-bar break recorded at 125 BPM in a 130 BPM project goes up 0.68 of a
-  semitone). The finest pitch step is 1 cent, so a fitted loop can be up to 0.03 % off. While the
-  pattern plays, Loops re-fires the loop at every cycle boundary, so that error never adds up.
-  With the pattern stopped the loop runs free.
+  semitone). The finest pitch step is 1 cent. The fit is rounded toward slow, so a fitted loop
+  lasts its bars or up to 0.06 % longer, never less. While the pattern plays, Loops looks at the
+  loop at the end of every cycle. If the voice is within 6 ms of its own wrap point it is left
+  alone, so there is no cut. Once it has drifted further it is cut and fired again; because the
+  loop is never short, that cuts a few ms of tail and does not play the start twice. (As first
+  built, the loop was cut and fired again on every cycle. Review showed that could double the
+  first few ms of the loop.) With the pattern stopped the loop runs free.
 - **Timing.** Starts and re-fires happen on the sequencer's own step edges, seen from inside the
   audio callback, so they land within one audio block (2.9 ms) of the grid.
 - The loop passes through the instrument's envelope, filter and sends, so the stock instrument
@@ -134,14 +138,17 @@ Loops key -> request -> audio callback (one hook after sequencer.tick) -> instru
 | Audio CPU | One of the 8 existing voices; the hook is a few comparisons per block | 2.9 ms per block |
 | Voices | 1 of 8 | 8, shared with the pattern |
 | Sample memory | 0 (plays what is already loaded) | about 60 MB pool |
-| Fast RAM (SRAM_DTC) | under 4 KB: 200 bars, two 600-column scratch arrays, state | about 21 KB free |
+| Fast RAM (SRAM_DTC) | measured: see `STATUS.md` (about 3.3 KB: 200 bars, two 600-column scratch arrays, state) | about 17 KB free in stock, about 13 KB left with Loops |
 | Flash | a few KB | about 14.5 MB free |
-| Display list | about 3.8 KB (estimate) | 8172 bytes for the whole screen |
+| Display list | not measured. First hand estimate 3.8 KB; a reviewer's count by control is 5 to 6.5 KB | 8172 bytes for the whole screen |
 | Display controls | about 12 | 65 |
 
 Display list estimate: title bar 300, info row 400, ruler and countdown 300, wave 1650 (200 bars
 x 8 bytes), slice strip 450, playhead overlay 220, soft keys 500. Past 8172 bytes the firmware
-silently drops controls, so the development build logs the real number.
+silently drops controls (the earliest-created first, which here are the playhead and its beat
+lamps). Planned, not implemented: a line in the development build's log with the real number.
+Until that exists the size is unknown, and a missing playhead on the device would be the sign of
+an overflow.
 
 ## 8. Slice 1, and what comes after
 
@@ -202,8 +209,11 @@ Later, in this order:
    instrument's points while the voice plays. Fallback: a small "forced play mode" flag in the player.
 2. **The pattern can take the voice.** A pattern note on the Loops track replaces the loop. Use an empty track.
 3. **Smoothness is unmeasured.** Redraw rate and 1/16 pixel placement are untested. Fallback: whole pixels.
-4. **Display list overflow** drops controls without an error. The estimate leaves 4 KB spare.
-5. **Zero-crossing snap** may move loop points by a few samples; the per-cycle re-fire hides it.
+4. **Display list overflow** drops controls without an error. The size is unmeasured; estimates leave 1.5 to 4 KB spare.
+5. **Zero-crossing snap** (the project's Snap to zero setting) can move each loop point by up to 64/65535 of the
+   sample, about 170 samples on a 4 s sample. The loop is then a little longer or shorter than the fit assumes, so in
+   FIT it is cut and fired again more often, and a shorter loop can play its first few ms twice. Turn Snap to zero off
+   for fitted loops until this is handled.
 6. **Fn and value keys** are taken over inside Loops and must be handed back on exit. The manual test checks it.
 7. **Going back to stock firmware.** Loops is kept out of Config's Fn-shortcut list; stock firmware could not read that entry.
 8. **Quiet loops.** An instrument whose envelope has no sustain fades out while looping.

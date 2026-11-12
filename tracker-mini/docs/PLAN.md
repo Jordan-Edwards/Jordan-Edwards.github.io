@@ -150,7 +150,8 @@ beat lamps, 1/16 px. Stopping after any step still shows the idea.
 
 ## 11. As built (slice 1), and where it differs from the plan above
 
-State: builds with `./build.sh loops`; 43 host tests pass (`tests/run.sh`). Not run on a device.
+State: builds with `./build.sh loops`; 48 host tests pass (`tests/run.sh`). Not run on a device. The changes made after
+review are at the end of this section.
 
 Checked in the source before writing (section 5, "read these first"):
 1. `fxReversePlayback` takes any non-zero value (1 is used). A later note with another effect, or none, ends it (`seqFx` calls
@@ -171,7 +172,8 @@ Differences from the plan:
   sounding until the beat.
 - **A pad pressed while ARMED** counts as coming from a running loop: releasing it goes back to waiting for the beat.
 - **Fit cents** follow the player, which moves in a straight line between two semitones, not on a log scale. The shift shown on
-  the screen is still the true value in semitones. Error stays within the 1-cent step (tested).
+  the screen is still the true value in semitones. After review the cents are rounded toward slow: the loop is never shorter
+  than its bars and at most one cent step longer (tested).
 - **Track change** is its own command: the old voice is cut, then the loop comes back on the new track (at the bar if the
   pattern plays).
 - **Middle, Up and Down act once per press.** Stock turns a held D-pad key into repeated presses; Left and Right may repeat.
@@ -191,11 +193,33 @@ Differences from the plan:
 - **Build name:** `Loops_s1`, as planned.
 
 Not done:
-- The built `.ptf`, `out/SHA256SUMS` and the README table are left until after review.
-- DESIGN section 7 says the development build logs the real display-list size. That log line was not added.
+- The development-build log line for the real display-list size (DESIGN section 7) was not added. DESIGN now says so.
 - Section 8 step 3, rebuilding stock to confirm it is still byte-identical, was not repeated: `./build.sh` (stock) applies no
   patches, so nothing it uses has changed.
 
 Measured from the build (linker printout, stock -> Loops): flash 1,702,396 -> 1,716,076 B (+13,680 B); SRAM_DTC 343,392 ->
 346,680 B (+3,288 B); SRAM_ITC 114,640 -> 115,048 B (+408 B); SRAM_OC and EXTERNAL_RAM unchanged. SRAM_DTC is now 96.2 % full
-(about 13 KB free), which is the tightest budget for later slices.
+(about 13 KB free), which is the tightest budget for later slices. (These are the figures before the review fixes; the
+figures of the build in `out/` are just below.)
+
+After review (patch `0005-loops-review-fixes.patch`):
+- **A fitted loop that is in time is left alone.** At the end of a cycle the engine reads the voice's position. Within 6 ms
+  of the loop's own wrap point (either end for Forward and Reverse, the start for Ping-pong) nothing is cut. Further off, it
+  is cut and fired again as before. Play still restarts the loop on the pattern's first step.
+- **Fit rounds toward slow**, so a correction cuts a little tail and does not play the start twice.
+- **A voice that stopped by itself** (envelope ended, stock Play or Stop silenced it) is given up after about 0.7 s and the
+  state goes to idle. The playhead no longer reads a stopped voice. Play pressed while a pad is held sounds the slice again.
+- **A pad on a slice that cannot be played is ignored**; what sounds goes on. A refused start no longer cuts a
+  pattern note of the same instrument when nothing of Loops' own is out.
+- **Glide** is set to 0 for the loop's note and put back, like play mode, points and tune.
+- **Snap to zero:** with the project setting on, a region no wider than the player's snap zone (128 position units) is not
+  played.
+- **Tempo follow** looks at the tempo four times a second, ignores changes under 0.05 BPM, keeps the last tempo when none
+  is known, and redraws the waveform only when the bar count changes.
+- **Fn2 with no bar count in reach** shows "FREE  no fit" in the info row.
+- `tests/run.sh` warns when the development checkout differs from the last patched build.
+- Measured from the final build (stock -> Loops): flash 1,702,396 -> 1,717,100 B (+14,704 B); SRAM_DTC 343,392 -> 346,688 B
+  (+3,296 B, 96.18 % full, 13,760 B free); SRAM_ITC 114,640 -> 115,408 B (+768 B); SRAM_OC and EXTERNAL_RAM unchanged.
+- The patched clean tree that was built and the `loops` branch in `.work/dev` have the same git tree
+  (`d5fa426698e5807f87c022c45bfaa3d870868656`); the 48 host tests pass against both.
+- Left open: see "Open risks" in `STATUS.md`.

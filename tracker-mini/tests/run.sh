@@ -28,6 +28,17 @@ if [ ! -f "$LOGIC_DIR/loopsLogic.cpp" ]; then
   LOGIC_DIR="$SRC/core/interface/loops"
 fi
 
+# Only this pure logic is tested here. If a patched build tree exists (./build.sh loops), say so
+# when the source under test is not what that build used.
+BUILT="$WORK/tracker-ce-loops/core/interface/loops"
+if [ "$LOGIC_DIR" != "$BUILT" ] && [ -f "$BUILT/loopsLogic.cpp" ]; then
+  if ! cmp -s "$LOGIC_DIR/loopsLogic.cpp" "$BUILT/loopsLogic.cpp" ||
+     ! cmp -s "$LOGIC_DIR/loopsLogic.h" "$BUILT/loopsLogic.h"; then
+    echo "!! warning: $LOGIC_DIR differs from the last patched build ($BUILT)."
+    echo "!!          To test what the patches hold: CE_SRC=$WORK/tracker-ce-loops/core tests/run.sh"
+  fi
+fi
+
 CXX="${CXX:-}"
 if [ -z "$CXX" ]; then
   if command -v g++ >/dev/null 2>&1; then CXX=g++; else CXX=clang++; fi
