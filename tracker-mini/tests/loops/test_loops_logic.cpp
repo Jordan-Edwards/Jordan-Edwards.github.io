@@ -109,10 +109,81 @@ TEST(fit_cents_use_the_players_linear_scale)
             double next = std::pow(2.0, (f.semitones + (f.cents >= 0 ? 1 : -1)) / 12.0);
             double speed = base + (next - base) * (std::abs(f.cents) / 100.0);
             double want = (double)kLoop125 / (44100.0 * passSeconds(qb, bpm));
-            CHECK_NEAR(speed / want, 1.0, 0.0004); // within the 1-cent step
+            // rounded toward slow: never faster than wanted, at most one cent step slower
+            CHECK(speed / want <= 1.00002);
+            CHECK(speed / want >= 1.0 - 0.00065);
             CHECK(f.cents >= -51 && f.cents <= 51);
         }
     }
+}
+
+TEST(fit_never_makes_the_loop_shorter_than_its_bars)
+{
+    // Many tempos and regions: the fitted pass lasts its bars or a little longer. A late loop
+    // is corrected by cutting its tail; an early one would play its start twice.
+    for (int t = 600; t <= 2000; t += 7) // 60.0 .. 200.0 BPM
+    {
+        float bpm = (float)t / 10.0f;
+        for (uint16_t b = 20000; b >= 20000; b = (uint16_t)(b + 15177))
+        {
+            int i = autoBarsIndex(kLoop125, 1000, b, bpm);
+            if (i < 0)
+                continue;
+            uint16_t qb = quarterBarsAt(i);
+            FitResult f = fitToBars(kLoop125, 1000, b, bpm, qb);
+            CHECK(f.valid);
+            double base = std::pow(2.0, f.semitones / 12.0);
+            double next = std::pow(2.0, (f.semitones + (f.cents >= 0 ? 1 : -1)) / 12.0);
+            double speed = base + (next - base) * (std::abs(f.cents) / 100.0);
+            double want = (double)regionFrames(kLoop125, 1000, b) / (44100.0 * passSeconds(qb, bpm));
+            CHECK(speed / want <= 1.00002);
+            CHECK(speed / want >= 1.0 - 0.00065);
+        }
+    }
+}
+
+TEST(refire_tolerance_is_a_few_ms_of_the_pass)
+{
+    // whole sample, 1 bar at 120 BPM = 2 s: 6 ms is 0.3 % of 65535
+    CHECK(refireTolerance(0, 65535, 4, 120.0f) == 196);
+    // 16 bars: the same 6 ms is a much smaller part of the region
+    CHECK(refireTolerance(0, 65535, 64, 120.0f) == 12);
+    // half the region, half the units
+    CHECK(refireTolerance(0, 32768, 4, 120.0f) == 98);
+    // never more than an eighth of the region
+    CHECK(refireTolerance(0, 800, 1, 999.0f) == 79);
+    // nothing to measure
+    CHECK(refireTolerance(500, 500, 4, 120.0f) == 0);
+    CHECK(refireTolerance(0, 65535, 4, 0.0f) == 0);
+}
+
+TEST(loop_in_phase_near_its_own_wrap)
+{
+    const uint16_t a = 10000, b = 50000, tol = 200;
+    // Forward and Reverse wrap from one end to the other: both ends are the same moment
+    for (uint8_t dir : { (uint8_t)dirForward, (uint8_t)dirReverse })
+    {
+        CHECK(loopInPhase(a, a, b, dir, tol));
+        CHECK(loopInPhase(a + 200, a, b, dir, tol));  // just wrapped
+        CHECK(loopInPhase(b - 200, a, b, dir, tol));  // about to wrap
+        CHECK(loopInPhase(a - 150, a, b, dir, tol));  // the player may snap a point a little
+        CHECK(loopInPhase(b + 150, a, b, dir, tol));
+        CHECK(!loopInPhase(a + 201, a, b, dir, tol));
+        CHECK(!loopInPhase(b - 201, a, b, dir, tol));
+        CHECK(!loopInPhase(30000, a, b, dir, tol));
+    }
+    // Ping-pong comes back to the start: the far end is half a cycle away
+    CHECK(loopInPhase(a + 200, a, b, dirPingPong, tol));
+    CHECK(!loopInPhase(a + 201, a, b, dirPingPong, tol));
+    CHECK(!loopInPhase(b, a, b, dirPingPong, tol));
+    CHECK(!loopInPhase(b - 10, a, b, dirPingPong, tol));
+    // no tolerance, no region
+    CHECK(loopInPhase(a, a, b, dirForward, 0));
+    CHECK(!loopInPhase(a + 1, a, b, dirForward, 0));
+    CHECK(!loopInPhase(a, a, a, dirForward, tol));
+    // at the very ends of the sample
+    CHECK(loopInPhase(65535, 0, 65535, dirForward, 10));
+    CHECK(loopInPhase(0, 0, 65535, dirForward, 10));
 }
 
 TEST(fit_region_scales_frames)
@@ -348,6 +419,67 @@ TEST(loop_counts_steps_and_refires_each_cycle_in_fit)
         }
     }
     CHECK(fires == 4);
+}
+
+TEST(loop_in_phase_is_left_alone_at_the_end_of_a_cycle)
+{
+    Machine m;
+    m.reset();
+    m.setCycleSteps(cycleSteps(1, dirForward)); // 4 steps
+    m.onCommand(cmdToggle, 0, true);
+    CHECK(is(m.onBlock(true, true, 0, false), actFireFull));
+
+    // three cycles on time: no cut, no restart, the count starts again each time
+    for (int pos = 1; pos <= 12; pos++)
+    {
+        Step s = m.onBlock(true, true, (uint16_t)pos, false, true);
+        CHECK(is(s, actNone));
+        CHECK(m.getState() == stLoop);
+        CHECK(m.isSounding());
+        CHECK(m.getSteps() == pos % 4);
+    }
+    // in phase in the middle of a cycle means nothing
+    CHECK(is(m.onBlock(true, true, 13, false, true), actNone));
+    CHECK(is(m.onBlock(true, true, 14, false, false), actNone));
+    CHECK(is(m.onBlock(true, true, 15, false, true), actNone));
+    // the fourth cycle ends with the voice off its wrap point: fired again
+    Step s = m.onBlock(true, true, 16, false, false);
+    CHECK(is(s, actFireFull));
+    CHECK(m.getSteps() == 0);
+    // Play always starts the loop again, in phase or not
+    m.onBlock(false, false, 0, false, true);
+    CHECK(is(m.onBlock(true, true, 0, false, true), actFireFull));
+    // FREE has no cycle: in phase changes nothing
+    Machine f;
+    f.reset();
+    f.onCommand(cmdToggle, 0, false);
+    for (int pos = 0; pos < 40; pos++)
+        CHECK(is(f.onBlock(true, true, (uint16_t)(pos % 32), false, true),
+                 pos == 0 ? actFireFull : actNone)); // pos 0: the pattern started
+}
+
+TEST(play_pressed_while_a_pad_is_held_sounds_the_slice_again)
+{
+    Machine m;
+    m.reset();
+    m.onCommand(cmdPadDown, 5, false);
+    CHECK(m.getState() == stStutter);
+    CHECK(is(m.onBlock(false, false, 0, false), actNone));
+    // stock Play cut every voice; the pattern starts
+    Step s = m.onBlock(true, true, 0, false);
+    CHECK(is(s, actFireSlice));
+    CHECK(s.slice == 5);
+    CHECK(m.getState() == stStutter);
+    CHECK(m.isSounding());
+    CHECK(is(m.onBlock(true, false, 0, false), actNone)); // once only
+    CHECK(is(m.onBlock(true, true, 1, false), actNone));
+    // a pattern note took the voice in the same block: the pattern wins
+    Machine m2;
+    m2.reset();
+    m2.onCommand(cmdPadDown, 2, false);
+    s = m2.onBlock(true, true, 0, true);
+    CHECK(is(s, actNone));
+    CHECK(m2.getState() == stIdle);
 }
 
 TEST(loop_cycle_is_doubled_for_ping_pong)

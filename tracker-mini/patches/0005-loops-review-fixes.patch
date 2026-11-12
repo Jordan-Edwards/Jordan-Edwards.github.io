@@ -1,0 +1,490 @@
+diff --git a/core/interface/loops/fLoops.cpp b/core/interface/loops/fLoops.cpp
+index 862a1f5..8df818a 100644
+--- a/core/interface/loops/fLoops.cpp
++++ b/core/interface/loops/fLoops.cpp
+@@ -19,6 +19,7 @@ static cLoops* LS = &loopsScreen;
+ 
+ static constexpr uint32_t kHeadRefreshMs = 16;
+ static constexpr uint32_t kArmedBlinkMs = 125; // 4 Hz
++static constexpr uint32_t kTempoFollowMs = 250; // how often the tempo is looked at
+ static constexpr int8_t kMaxOctave = 2;
+ 
+ static constexpr uint8_t kNavMiddle = 1;
+@@ -146,19 +147,29 @@ void cLoops::update()
+ 
+     const LoopsStatus status = loopsEngine.status();
+ 
+-    // follow the tempo: in FIT the next note fired uses the new pitch
+-    const float nowTempo = sequencer.getCurrentTempo();
+-    if (fabsf(nowTempo - tempo) > 0.01f)
++    // Follow the tempo: in FIT the next note fired uses the new pitch. Looked at a few times
++    // a second, so a tempo that wobbles (external clock) cannot hold up the playhead, and a
++    // tempo that is not known (clock lost) leaves the last one in place.
++    if (tempoTimer >= kTempoFollowMs)
+     {
+-        tempo = nowTempo;
+-        if (fitOn)
++        tempoTimer = 0;
++        const float nowTempo = sequencer.getCurrentTempo();
++        if (nowTempo > 0.0f && fabsf(nowTempo - tempo) >= 0.05f)
+         {
+-            computeFit();
+-            loopsEngine.setConfig(makeConfig());
+-            refreshSoftKeys();
+-            refreshWave();
++            tempo = nowTempo;
++            if (fitOn)
++            {
++                const int8_t barsBefore = barsIndex;
++                computeFit();
++                loopsEngine.setConfig(makeConfig());
++                refreshSoftKeys();
++                if (!fitOn || barsIndex != barsBefore)
++                {
++                    refreshWave(); // the ruler only changes with the bar count
++                }
++            }
++            refreshInfo(true);
+         }
+-        refreshInfo(true);
+     }
+ 
+     refreshBadge(status.state, ((uint32_t)blinkTimer / kArmedBlinkMs) % 2 == 0, false);
+@@ -291,6 +302,10 @@ LoopsConfig cLoops::makeConfig()
+     config.octave = octave;
+     config.cycleSteps =
+       config.fit ? loops::cycleSteps(loops::quarterBarsAt(barsIndex), direction) : 0;
++    config.refireTol =
++      config.fit
++        ? loops::refireTolerance(regionA, regionB, loops::quarterBarsAt(barsIndex), tempo)
++        : 0;
+     return config;
+ }
+ 
+diff --git a/core/interface/loops/gLoops.cpp b/core/interface/loops/gLoops.cpp
+index c787276..ba55a2f 100644
+--- a/core/interface/loops/gLoops.cpp
++++ b/core/interface/loops/gLoops.cpp
+@@ -369,7 +369,8 @@ void cLoops::refreshHead(const LoopsStatus& status, uint16_t dtMs)
+ 
+     int8_t playingSlice = -1;
+ 
+-    if (status.sounding)
++    // A stopped voice has no position to read (the player divides by a length of 0).
++    if (status.sounding && instrumentPlayer[status.track].getLengthIfPlaying() != 0)
+     {
+         const uint16_t pos = instrumentPlayer[status.track].getWavePosition();
+         head.advance(pos, dtMs);
+diff --git a/core/interface/loops/loops.h b/core/interface/loops/loops.h
+index 6ce8d6c..efb3e58 100644
+--- a/core/interface/loops/loops.h
++++ b/core/interface/loops/loops.h
+@@ -101,6 +101,7 @@ class cLoops : public ModuleBase
+     uint16_t lastFireCount = 0;
+     elapsedMillis headTimer;
+     elapsedMillis blinkTimer;
++    elapsedMillis tempoTimer;
+     bool headWasActive = false;
+     uint8_t shownState = 255;
+     bool shownBlink = false;
+diff --git a/core/interface/loops/loopsEngine.cpp b/core/interface/loops/loopsEngine.cpp
+index 116c63d..9036caf 100644
+--- a/core/interface/loops/loopsEngine.cpp
++++ b/core/interface/loops/loopsEngine.cpp
+@@ -29,6 +29,8 @@ void LoopsEngine::open(const LoopsConfig& config)
+     queueHead = 0;
+     queueTail = 0;
+     reverseOnVoice = false;
++    voiceOut = false;
++    silentBlocks = 0;
+     publish();
+     opened = true;
+     AudioInterrupts();
+@@ -124,7 +126,17 @@ AUDIO_CORE_RAM void LoopsEngine::audioTick()
+         switch (q.command)
+         {
+             case ecToggle: perform(machine.onCommand(loops::cmdToggle, 0, playing)); break;
+-            case ecPadDown: perform(machine.onCommand(loops::cmdPadDown, q.arg, playing)); break;
++            case ecPadDown:
++            {
++                // A slice that cannot be played is ignored: what sounds now goes on.
++                uint16_t a = 0;
++                uint16_t b = 0;
++                if (regionFor(false, q.arg, a, b))
++                {
++                    perform(machine.onCommand(loops::cmdPadDown, q.arg, playing));
++                }
++                break;
++            }
+             case ecPadUp: perform(machine.onCommand(loops::cmdPadUp, 0, playing)); break;
+             case ecRearm: perform(machine.onCommand(loops::cmdRearm, 0, playing)); break;
+             case ecTrack:
+@@ -145,9 +157,49 @@ AUDIO_CORE_RAM void LoopsEngine::audioTick()
+     }
+ 
+     const bool edge = stepEdge.update(playing, globalPos);
+-    const bool lost = machine.isSounding() && !voiceIsOurs();
+ 
+-    perform(machine.onBlock(playing, edge, globalPos, lost));
++    playerEngine& player = instrumentPlayer[cfg.track];
++    const bool sounding = machine.isSounding();
++    const bool ours = voiceIsOurs();
++    const bool running = sounding && ours && player.getLengthIfPlaying() != 0;
++    const bool cycling = machine.getState() == loops::stLoop && machine.getCycleSteps() > 0;
++
++    // End of a cycle: a fitted loop that still runs and sits on its own wrap point is left
++    // alone. Only one that has drifted away is cut and fired again.
++    bool inPhase = false;
++    if (edge && running && cycling)
++    {
++        inPhase = loops::loopInPhase(
++          player.getWavePosition(), pubRegionStart, pubRegionEnd, cfg.direction, cfg.refireTol);
++    }
++
++    // Our note can stop without us: its envelope ends, stock Play cuts every voice, stock Stop
++    // closes open notes. It gets a moment first, because after Play the state machine starts
++    // it again, and a fitted loop is fired again at the end of its cycle while the pattern plays.
++    if (sounding && ours && !running && !(playing && cycling))
++    {
++        if (silentBlocks < 255)
++        {
++            silentBlocks++;
++        }
++    }
++    else
++    {
++        silentBlocks = 0;
++    }
++
++    const bool lost = sounding && (!ours || silentBlocks >= kSilentBlocks);
++    if (lost)
++    {
++        if (ours && reverseOnVoice)
++        {
++            releaseVoice(cfg.track); // it stopped by itself: take our reverse effect off it
++        }
++        voiceOut = false; // not ours to cut any more
++        silentBlocks = 0;
++    }
++
++    perform(machine.onBlock(playing, edge, globalPos, lost, inPhase));
+ 
+     publish();
+ }
+@@ -159,7 +211,8 @@ AUDIO_CORE_FLASH void LoopsEngine::perform(const loops::Step& step)
+         case loops::actFireFull:
+             if (!fire(true, 0))
+             {
+-                // nothing started: do not leave an older note of ours hanging
++                // nothing started: do not leave an older note of ours hanging (cutVoice()
++                // does nothing when no note of ours is out)
+                 cutVoice();
+                 machine.reset();
+             }
+@@ -176,26 +229,22 @@ AUDIO_CORE_FLASH void LoopsEngine::perform(const loops::Step& step)
+     }
+ }
+ 
+-// Play the instrument as a loop on our track voice. The player reads play mode, points and
+-// tune from the instrument inside noteOn (the voice is cut first, so play() runs at once and
+-// nothing is deferred). We put our values in for that one call and put the owner's values
+-// back before returning. This runs in the audio callback, so the sequencer cannot run in
+-// between and never sees the borrowed values.
+-AUDIO_CORE_FLASH bool LoopsEngine::fire(bool full, uint8_t slice)
++// The region a fire would play, or false when it cannot be played. Touches nothing.
++AUDIO_CORE_FLASH bool LoopsEngine::regionFor(bool full, uint8_t slice, uint16_t& a, uint16_t& b) const
+ {
+     if (cfg.instr >= kSampleInstrumentsCount || cfg.track >= 8)
+     {
+         return false;
+     }
+ 
+-    strInstrument& ins = mtProject.instrument[cfg.instr];
++    const strInstrument& ins = mtProject.instrument[cfg.instr];
+     if (ins.isActive != 1)
+     {
+         return false;
+     }
+ 
+-    uint16_t a = ins.startPoint;
+-    uint16_t b = ins.endPoint;
++    a = ins.startPoint;
++    b = ins.endPoint;
+     if (!full)
+     {
+         const loops::Region r = loops::sliceBounds(a, b, slice, cfg.slices);
+@@ -211,6 +260,24 @@ AUDIO_CORE_FLASH bool LoopsEngine::fire(bool full, uint8_t slice)
+     {
+         return false;
+     }
++    return true;
++}
++
++// Play the instrument as a loop on our track voice. The player reads play mode, points and
++// tune from the instrument inside noteOn (the voice is cut first, so play() runs at once and
++// nothing is deferred). We put our values in for that one call and put the owner's values
++// back before returning. This runs in the audio callback, so the sequencer cannot run in
++// between and never sees the borrowed values.
++AUDIO_CORE_FLASH bool LoopsEngine::fire(bool full, uint8_t slice)
++{
++    uint16_t a = 0;
++    uint16_t b = 0;
++    if (!regionFor(full, slice, a, b))
++    {
++        return false; // refused before the voice was touched
++    }
++
++    strInstrument& ins = mtProject.instrument[cfg.instr];
+ 
+     const uint8_t savedPlayMode = ins.playMode;
+     const uint16_t savedStart = ins.startPoint;
+@@ -219,12 +286,14 @@ AUDIO_CORE_FLASH bool LoopsEngine::fire(bool full, uint8_t slice)
+     const uint16_t savedEnd = ins.endPoint;
+     const int8_t savedTune = ins.tune;
+     const int8_t savedFineTune = ins.fineTune;
++    const uint16_t savedGlide = ins.glide;
+ 
+     ins.playMode = (cfg.direction == loops::dirPingPong) ? playModePingpong : playModeLoopForward;
+     ins.startPoint = a;
+     ins.loopPoint1 = a;
+     ins.loopPoint2 = b;
+     ins.endPoint = b;
++    ins.glide = 0; // the loop starts on its own pitch, not sliding in from the track's last note
+ 
+     if (cfg.fit)
+     {
+@@ -257,6 +326,7 @@ AUDIO_CORE_FLASH bool LoopsEngine::fire(bool full, uint8_t slice)
+     }
+ 
+     playerEngine& player = instrumentPlayer[cfg.track];
++    voiceOut = true; // from here on the voice is ours to cut, also if the start fails
+     player.noteOff(Sequencer::STEP_NOTE_OFF_CUT);
+     const uint8_t started = player.noteOn(cfg.instr, kLoopNote, kNoVelocity, fxId, fxVal, 0, 0);
+ 
+@@ -267,6 +337,7 @@ AUDIO_CORE_FLASH bool LoopsEngine::fire(bool full, uint8_t slice)
+     ins.endPoint = savedEnd;
+     ins.tune = savedTune;
+     ins.fineTune = savedFineTune;
++    ins.glide = savedGlide;
+ 
+     reverseOnVoice = (fxId != 0);
+ 
+@@ -288,12 +359,15 @@ AUDIO_CORE_FLASH bool LoopsEngine::fire(bool full, uint8_t slice)
+     return true;
+ }
+ 
++// Only a note we started ourselves is cut: a pattern note of the same instrument on this
++// track is left alone when nothing of ours is out.
+ AUDIO_CORE_FLASH void LoopsEngine::cutVoice()
+ {
+-    if (cfg.track < 8 && voiceIsOurs())
++    if (cfg.track < 8 && voiceOut && voiceIsOurs())
+     {
+         releaseVoice(cfg.track);
+     }
++    voiceOut = false;
+ }
+ 
+ // Cut the voice and take our reverse step effect off it, so the track is left as we found it.
+diff --git a/core/interface/loops/loopsEngine.h b/core/interface/loops/loopsEngine.h
+index 01562a4..1310312 100644
+--- a/core/interface/loops/loopsEngine.h
++++ b/core/interface/loops/loopsEngine.h
+@@ -25,7 +25,8 @@ struct LoopsConfig
+     int8_t fitSemitones = 0;
+     int8_t fitCents = 0;
+     int8_t octave = 0;                      // FREE: octave shift on top of the instrument's tune
+-    uint16_t cycleSteps = 0;                // steps between re-fires while the pattern plays, 0 = none
++    uint16_t cycleSteps = 0;                // steps in one cycle while the pattern plays, 0 = none
++    uint16_t refireTol = 0;                 // FIT: loops::refireTolerance(), in position units
+ };
+ 
+ struct LoopsStatus
+@@ -72,8 +73,11 @@ class LoopsEngine
+         uint8_t arg;
+     };
+     static constexpr uint8_t kQueueSize = 8;
++    // A note of ours that stays stopped this many audio blocks (about 0.7 s) is given up.
++    static constexpr uint8_t kSilentBlocks = 250;
+ 
+     void perform(const loops::Step& step);
++    bool regionFor(bool full, uint8_t slice, uint16_t& a, uint16_t& b) const;
+     bool fire(bool full, uint8_t slice);
+     void cutVoice();
+     void releaseVoice(uint8_t track);
+@@ -82,6 +86,8 @@ class LoopsEngine
+ 
+     volatile bool opened = false;
+     volatile bool reverseOnVoice = false;
++    bool voiceOut = false;     // audio side: a note of ours was started and not yet cut or lost
++    uint8_t silentBlocks = 0;  // audio side: blocks in a row that note has been stopped
+ 
+     LoopsConfig cfg;
+     loops::Machine machine;
+diff --git a/core/interface/loops/loopsLogic.cpp b/core/interface/loops/loopsLogic.cpp
+index 4917014..92f2025 100644
+--- a/core/interface/loops/loopsLogic.cpp
++++ b/core/interface/loops/loopsLogic.cpp
+@@ -53,17 +53,20 @@ FitResult fitToBars(uint32_t sampleFrames, uint16_t a, uint16_t b, float bpm, ui
+ 
+     // The player moves in a straight line between two semitones: 100 cents up is note n + 1,
+     // 100 cents down is note n - 1. Work out the cents on that scale, not on a log scale.
++    // Round toward slow (down in pitch): the loop then lasts its bars or a little longer, never
++    // less. The small allowance keeps an exact fit at 0 cents in spite of float rounding.
+     float q = powf(2.0f, (semis - (float)n) / 12.0f);
++    const float allow = 0.01f;
+     int cents;
+     if (q >= 1.0f)
+     {
+         const float up = 0.0594630944f; // 2^(1/12) - 1
+-        cents = (int)lroundf(100.0f * (q - 1.0f) / up);
++        cents = (int)floorf(100.0f * (q - 1.0f) / up + allow);
+     }
+     else
+     {
+         const float down = 0.0561256873f; // 1 - 2^(-1/12)
+-        cents = -(int)lroundf(100.0f * (1.0f - q) / down);
++        cents = -(int)ceilf(100.0f * (1.0f - q) / down - allow);
+     }
+     if (cents > 100)
+         cents = 100;
+@@ -104,6 +107,36 @@ uint16_t cycleSteps(uint16_t quarterBars, uint8_t direction)
+     return steps;
+ }
+ 
++uint16_t refireTolerance(uint16_t a, uint16_t b, uint16_t quarterBars, float bpm)
++{
++    float seconds = passSeconds(quarterBars, bpm);
++    if (b <= a || seconds <= 0.0f)
++        return 0;
++
++    float span = (float)(b - a);
++    float tol = span * (kRefireTolMs / 1000.0f) / seconds;
++    if (tol > span / 8.0f)
++        tol = span / 8.0f;
++    return (uint16_t)tol;
++}
++
++bool loopInPhase(uint16_t pos, uint16_t a, uint16_t b, uint8_t direction, uint16_t tol)
++{
++    if (b <= a)
++        return false;
++
++    int32_t fromStart = (int32_t)pos - (int32_t)a;
++    int32_t fromEnd = (int32_t)b - (int32_t)pos;
++    if (fromStart < 0)
++        fromStart = -fromStart;
++    if (fromEnd < 0)
++        fromEnd = -fromEnd;
++
++    if (fromStart <= (int32_t)tol)
++        return true;
++    return direction != dirPingPong && fromEnd <= (int32_t)tol;
++}
++
+ //------------------------------------------------------------------------------
+ // Slices
+ //------------------------------------------------------------------------------
+@@ -288,7 +321,11 @@ Step Machine::onCommand(Command cmd, uint8_t arg, bool seqPlaying)
+     return none;
+ }
+ 
+-Step Machine::onBlock(bool seqPlaying, bool stepEdge, uint16_t globalPos, bool voiceLost)
++Step Machine::onBlock(bool seqPlaying,
++                      bool stepEdge,
++                      uint16_t globalPos,
++                      bool voiceLost,
++                      bool inPhase)
+ {
+     Step out = { actNone, 0 };
+ 
+@@ -329,11 +366,28 @@ Step Machine::onBlock(bool seqPlaying, bool stepEdge, uint16_t globalPos, bool v
+                 steps++;
+                 if (cycle > 0 && steps >= cycle)
+                 {
+-                    out = fireFull();
++                    if (inPhase)
++                    {
++                        // The voice wrapped by itself, on time. Cutting and restarting it here
++                        // could only add a click or play the start of the loop twice.
++                        steps = 0;
++                    }
++                    else
++                    {
++                        out = fireFull();
++                    }
+                 }
+             }
+             break;
+ 
++        case stStutter:
++            if (started)
++            {
++                // Stock Play cut the held slice with every other voice: sound it again.
++                out = fireSlice(slice);
++            }
++            break;
++
+         default: break;
+     }
+ 
+diff --git a/core/interface/loops/loopsLogic.h b/core/interface/loops/loopsLogic.h
+index e34f135..ae4dd6b 100644
+--- a/core/interface/loops/loopsLogic.h
++++ b/core/interface/loops/loopsLogic.h
+@@ -28,6 +28,7 @@ constexpr uint16_t kFlashMs = 180;
+ constexpr uint16_t kTailMinPx = 16;
+ constexpr uint16_t kTailMaxPx = 200;
+ constexpr int32_t kMinRegion = 2; // smallest playable region, in position units
++constexpr float kRefireTolMs = 6.0f; // a loop this close to its own wrap is left alone
+ 
+ enum Direction : uint8_t
+ {
+@@ -47,6 +48,8 @@ struct FitResult
+     int8_t semitones; // whole semitones
+     int8_t cents;     // engine fine tune -100..100 (linear between two semitones, as the player does)
+ };
++// The cents are rounded toward slow: the fitted loop is never shorter than its bars, so a
++// correction cuts the end of a pass and never plays its start twice.
+ 
+ // Loop length in quarter bars for a choice index 0..kBarChoices-1: 1/4, 1/2, 1, 2, 4, 8, 16 bars.
+ uint16_t quarterBarsAt(int index);
+@@ -62,9 +65,17 @@ FitResult fitToBars(uint32_t sampleFrames, uint16_t a, uint16_t b, float bpm, ui
+ // Index of the bar choice that needs the smallest shift; -1 when none is within range.
+ int autoBarsIndex(uint32_t sampleFrames, uint16_t a, uint16_t b, float bpm);
+ 
+-// Sequencer steps between two re-fires: one pass, or there and back for ping-pong.
++// Sequencer steps in one cycle: one pass, or there and back for ping-pong.
+ uint16_t cycleSteps(uint16_t quarterBars, uint8_t direction);
+ 
++// How far (in position units) a fitted loop may be from its own wrap point at the end of a
++// cycle and still be left alone: kRefireTolMs of a pass that lasts quarterBars at bpm.
++uint16_t refireTolerance(uint16_t a, uint16_t b, uint16_t quarterBars, float bpm);
++
++// True when a voice at pos is within tol of the point where the loop a..b wraps by itself:
++// either end for Forward and Reverse, the start for Ping-pong (it comes back there).
++bool loopInPhase(uint16_t pos, uint16_t a, uint16_t b, uint8_t direction, uint16_t tol);
++
+ //------------------------------------------------------------------------------
+ // Slices
+ //------------------------------------------------------------------------------
+@@ -154,11 +165,17 @@ class Machine
+   public:
+     void reset();
+ 
+-    // 0 = never re-fire (FREE)
++    // 0 = no cycle, never re-fire (FREE)
+     void setCycleSteps(uint16_t steps) { cycle = steps; }
+ 
+     Step onCommand(Command cmd, uint8_t arg, bool seqPlaying);
+-    Step onBlock(bool seqPlaying, bool stepEdge, uint16_t globalPos, bool voiceLost);
++    // inPhase: the voice is at its own wrap point right now (see loopInPhase). At the end of a
++    // cycle such a loop is left running; one that has drifted is fired again.
++    Step onBlock(bool seqPlaying,
++                 bool stepEdge,
++                 uint16_t globalPos,
++                 bool voiceLost,
++                 bool inPhase = false);
+ 
+     // The engine cut the voice itself (track change) or a fire failed.
+     void clearSounding() { sounding = false; }
