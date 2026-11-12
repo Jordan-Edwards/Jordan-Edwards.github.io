@@ -1,5 +1,19 @@
 # Handoff: where everything stands
 
+## Morning summary, 12 November (release audit done; fixes in progress)
+
+**Can Build 2 0.2.10 be released as it is? No.** Full audit with evidence: `G:\OPX1_AGENTS_20261110\release\AUDIT.md`. This is an engineering inventory, not legal advice; clearing anything for release needs a lawyer.
+
+- **The OS:** `os.ldr` is TE's stock OP-XY OS 1.2.1 with our changes: 2,372,929 bytes identical to the stock image, 407 bytes changed, 758,520 bytes added. At least 75.8% of the shipped image is TE's OS word for word. The only release form that avoids shipping it is a patcher the user runs on their own copy, and that may still breach TE's terms or anti-circumvention law.
+- **The engines:** 20 of the 22 machines run TE's own code: the 8 Field effects, the Field vocoder and 11 synths. Each capsule is the Field's instructions copied byte for byte with only addresses moved, plus tables copied from the Field image. Four capsules (mother, grid, pulse, drwave) also hold copied Analog Devices chip-ROM routines.
+- **Screens, presets, names:** 19-20 of 22 screens come from the Field's own SVGs. About 159 presets look like Field factory presets (inferred from names). `op1_factory.json` is TE's catalog file. Names and descriptions say "OP-1 Field" throughout.
+- **Ours:** the Scale player, the 16-band Vocoder (own DSP, no Field code), and the non-Field parts of our SDK changes. The SDK is MIT-licensed from the Open-XY contributors, so it is not ours to relicense.
+- **Releasable now, subject to a lawyer:** Scale and Vocoder as source. Before that, the Vocoder needs its `field_level.hpp` dependency and the TE font name removed, and its `tools`/`make_tables.py` checked. Our non-Field SDK patches could go upstream under MIT. Also releasable: Dubious (our design) and the Tracker Mini Loops work (Polyend CE licence: share, do not sell).
+- **Clean-room route to "same sound, built independently":** specs and audio renders from one side, new DSP written only from those by agents that never see Field code, new art, new names. Estimate: about 6 clean engines plus Scale and Vocoder for a first release, 3-4 months; full parity 9-15 engineer-months. Order and per-engine estimates are in AUDIT.md.
+
+**Still running:** Nitro investigation (`G:\OPX1_AGENTS_20261110\nitro-check\REPORT.md` when done) and a search for the earlier Castle build. **The OP-XY was not in file-transfer mode this morning**, so nothing on it was checked or changed.
+
+
 Written 12 November 2026 at the end of a long cloud session, so the work can carry on from the PC.
 Nothing below has been tested on hardware unless it says so.
 
