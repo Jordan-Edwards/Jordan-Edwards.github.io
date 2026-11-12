@@ -26,6 +26,11 @@
   - Match at default knobs: level within 0.05 dB median (0.17 worst), 1/3-octave bands within 0.5 dB median (2.7 worst).
   - Known gaps: Feedback 0.9-1 (the low-cut peak is broader and does not self-oscillate on loud input), Follow below centre (up to 12 dB off), the drive curve below clipping, and the noise floor on sweeps.
   - Next: round 2 on those gaps, then wrap Afterburner as an OP-XY effect machine with new art and a new name, then a provenance check (grep for Field addresses, constants and names).
+- **Rules Jordan set for every clean engine (12 November):**
+  1. Not finished until it matches the original everywhere, not just at the defaults.
+  2. Each gets one upgrade the original lacked, ideally something users asked for, built on what the OP-XY does and the OP-1 could not: tempo sync, sixteen tracks, per-step changes. Off by default, so the plain sound still matches. Afterburner's is **Beat sweep** (a tempo-synced filter sweep; forum users said they missed tempo-synced modulation).
+  3. **Art:** unique imagery that shows what the engine does, quality OP-XY-style pages, in colour. The palette stays in the same colour temperature as the OP-1 Field's but a little off and less bright, never the Field's exact colours. Drawn fresh by agents that have not seen the Field SVGs.
+- **LED question (open):** the OP-XY's key LEDs have only been seen white, red or off. An investigation of what the LED hardware can actually do (colour channels, dimming, driver chip) is running: `G:\OPX1_AGENTS_20261110\leds\LEDS.md`.
 - Before any public release: a lawyer on the distribution form (a patcher that the user runs on their own OS, never a shipped `os.ldr`), the names, and the art. **The OP-XY was not in file-transfer mode this morning**, so nothing on it was checked or changed.
 
 
