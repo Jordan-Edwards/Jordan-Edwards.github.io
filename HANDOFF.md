@@ -11,7 +11,11 @@
 - **Releasable now, subject to a lawyer:** Scale and Vocoder as source. Before that, the Vocoder needs its `field_level.hpp` dependency and the TE font name removed, and its `tools`/`make_tables.py` checked. Our non-Field SDK patches could go upstream under MIT. Also releasable: Dubious (our design) and the Tracker Mini Loops work (Polyend CE licence: share, do not sell).
 - **Clean-room route to "same sound, built independently":** specs and audio renders from one side, new DSP written only from those by agents that never see Field code, new art, new names. Estimate: about 6 clean engines plus Scale and Vocoder for a first release, 3-4 months; full parity 9-15 engineer-months. Order and per-engine estimates are in AUDIT.md.
 
-**Still running:** Nitro investigation (`G:\OPX1_AGENTS_20261110\nitro-check\REPORT.md` when done) and a search for the earlier Castle build. **The OP-XY was not in file-transfer mode this morning**, so nothing on it was checked or changed.
+**Nitro: found the cause, and it is not the code** (`G:\OPX1_AGENTS_20261110\nitro-check\REPORT.md`). The capsule is the Field's own process function and matched the exact model with 0 differing samples in the emulator. Nitro's grit comes from driving it hard, and on the OP-XY it is under-driven: the +42 dB Trim default was set by ear for CWO and never measured for Nitro, and the send knob scales its input too (half send = 6 dB less drive). On top of that, at partial send the clean track fills back in what the filter removed: at send 0.3 the effect is 11-13 dB weaker than on the Field. The Field defaults are also nearly an open filter.
+- **Try on the device:** send to Nitro at full, Trim +48 or +54 dB, then Feedback or Follow up and Lows/Highs moved inward.
+- **Fix once you have heard it:** change Nitro's `trim` default in `definition.json` from 0.681818 (+42 dB) to 0.772727 (+48) or 0.863636 (+54) in a 0.2.11 build. Loudness stays the same and the filter gets 6-12 dB more drive. Very hot tracks may crunch. Not built yet: no point before you have listened.
+
+**Still running:** a search for the earlier Castle build. **The OP-XY was not in file-transfer mode this morning**, so nothing on it was checked or changed.
 
 
 Written 12 November 2026 at the end of a long cloud session, so the work can carry on from the PC.
