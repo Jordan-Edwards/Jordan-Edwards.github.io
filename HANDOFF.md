@@ -20,7 +20,12 @@
 **Clean-room rewrite: started (Jordan's decision, 12 November).** Goal: every engine rewritten so it sounds the same but contains no TE code, data or art, so it can be released.
 - The wall: `G:\CLEANROOM-DIRTY\<engine>` is the spec side (may use the Field-derived models). `G:\CLEANROOM\<engine>` is the only folder the build side may read: SPEC.md in plain words and measurements, reference renders with their dry inputs, a neutral score.py, and WALL-LOG.md with every file's sha256.
 - Build-side agents get no paths outside `G:\CLEANROOM\<engine>` and are told never to open the Field material. This is enforced by instruction and logged, not by separate machines; the audit recommends moving the dirty material offline before a public release.
-- Pilot: the Nitro-like filter. Spec capture running. Next: a fresh build-side agent writes new DSP from the spec and scores it against the renders.
+- Pilot: the Nitro-like filter, working name **Afterburner**.
+  - Spec side done: `G:\CLEANROOM\nitro` holds SPEC.md, 213 renders plus 19 dry inputs (all generated in code), score.py and WALL-LOG.md with sha256 for every file.
+  - Build side, round 1 done: `G:\CLEANROOM\nitro\build` has new C++, BUILD-LOG.md and README.md. The build agent read only the cleanroom folder.
+  - Match at default knobs: level within 0.05 dB median (0.17 worst), 1/3-octave bands within 0.5 dB median (2.7 worst).
+  - Known gaps: Feedback 0.9-1 (the low-cut peak is broader and does not self-oscillate on loud input), Follow below centre (up to 12 dB off), the drive curve below clipping, and the noise floor on sweeps.
+  - Next: round 2 on those gaps, then wrap Afterburner as an OP-XY effect machine with new art and a new name, then a provenance check (grep for Field addresses, constants and names).
 - Before any public release: a lawyer on the distribution form (a patcher that the user runs on their own OS, never a shipped `os.ldr`), the names, and the art. **The OP-XY was not in file-transfer mode this morning**, so nothing on it was checked or changed.
 
 
