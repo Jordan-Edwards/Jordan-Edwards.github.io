@@ -3,3 +3,6 @@
 
 # MIDI files are binary - never line-ending normalize them
 *.mid binary
+
+# Firmware images are Intel HEX with CRLF line ends; keep them byte-exact.
+*.ptf binary
