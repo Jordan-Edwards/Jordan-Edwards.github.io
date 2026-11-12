@@ -2,6 +2,16 @@
 
 Updated: 2026-11-11, 6:35 PM Central.
 
+## What Jordan asked for
+
+- "The retracker thing, but our own upgraded version", on the Mini.
+- The look matters: the playhead sweeping over the audio waves, back and forth
+  in ping-pong, with visual feedback that is "clear what it's doing, but cool
+  and smooth".
+- The Mini and the Tracker+ are the same hardware, so use what the Plus can do.
+- Report plainly what was found, what it makes possible, and where the limits
+  of the hardware are.
+
 ## Done
 
 - Confirmed the Tracker Mini firmware is open source: Polyend's Tracker
