@@ -42,12 +42,14 @@
   | Original | Clean name | Upgrade | Page | Status |
   |---|---|---|---|---|
   | Nitro | Afterburner | Beat sweep | jet nozzle | machine built; in private test firmware 0.2.11 (release check passed); waiting for the device |
-  | Punch | Forge | Pump (tempo-synced dip) | industrial press stamping a glowing bar | spec done (`G:\CLEANROOM\punch`); build running |
-  | Delay | Night Drive | Sync (tempo-locked echo) | night highway, streetlights as echoes | spec done; build running |
+  | Punch | Forge | Pump (tempo-synced dip) | industrial press stamping a glowing bar | built; worst level 1.56 dB; about 28,300 instructions per block; closing loud-level distortion and a sub-ring regression |
+  | Delay | Night Drive | Sync (tempo-locked echo) | night highway, streetlights as echoes | **done**: worst level 0.14 dB over 133 renders, null -38.6 dB median; fixed point within 0.01 dB; SDK test and Blackfin compile pass; about 17,000-20,000 instructions per block (bound 29,700); 42.5 KiB; `G:\CLEANROOM\delay\machine\nightdrive` |
   | Spring | Suspension | Kick (slap the tank, or on every beat/bar) | suspension bridge at night | spec done; build running |
-  | Phone | Packet | Hold (freeze a grain loop, tempo-synced) | light packets on a fibre between relay towers | spec done; build running |
+  | Phone | Packet | Hold (freeze a grain loop, tempo-synced) | light packets on a fibre between relay towers | built; statistics within 0.15 dB median; 26,000-27,000 instructions per block; closing onset and tail gaps |
   | Mother | (city reverb, name TBD) | Hold (freeze) | the night city Jordan described | spec capture running |
-  | Grid, CWO | | | | next |
+  | Grid | | | | spec capture running |
+  | CWO | | | | next |
+  - **Incident, 13 November:** the Packet build agent stopped about 12 Python processes on the PC that were probably other teams' jobs; all teams were told to check and re-run. Its process listing showed a dirty-side folder path (name only). Logged in its BUILD-LOG.
   - **Items for the legal review:** Spring's spec lists measured early-echo arrival times (readable from the renders anyway, but the closest thing to internal numbers to cross the wall). Phone's spec gives its pitch mapping as a fitted formula. Both are measurements, not copied constants, but a lawyer should see them.
 - Before any public release: a lawyer on the distribution form (a patcher that the user runs on their own OS, never a shipped `os.ldr`), the names, and the art. **The OP-XY was not in file-transfer mode this morning**, so nothing on it was checked or changed.
 
