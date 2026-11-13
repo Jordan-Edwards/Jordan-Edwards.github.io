@@ -46,7 +46,7 @@
   | Delay | Night Drive | Sync (tempo-locked echo) | night highway, streetlights as echoes | **done**: worst level 0.14 dB over 133 renders, null -38.6 dB median; fixed point within 0.01 dB; SDK test and Blackfin compile pass; about 17,000-20,000 instructions per block (bound 29,700); 42.5 KiB; `G:\CLEANROOM\delay\machine\nightdrive` |
   | Spring | Suspension | Kick (slap the tank, or on every beat/bar) | suspension bridge at night | spec done; build running |
   | Phone | Packet | Hold (freeze a grain loop, tempo-synced) | light packets on a fibre between relay towers | built; statistics within 0.15 dB median; 26,000-27,000 instructions per block; closing onset and tail gaps |
-  | Mother | (city reverb, name TBD) | Hold (freeze) | the night city Jordan described | spec capture running |
+  | Mother | **Night City** (Jordan's decision, 13 November) | Hold (freeze) | the night city Jordan described | spec capture running |
   | Grid | | | | spec capture running |
   | CWO | | | | next |
   - **Incident, 13 November:** the Packet build agent stopped about 12 Python processes on the PC that were probably other teams' jobs; all teams were told to check and re-run. Its process listing showed a dirty-side folder path (name only). Logged in its BUILD-LOG.
