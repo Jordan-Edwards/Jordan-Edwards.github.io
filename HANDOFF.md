@@ -38,6 +38,17 @@
   3. **Art:** unique imagery that shows what the engine does, quality OP-XY-style pages, in colour. The palette stays in the same colour temperature as the OP-1 Field's but a little off and less bright, never the Field's exact colours. Drawn fresh by agents that have not seen the Field SVGs.
 - **LEDs (answered, `G:\OPX1_AGENTS_20261110\leds\LEDS.md`):** the keys have two colour channels, white and red, each with its own current setting (a hidden stock debug screen, "led current tuning", has kb white current, kb red current, kb_gcc and vu_gcc). There is no green, blue or RGB. Brightness already has 64 levels (the stock "led brightness" setting, 0-63). Inferred, not proven: the driver looks like an ISSI-style matrix chip with 256 steps per LED, which would allow dimmed white, dimmed red and white+red mixes (warm white to pink). Not found yet: the driver chip, the per-key state table, LED counts, what the "vu" group is. The SDK has no LED API. Smallest test: set the stock LED brightness to its lowest and highest values and watch whether both white and red keys dim in steps.
 - **Reverb page design (Jordan, 12 November):** the clean reverb is not called Mother. Its page is an original night city in a Blade Runner / Tron / Daft Punk vibe (not a copy of any game's art): a symmetrical street with you small at the bottom centre. Distance: the street deepens. Decay/Gate: windows light with the sound and fade with the tail, or snap off together. Color: the haze shifts cold blue to magenta and amber. Mix: rain and fog thicken. Hits send light trails down the street; billboards flicker with the tail; a few signs hum in silence. Upgrade: **Hold** (freeze the tail as a drone, the city freezes lit), switchable per step from the sequencer.
+- **Effect queue (Jordan, 13 November: "after one, continue on to the other effects; if I can't test, keep making more"):**
+  | Original | Clean name | Upgrade | Page | Status |
+  |---|---|---|---|---|
+  | Nitro | Afterburner | Beat sweep | jet nozzle | machine built; in private test firmware 0.2.11 (release check passed); waiting for the device |
+  | Punch | Forge | Pump (tempo-synced dip) | industrial press stamping a glowing bar | spec done (`G:\CLEANROOM\punch`); build running |
+  | Delay | Night Drive | Sync (tempo-locked echo) | night highway, streetlights as echoes | spec done; build running |
+  | Spring | Suspension | Kick (slap the tank, or on every beat/bar) | suspension bridge at night | spec done; build running |
+  | Phone | Packet | Hold (freeze a grain loop, tempo-synced) | light packets on a fibre between relay towers | spec done; build running |
+  | Mother | (city reverb, name TBD) | Hold (freeze) | the night city Jordan described | spec capture running |
+  | Grid, CWO | | | | next |
+  - **Items for the legal review:** Spring's spec lists measured early-echo arrival times (readable from the renders anyway, but the closest thing to internal numbers to cross the wall). Phone's spec gives its pitch mapping as a fitted formula. Both are measurements, not copied constants, but a lawyer should see them.
 - Before any public release: a lawyer on the distribution form (a patcher that the user runs on their own OS, never a shipped `os.ldr`), the names, and the art. **The OP-XY was not in file-transfer mode this morning**, so nothing on it was checked or changed.
 
 
