@@ -1,0 +1,2 @@
+# Firmware files the card watcher should add to the Tracker Mini card.
+# One per line: <sha256>  <file name>. Empty for now: nothing of ours is ready for the card yet.
