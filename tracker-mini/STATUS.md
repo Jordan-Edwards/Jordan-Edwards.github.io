@@ -12,6 +12,8 @@ Updated: 2026-11-13, 5:00 AM Central.
 - Report plainly what was found, what it makes possible, and where the limits
   of the hardware are.
 - Notice when the Tracker is plugged back in, without being told.
+- No dead buttons. On the looper build Jordan tried, some buttons did nothing.
+  Every key on every looper screen must do something and show what it does.
 
 ## Done
 
