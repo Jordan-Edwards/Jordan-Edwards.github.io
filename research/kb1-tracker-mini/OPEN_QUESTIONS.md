@@ -1,0 +1,16 @@
+# Open questions: hardware and version details only
+
+These cannot be settled from the public sources (`RESEARCH.md` §1). Each says how to answer it and which stage needs it. Nothing here blocks further reading of code; all of it blocks hardware stages.
+
+| # | Question | Why it matters | How to answer | Needed by |
+|---|---|---|---|---|
+| Q1 | **Which firmware is on your Tracker Mini now?** (Polyend stock 1.x, CE 1.0.0 release, or a CE beta; plus the Build hash) | Sets the baseline and recovery image. CE `main` is 176 commits past `v1.0.0`. | Config → Firmware (version + Build) | Stage 0 |
+| Q2 | **Which KB1 firmware version and PCB revision do you have?** (repo hardware is `KB1v8.1`; firmware `v2.3.3` is current) | Code findings are for firmware 2.3.3 / PCB v8.1. Older firmware may lack the boot/sleep panic or behave differently. An older PCB could wire the jack differently. | KB1 Studio → Device Info (firmware). PCB revision is silkscreened on the board, or ask the seller. | Stage 0 |
+| Q3 | **Which Arduino-ESP32 / `espressif32` platform and MIDI-library versions built the released v2.3.3 binary?** | `platformio.ini` doesn't pin them. A rebuild may differ from the shipped binary (UART buffering, BLE stack). | Ask PocketMidi, or inspect the version strings embedded in the release `.bin`. | Stage 0/4 |
+| Q4 | **What does the Tracker receive on the MIDI line when KB1 resets, powers on, or is flashed?** (e.g. ESP32 ROM boot text on GPIO43 at 115200 baud, line float) | Decides whether boot garbage can reach the parser, and validates the "jack closed until Hello" safety argument. | Stage 1 byte capture | Stage 1 |
+| Q5 | **Does stock firmware leave a note hanging when KB1 is switched off or undocked mid-note?** | Code predicts yes for sustaining instruments (CC 123 ignored). Confirms the value of Stage 2. | Stage 1 test A1.3 | Stage 1 |
+| Q6 | **What test equipment do you have?** A USB-MIDI interface + TRS-Type-B adapter, or a spare microcontroller, to inject test messages into the Tracker's MIDI In. | Lets Stage 3 be verified before touching KB1 firmware. Without it, Stage 3 and 4 are tested together. | Your inventory | Stage 3 |
+| Q7 | **With KB1 assembled, can you reach the XIAO's BOOT/RESET buttons, or must the case be opened?** | Determines the worst-case KB1 recovery path (ROM download mode). | Inspect your unit | Before Stage 4 |
+| Q8 | **With KB1 docked, are the Tracker's USB-C port and the reset pinhole still reachable?** | The CDC log console, power during tests, and Tracker emergency recovery all need them. | Inspect your docked setup | Stage 1 |
+| Q9 | **What are your normal (non-KB1) Config → MIDI values, and do you use the MIDI In jack, USB MIDI or MIDI Out for other gear?** | Defines what "preserve existing settings" must protect and which E9–E11 tests apply. Explains why settings currently get changed each session. | Photograph Config → MIDI. List the gear you use. | Stage 0 |
+| Q10 | **Signal margin at low battery**: KB1 Studio says dropped notes usually mean a low battery. Does your unit drop or garble notes before the battery warning? | A corrupted Hello or missed `FE` near brown-out could cause a false disconnect. The timeouts may need tuning. | Observe during Stage 5 E6 with a partly discharged KB1 | Stage 5 |
