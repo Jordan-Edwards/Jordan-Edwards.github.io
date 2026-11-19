@@ -10,7 +10,7 @@ Status: **ideas and feasibility only**. Nothing has been built or flashed. Build
 | **Pocket MIDI KB1** | known (`303A:1001`, COM3), not attached now | **Yes**: ESP32-S3, GPL-3.0 | TRS out into Tracker only (one-way) [netlist]; **BLE radio** [code]; USB-C on the ESP32-S3 (currently serial/flash only) [code] |
 | Teenage Engineering **OP-XY** | known (`2367:0021`) | No | 3.5 mm MIDI = **Type A** [TE guide]; USB-C MIDI; USB **host** reported on op-forums (not yet confirmed by TE docs) |
 | 1010music **bluebox** (desktop) | known | No | TRS MIDI: **receives Type A *and* B, sends Type B** [1010music staff, forum]; USB MIDI device |
-| Novation **Launchpad Pro MK3** | known | Official: **no** (only the *original* Launchpad Pro has Novation's open firmware). Community "CoreFW" (Rust reimplementation) exists, with a reported "Code 10" failure after flashing | USB MIDI; TRS MIDI in/out (type not verified here) |
+| ~~Novation Launchpad Pro MK3~~ | **sold**: ideas involving it are kept below only for reference | — | — |
 | Behringer **Poly D** | known (`1397:122A`) | No | 5-pin DIN MIDI + USB MIDI |
 | Roland **S-1**, **J-6** (from your songbook repo) | not on this PC | No | 3.5 mm MIDI = **Type A** ("All AIRA Compacts use MIDI TRS TYPE A", Roland) |
 | Focusrite **Scarlett Solo 4th Gen** | known | No | Audio only |
@@ -30,7 +30,7 @@ Status: **ideas and feasibility only**. Nothing has been built or flashed. Build
 
 4. **KB1 + your vocoder build** *(Tracker change on the vocoder fork, after the Zelda/vocoder stopping point)*. KB1's Line-In pass-through (J1) feeds the Tracker's line in, and its keys and levers arrive as notes and CCs. A mic into KB1 J1, chords on KB1 as the carrier, and levers/touch mapped to vocoder parameters (formant, mix, bands) makes the docked pair a self-contained vocoder keyboard with KB1's built-in speakers. Treat this as a separate branch so it doesn't disturb the current vocoder work.
 
-5. **Launchpad Pro MK3 as a Tracker performance surface** *(no firmware change)*. Tracker CE already listens for CC 41–48 (track mutes in Performance mode), CC 51–62 (performance FX slots) and CC 71–82 (mixer) [code: `fPerformance.cpp#L890`, `fMasterParams.cpp#L3075`]. A Launchpad *custom mode* (Novation Components, official) can send exactly these. Keep the official firmware; CoreFW isn't worth the brick risk.
+5. ~~Launchpad Pro MK3 as a Tracker performance surface~~ *(Launchpad sold; any CC controller can do the same)* *(no firmware change)*. Tracker CE already listens for CC 41–48 (track mutes in Performance mode), CC 51–62 (performance FX slots) and CC 71–82 (mixer) [code: `fPerformance.cpp#L890`, `fMasterParams.cpp#L3075`]. A Launchpad *custom mode* (Novation Components, official) can send exactly these. Keep the official firmware; CoreFW isn't worth the brick risk.
 
 ### Tier 2: KB1 firmware, broader reach (ESP32-S3 can do these; GPL-3.0)
 
