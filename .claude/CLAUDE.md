@@ -19,3 +19,6 @@
   - source: moog, prof (Prophet), juno, jup, dx7, generic-wavetable, generic-analog, etc.
   - character: short, long, stab, warm, bright, acid, sub, ...
 - e.g. `bass-moog-short-stab`, `pad-prof-long-warm`, `lead-generic-wavetable-bright`
+
+## Current project
+- OP-XY rebuild: follow `tools/opxy_plan.md` (goal, order of steps, curation and naming rules).

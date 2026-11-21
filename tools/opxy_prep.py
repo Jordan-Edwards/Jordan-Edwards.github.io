@@ -4,6 +4,9 @@
 Run on the computer the OP-XY is plugged into (with the OP-XY mounted as a disk).
 Nothing on the device is modified or deleted.
 
+The goal and the full plan (what comes after this, and how to make decisions)
+are in tools/opxy_plan.md. Read it before going further.
+
   python3 opxy_prep.py backup  <opxy_mount> <backup_dir>
   python3 opxy_prep.py inventory <out.tsv> <sample_dir> [<sample_dir> ...]
 
@@ -11,6 +14,9 @@ The inventory TSV (path, size_kb, seconds, channels, rate) is compact on purpose
 hand it to Claude to curate and rename without listing folders file by file.
 """
 import hashlib, os, shutil, sys, time, wave
+
+NEXT = ("\nNext: run the inventory step, then follow tools/opxy_plan.md.\n"
+        "In Claude Code, say: \"Continue the OP-XY plan in tools/opxy_plan.md\"")
 
 AUDIO = {".wav", ".aif", ".aiff", ".flac", ".mp3"}
 
@@ -49,6 +55,7 @@ def backup(src, dst_root):
         print("\n".join(bad[:20]))
         sys.exit(1)
     print("VERIFIED: every file matches by size and SHA-256. Safe to wipe the device.")
+    print(NEXT)
 
 
 def inventory(out, roots):
@@ -70,6 +77,7 @@ def inventory(out, roots):
                 fh.write(f"{p}\t{os.path.getsize(p) // 1024}\t{secs}\t{ch}\t{rate}\n")
                 rows += 1
     print(f"inventory: {rows} entries -> {out}")
+    print(NEXT)
 
 
 if __name__ == "__main__":
